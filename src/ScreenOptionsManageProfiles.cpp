@@ -30,6 +30,8 @@ enum ProfileAction
 {
 	ProfileAction_SetDefaultP1,
 	ProfileAction_SetDefaultP2,
+	ProfileAction_SetDefaultP3,
+	ProfileAction_SetDefaultP4,
 	ProfileAction_Edit,
 	ProfileAction_Rename,
 	ProfileAction_Delete,
@@ -38,6 +40,8 @@ enum ProfileAction
 	ProfileAction_MergeToMachineSkipTotal,
 	ProfileAction_MergeToP1,
 	ProfileAction_MergeToP2,
+	ProfileAction_MergeToP3,
+	ProfileAction_MergeToP4,
 	ProfileAction_ChangeToGuest,
 	ProfileAction_ChangeToNormal,
 	ProfileAction_ChangeToTest,
@@ -48,6 +52,8 @@ enum ProfileAction
 static const char *ProfileActionNames[] = {
 	"SetDefaultP1",
 	"SetDefaultP2",
+	"SetDefaultP3",
+	"SetDefaultP4",
 	"Edit",
 	"Rename",
 	"Delete",
@@ -56,6 +62,8 @@ static const char *ProfileActionNames[] = {
 	"MergeToMachineSkipTotal",
 	"MergeToP1",
 	"MergeToP2",
+	"MergeToP3",
+	"MergeToP4",
 	"ChangeToGuest",
 	"ChangeToNormal",
 	"ChangeToTest",
@@ -350,6 +358,14 @@ void ScreenOptionsManageProfiles::HandleScreenMessage( const ScreenMessage SM )
 				PROFILEMAN->MergeLocalProfiles(GetLocalProfileIDWithFocus(),
 					ProfileManager::m_sDefaultLocalProfileID[PLAYER_2].Get());
 				break;
+			case ProfileAction_MergeToP3:
+					PROFILEMAN->MergeLocalProfiles(GetLocalProfileIDWithFocus(),
+					ProfileManager::m_sDefaultLocalProfileID[PLAYER_3].Get());
+				break;
+			case ProfileAction_MergeToP4:
+					PROFILEMAN->MergeLocalProfiles(GetLocalProfileIDWithFocus(),
+					ProfileManager::m_sDefaultLocalProfileID[PLAYER_4].Get());
+				break;
 			case ProfileAction_ChangeToGuest:
 				PROFILEMAN->ChangeProfileType(GetLocalProfileIndexWithFocus(),
 					ProfileType_Guest);
@@ -437,6 +453,8 @@ void ScreenOptionsManageProfiles::ProcessMenuStart( const InputEventPlus & )
 
 		ADD_ACTION( ProfileAction_SetDefaultP1 );
 		ADD_ACTION( ProfileAction_SetDefaultP2 );
+		ADD_ACTION( ProfileAction_SetDefaultP3 );
+		ADD_ACTION( ProfileAction_SetDefaultP4 );
 		if( PROFILEMAN->FixedProfiles() )
 		{
 			ADD_ACTION( ProfileAction_Rename );
@@ -451,6 +469,8 @@ void ScreenOptionsManageProfiles::ProcessMenuStart( const InputEventPlus & )
 			ADD_ACTION( ProfileAction_MergeToMachineSkipTotal );
 			ADD_ACTION( ProfileAction_MergeToP1 );
 			ADD_ACTION( ProfileAction_MergeToP2 );
+			ADD_ACTION( ProfileAction_MergeToP3 );
+			ADD_ACTION( ProfileAction_MergeToP4 );
 			ADD_ACTION( ProfileAction_ChangeToGuest );
 			ADD_ACTION( ProfileAction_ChangeToNormal );
 			ADD_ACTION( ProfileAction_ChangeToTest );
