@@ -752,6 +752,8 @@ void GameCommand::ApplySelf( const vector<PlayerNumber> &vpns ) const
 					GAMESTATE->JoinPlayer( p );
 				}
 			}
+			GAMESTATE->JoinPlayer( PLAYER_1 );
+			GAMESTATE->JoinPlayer( PLAYER_2 );
 			break;
 		case StyleType_FourPlayersFourSides:
 			GAMESTATE->JoinPlayer(PLAYER_1);
