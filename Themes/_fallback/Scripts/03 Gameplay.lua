@@ -27,13 +27,33 @@ function GetExtraColorThreshold()
 	return Modes[CurGameName()] or 10
 end
 
-function GameplayPlayerPositions(widths)
-	local edge_pct= .1
-	local num_players= #widths
-	local edge_width= _screen.w * edge_pct
-	if num_players == 1 and Center1Player() then
-		local dist_to_edge= _screen.cx - edge_width
-		return {{_screen.cx, dist_to_edge*2}}
+-- GameplayMargins exists to provide a layer of backwards compatibility for
+-- people using the X position metrics to set where the notefields are.
+-- This makes it somewhat complex.
+-- Rather than trying to understand how it works, you can simply do this:
+-- (example values in parentheses)
+-- 1.  Decide how much space you want in the center between notefields. (80)
+-- 2.  Decide how much space you want on each side. (40)
+-- 3.  Write a simple function that just returns those numbers:
+--     function GameplayMargins() return 40, 80, 40 end
+-- Then the engine does the work of figuring out where each notefield should
+-- be centered.
+function GameplayMargins(enabled_players, styletype)
+	local other= {[PLAYER_1]= PLAYER_2, [PLAYER_2]= PLAYER_1, [PLAYER_3]= PLAYER_4, , [PLAYER_4]= PLAYER_3}
+	local margins= {[PLAYER_1]= {30, 30}, [PLAYER_2]= {30, 30}, [PLAYER_3]= {30, 30}, [PLAYER_4]= {30, 30}}
+	-- Use a fake style width because calculating the real style width throws off
+	-- the code in the engine.
+	local fake_style_width= 272
+	-- Handle the case of a single player that is centered first because it's
+	-- simpler.
+	if Center1Player() then
+		local pn= enabled_players[1]
+		fake_style_width= 544
+		local center= _screen.cx
+		local left= center - (fake_style_width / 2)
+		local right= _screen.w - center - (fake_style_width / 2)
+		-- center margin width will be ignored.
+		return left, 80, right
 	end
 	local ret= {}
 	for i= 1, #widths do
@@ -67,7 +87,7 @@ end
 -- [en] returns possible modes for ScreenSelectPlayMode
 function GameCompatibleModes()
 	local Modes = {
-		dance = "Single,Double,Solo,Versus,Couple",
+		dance = "Single,Quad,Double,Solo,Versus,Couple",
 		pump = "Single,Double,HalfDouble,Versus,Couple,Routine",
 		beat = "5Keys,7Keys,10Keys,14Keys,Versus5,Versus7",
 		kb7 = "KB7",

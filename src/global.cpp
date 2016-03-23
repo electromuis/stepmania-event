@@ -27,6 +27,8 @@ void NORETURN sm_crash( std::string const &reason )
 	/* If we're being debugged, throw a debug break so it'll suspend the process. */
 	if( IsDebuggerPresent() )
 	{
+
+
 		DebugBreak();
 		for(;;); /* don't return */
 	}
