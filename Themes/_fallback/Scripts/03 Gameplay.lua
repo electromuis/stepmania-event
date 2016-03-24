@@ -41,35 +41,19 @@ end
 function GameplayMargins(enabled_players, styletype)
 	--local other= {[PLAYER_1]= PLAYER_2, [PLAYER_2]= PLAYER_1, [PLAYER_3]= PLAYER_4, , [PLAYER_4]= PLAYER_3}
 	--local margins= {[PLAYER_1]= {30, 30}, [PLAYER_2]= {30, 30}, [PLAYER_3]= {30, 30}, [PLAYER_4]= {30, 30}}
-	local other= {[PLAYER_1]= PLAYER_2, [PLAYER_2]= PLAYER_1}
+	local other= {[PLAYER_1]= PLAYER_2, [PLAYER_2]= PLAYER_1, [PLAYER_3]= PLAYER_4, [PLAYER_4]= PLAYER_3}
 	local margins= {[PLAYER_1]= {30, 30}, [PLAYER_2]= {30, 30}, [PLAYER_3]= {30, 30}, [PLAYER_4]= {30, 30}}
 	-- Use a fake style width because calculating the real style width throws off
 	-- the code in the engine.
 	local fake_style_width= 272
 	-- Handle the case of a single player that is centered first because it's
 	-- simpler.
-	if Center1Player() then
-		local pn= enabled_players[1]
-		fake_style_width= 544
-		local center= _screen.cx
-		local left= center - (fake_style_width / 2)
-		local right= _screen.w - center - (fake_style_width / 2)
-		-- center margin width will be ignored.
-		return left, 80, right
-	end
-	local ret= {}
-	for i= 1, #widths do
-		local p= widths[i][1]
-		local x= THEME:GetMetric("ScreenGameplay", "PlayerP"..(p+1).."MiscX")
-		local dist_to_edge= _screen.cx
-		if x > _screen.cx then
-			dist_to_edge= _screen.w - edge_width - x
-		else
-			dist_to_edge= x - edge_width
-		end
-		ret[i]= {x, dist_to_edge * 2}
-	end
-	return ret
+
+	local left=0
+	local center=0
+	local right=0
+	
+	return 0, 120, 120, 120, 0
 end
 
 -- AllowOptionsMenu()

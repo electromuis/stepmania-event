@@ -825,7 +825,7 @@ void PlayerOptions::ToggleOneTurn( Turn t )
 float PlayerOptions::GetReversePercentForColumn( int iCol ) const
 {
 	float f = 0;
-	ASSERT(m_pn == PLAYER_1 || m_pn == PLAYER_2);
+	ASSERT(m_pn == PLAYER_1 || m_pn == PLAYER_2|| m_pn == PLAYER_3 || m_pn == PLAYER_4);
 	ASSERT(GAMESTATE->GetCurrentStyle(m_pn) != nullptr);
 	int iNumCols = GAMESTATE->GetCurrentStyle(m_pn)->m_iColsPerPlayer;
 
