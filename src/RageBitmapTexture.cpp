@@ -385,5 +385,14 @@ void RageBitmapTexture::Destroy()
  * OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
  * OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
  * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+<<<<<<< e75f5969bddc861e6476040479d3e7947a44dddb
  * PERFORMANCE OF THIS SOFTWARE.
  */
+=======
+ * PERFORMANCE OF THIS SOFTWARE. 
+ * 
+ * (c) 2016- Electromuis, Anton Grootes
+ * This branch of https://github.com/stepmania/stepmania
+ * will from here on out be released as GPL v3 (wich converts from the previous MIT license)
+ */ 
+>>>>>>> Initial GPL commit for the event fork
