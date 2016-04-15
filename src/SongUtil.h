@@ -133,6 +133,7 @@ namespace SongUtil
 	void AdjustDuplicateSteps( Song *pSong ); // part of TidyUpData
 	void DeleteDuplicateSteps( Song *pSong, std::vector<Steps*> &vSteps );
 
+<<<<<<< 50ba5d82d0618e233c77083a3c2c28e4f7cdd6e2
 	std::string MakeSortString( std::string s );
 	void SortSongPointerArrayByTitle( std::vector<Song*> &vpSongsInOut );
 	void SortSongPointerArrayByBPM( std::vector<Song*> &vpSongsInOut );
@@ -148,6 +149,24 @@ namespace SongUtil
 	void SortSongPointerArrayBySectionName( std::vector<Song*> &vpSongsInOut, SortOrder so );
 	void SortByMostRecentlyPlayedForMachine( std::vector<Song*> &vpSongsInOut );
 	void SortSongPointerArrayByLength( std::vector<Song*> &vpSongsInOut );
+=======
+	RString MakeSortString( RString s );
+	void SortSongPointerArrayByTitle( vector<Song*> &vpSongsInOut );
+	void SortSongPointerArrayByBPM( vector<Song*> &vpSongsInOut );
+	void SortSongPointerArrayByGrades( vector<Song*> &vpSongsInOut, bool bDescending );
+	void SortSongPointerArrayByArtist( vector<Song*> &vpSongsInOut );
+	void SortSongPointerArrayByDisplayArtist( vector<Song*> &vpSongsInOut );
+	void SortSongPointerArrayByGenre( vector<Song*> &vpSongsInOut );
+	void SortSongPointerArrayByGroupAndTitle( vector<Song*> &vpSongsInOut );
+	void SortSongPointerArrayByNumPlays( vector<Song*> &vpSongsInOut, ProfileSlot slot, bool bDescending );
+	void SortSongPointerArrayByNumPlays( vector<Song*> &vpSongsInOut, const Profile* pProfile, bool bDescending );
+	void SortSongPointerArrayByStepsTypeAndMeter( vector<Song*> &vpSongsInOut, StepsType st, Difficulty dc );
+	RString GetSectionNameFromSongAndSort( const Song *pSong, SortOrder so );
+	void SortSongPointerArrayBySectionName( vector<Song*> &vpSongsInOut, SortOrder so );
+	void SortByMostRecentlyPlayedForMachine( vector<Song*> &vpSongsInOut );
+	void SortSongPointerArrayByLength( vector<Song*> &vpSongsInOut );
+	void FilterSongPointerArray(vector<Song*> &vpSongsInOut, RString sQuery);
+>>>>>>> Filtering songwheel, no results
 
 	int CompareSongPointersByGroup(const Song *pSong1, const Song *pSong2);
 
