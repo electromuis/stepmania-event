@@ -36,6 +36,7 @@
 #include "RageFmtWrap.h"
 
 using std::vector;
+#include "ScreenTextEntry.h"
 
 static const char *SelectionStateNames[] = {
 	"SelectingSong",
@@ -57,6 +58,7 @@ AutoScreenMessage( SM_SortOrderChanging );
 AutoScreenMessage( SM_SortOrderChanged );
 AutoScreenMessage( SM_BackFromPlayerOptions );
 AutoScreenMessage( SM_ConfirmDeleteSong );
+AutoScreenMessage( SM_SearchSongs );
 
 static std::string g_sCDTitlePath;
 static bool g_bWantFallbackCdTitle;
@@ -69,6 +71,7 @@ static RageTimer g_ScreenStartedLoadingAt(RageZeroTimer);
 RageTimer g_CanOpenOptionsList(RageZeroTimer);
 
 static LocalizedString PERMANENTLY_DELETE("ScreenSelectMusic", "PermanentlyDelete");
+static LocalizedString SEARCH_SONG("ScreenSelectMusic", "SearchSong");
 
 REGISTER_SCREEN_CLASS( ScreenSelectMusic );
 void ScreenSelectMusic::Init()
@@ -451,6 +454,20 @@ bool ScreenSelectMusic::Input( const InputEventPlus &input )
 			return false;
 		PREFSMAN->m_bShowNativeLanguage.Set( !PREFSMAN->m_bShowNativeLanguage );
 		MESSAGEMAN->Broadcast( "DisplayLanguageChanged" );
+		m_MusicWheel.RebuildWheelItems();
+		return true;
+	}
+	
+	// Song selection
+	if (input.DeviceI.device == DEVICE_KEYBOARD && input.DeviceI.button == KEY_F11)
+	{
+		if (input.type != IET_FIRST_PRESS)
+			return false;
+
+		ScreenTextEntry::TextEntry(SM_SearchSongs, SEARCH_SONG.GetValue(), "", 128);
+
+		PREFSMAN->m_bShowNativeLanguage.Set(!PREFSMAN->m_bShowNativeLanguage);
+		MESSAGEMAN->Broadcast("DisplayLanguageChanged");
 		m_MusicWheel.RebuildWheelItems();
 		return true;
 	}
@@ -1244,6 +1261,10 @@ void ScreenSelectMusic::HandleScreenMessage( const ScreenMessage SM )
 			// need to resume the song preview that was automatically paused
 			m_MusicWheel.ChangeMusic(0);
 		}
+	}
+	else if (SM == SM_SearchSongs)
+	{
+
 	}
 
 	ScreenWithMenuElements::HandleScreenMessage( SM );
@@ -2060,7 +2081,8 @@ bool ScreenSelectMusic::can_open_options_list(PlayerNumber pn)
 #include "LuaBinding.h"
 
 /** @brief Allow Lua to have access to the ScreenSelectMusic. */
-class LunaScreenSelectMusic: public Luna<ScreenSelectMusic>
+class LunaScreenSelectMusic: public Luna<ScreenSelectMusic>
+
 {
 public:
 	static int GetGoToOptions( T* p, lua_State *L ) { lua_pushboolean( L, p->GetGoToOptions() ); return 1; }
