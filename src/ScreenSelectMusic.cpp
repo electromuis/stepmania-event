@@ -1263,7 +1263,8 @@ void ScreenSelectMusic::HandleScreenMessage( const ScreenMessage SM )
 	{
 		m_MusicWheel.SearchSongs(ScreenTextEntry::s_sLastAnswer);
 
-		m_MusicWheel.RebuildWheelItems();
+		m_MusicWheel.ReloadSongList();
+
 		AfterMusicChange();
 	}
 
