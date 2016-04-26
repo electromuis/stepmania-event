@@ -93,6 +93,18 @@ for idx, cat in pairs(paneCategoryValues) do
 			CurrentTrailP2ChangedMessageCommand=function(self)
 				if Player == PLAYER_2 then self:playcommand("Set"); end;
 			end;
+			CurrentStepsP3ChangedMessageCommand=function(self)
+				if Player == PLAYER_3 then self:playcommand("Set"); end;
+			end;
+			CurrentTrailP3ChangedMessageCommand=function(self)
+				if Player == PLAYER_3 then self:playcommand("Set"); end;
+			end;
+			CurrentStepsP4ChangedMessageCommand=function(self)
+				if Player == PLAYER_4 then self:playcommand("Set"); end;
+			end;
+			CurrentTrailP4ChangedMessageCommand=function(self)
+				if Player == PLAYER_4 then self:playcommand("Set"); end;
+			end;
 		};
 	};
 end;

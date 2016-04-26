@@ -123,12 +123,14 @@ for i=1,#judgeLines do
 				InitCommand=cmd(x,xPos;y,yPos;zoom,0.45;diffuse,TapNoteScoreToColor(tns););
 				BeginCommand=function(self)
 					self:visible(GAMESTATE:IsPlayerEnabled(pn))
-					self:addx(pn == PLAYER_1 and 52 or -75);
+					self:addx(pn == PLAYER_1 and 20 or -75);
+					--backup self:addx(pn == PLAYER_1 and 52 or -75);
 					self:halign(1)
 					local playerStageStats = STATSMAN:GetCurStageStats():GetPlayerStageStats(pn)
 					local count = playerStageStats:GetPercentageOfTaps(tns);
 					local p = tonumber(string.format("%.00f",count*100));
 					self:settext( p.."%" );
+				
 				end;
 				OffCommand=THEME:GetMetric(Var "LoadingScreen",metric.."OffCommand");
 			};

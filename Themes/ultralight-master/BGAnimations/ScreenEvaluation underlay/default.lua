@@ -54,7 +54,7 @@ t[#t+1] = Def.ActorFrame{
 
 t[#t+1] = Def.ActorFrame{
 	Name="P2ScoreFrame",
-	InitCommand=cmd(x,SCREEN_CENTER_X*1.7;y,SCREEN_TOP+120),
+	InitCommand=cmd(x,SCREEN_CENTER_X*0.775;y,SCREEN_TOP+120),
 	BeginCommand=cmd(hide_if,not IsPlayerValid(PLAYER_2)),
 	Def.Quad{
 		Name="Outer",
@@ -81,11 +81,70 @@ t[#t+1] = Def.ActorFrame{
 	}
 }
 
+t[#t+1] = Def.ActorFrame{
+	Name="P3ScoreFrame",
+	InitCommand=cmd(x,SCREEN_CENTER_X*1.225;y,SCREEN_TOP+120),
+	BeginCommand=cmd(hide_if,not IsPlayerValid(PLAYER_3)),
+	Def.Quad{
+		Name="Outer",
+		InitCommand=cmd(zoomto,gradeFrameWidth+(gradeFrameBorderSize),gradeFrameHeight+(gradeFrameBorderSize);diffuse,color("0,0,0,0.5"))
+	},
+	Def.Quad{
+		Name="Inner",
+		InitCommand=cmd(x,-0.125;y,0.25;zoomto,gradeFrameWidth,gradeFrameHeight;diffuse,Brightness(PlayerColor(PLAYER_3),0.75))
+	},
+	Def.Quad{
+		Name="GradePart",
+		InitCommand=cmd(x,gradeFrameWidth*0.5;y,0.25;halign,1;zoomto,gradeFrameWidth*0.325,gradeFrameHeight;diffuse,HSVA(0,0,0.9,0.8);),
+		BeginCommand=function(self)
+			self:visible(THEME:GetMetric(Var "LoadingScreen","ShowGradeArea"))
+		end
+	},
+	Def.Quad{
+		Name="Under",
+		InitCommand=cmd(y,20;zoomto,gradeFrameWidth+(gradeFrameBorderSize),4;fadeleft,0.35;faderight,0.35;diffusealpha,0.45;blend,Blend.Add)
+	},
+	Def.Quad{
+		Name="Under2",
+		InitCommand=cmd(y,17;zoomto,gradeFrameWidth+(gradeFrameBorderSize),2;fadeleft,0.25;faderight,0.25;diffusealpha,0.625;blend,Blend.Add;skewx,-0.05)
+	},
+}
+
+t[#t+1] = Def.ActorFrame{
+	Name="P4ScoreFrame",
+	InitCommand=cmd(x,SCREEN_CENTER_X*1.7;y,SCREEN_TOP+120),
+	BeginCommand=cmd(hide_if,not IsPlayerValid(PLAYER_4)),
+	Def.Quad{
+		Name="Outer",
+		InitCommand=cmd(zoomto,gradeFrameWidth+(gradeFrameBorderSize),gradeFrameHeight+(gradeFrameBorderSize);diffuse,color("0,0,0,0.5"))
+	},
+	Def.Quad{
+		Name="Inner",
+		InitCommand=cmd(x,-0.125;y,0.25;zoomto,gradeFrameWidth,gradeFrameHeight;diffuse,Brightness(PlayerColor(PLAYER_4),0.75))
+	},
+	Def.Quad{
+		Name="GradePart",
+		InitCommand=cmd(x,gradeFrameWidth*0.5;y,0.25;halign,1;zoomto,gradeFrameWidth*0.325,gradeFrameHeight;diffuse,HSVA(0,0,0.9,0.8);),
+		BeginCommand=function(self)
+			self:visible(THEME:GetMetric(Var "LoadingScreen","ShowGradeArea"))
+		end
+	},
+	Def.Quad{
+		Name="Under",
+		InitCommand=cmd(y,20;zoomto,gradeFrameWidth+(gradeFrameBorderSize),4;fadeleft,0.35;faderight,0.35;diffusealpha,0.45;blend,Blend.Add)
+	},
+	Def.Quad{
+		Name="Under2",
+		InitCommand=cmd(y,17;zoomto,gradeFrameWidth+(gradeFrameBorderSize),2;fadeleft,0.25;faderight,0.25;diffusealpha,0.625;blend,Blend.Add;skewx,-0.05)
+	},
+}
+
+
 -- decoration lines
 local middleX = WideScale(90,128)
 local bannerSideX = WideScale(136,174)
 local endSideX = WideScale(44,82)
-
+--[[
 t[#t+1] = Def.ActorFrame{
 	Name="P1LineFrame",
 	InitCommand=cmd(hide_if,not IsPlayerValid(PLAYER_1)),
@@ -125,7 +184,7 @@ t[#t+1] = Def.ActorFrame{
 		OnCommand=cmd(sleep,1;decelerate,0.5;cropbottom,0)
 	},
 }
-
+--]]
 t[#t+1] = LoadActor("judgeBGs")
 
 return t
