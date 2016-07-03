@@ -477,7 +477,6 @@ void NoteFieldColumn::calc_pos_only(mod_val_inputs& input, Rage::Vector3& out)
 void NoteFieldColumn::hold_render_transform(mod_val_inputs& input,
 	Rage::transform& trans, bool do_rot)
 {
-<<<<<<< e75f5969bddc861e6476040479d3e7947a44dddb
 	if(!m_in_defective_mode)
 	{
 		m_note_mod.hold_render_eval(input, trans, do_rot);
@@ -488,29 +487,6 @@ void NoteFieldColumn::hold_render_transform(mod_val_inputs& input,
 	{
 		m_defective_mods->hold_render_transform(input.y_offset, m_column, trans);
 	}
-=======
-	const PlayerOptions& curr_options= m_pPlayerState->m_PlayerOptions.GetCurrent();
-	// Adjust draw range depending on some effects
-	m_FieldRenderArgs.draw_pixels_after_targets= m_iDrawDistanceAfterTargetsPixels;
-	// HACK: If boomerang and centered are on, then we want to draw much 
-	// earlier so that the notes don't pop on screen.
-	float centered_times_boomerang=
-		curr_options.m_fScrolls[PlayerOptions::SCROLL_CENTERED] *
-		curr_options.m_fAccels[PlayerOptions::ACCEL_BOOMERANG];
-	m_FieldRenderArgs.draw_pixels_after_targets +=
-		int(SCALE(centered_times_boomerang, 0.f, 1.f, 0.f, -SCREEN_HEIGHT/2));
-	m_FieldRenderArgs.draw_pixels_before_targets =
-		m_iDrawDistanceBeforeTargetsPixels;
-
-	float draw_scale= 1;
-	draw_scale*= 1 + 0.5f * fabsf(curr_options.m_fPerspectiveTilt);
-	draw_scale*= 1 + fabsf(curr_options.m_fEffects[PlayerOptions::EFFECT_MINI]+0.6f);
-
-	m_FieldRenderArgs.draw_pixels_after_targets=
-		(int)(m_FieldRenderArgs.draw_pixels_after_targets * draw_scale);
-	m_FieldRenderArgs.draw_pixels_before_targets=
-		(int)(m_FieldRenderArgs.draw_pixels_before_targets * draw_scale);
->>>>>>> Initial GPL commit for the event fork
 }
 
 void NoteFieldColumn::calc_reverse_shift()
@@ -3496,11 +3472,7 @@ struct LunaNoteField : Luna<NoteField>
 		ADD_GET_SET_METHODS(oitg_zoom_mode);
 	}
 };
-<<<<<<< e75f5969bddc861e6476040479d3e7947a44dddb
 LUA_REGISTER_DERIVED_CLASS(NoteField, ActorFrame);
-=======
-
-LUA_REGISTER_DERIVED_CLASS(NoteField, ActorFrame)
 // lua end
 
 /*
@@ -3531,4 +3503,3 @@ LUA_REGISTER_DERIVED_CLASS(NoteField, ActorFrame)
  * This branch of https://github.com/stepmania/stepmania
  * will from here on out be released as GPL v3 (wich converts from the previous MIT license)
  */
->>>>>>> Initial GPL commit for the event fork

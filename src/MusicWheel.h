@@ -69,12 +69,8 @@ protected:
 	std::vector<MusicWheelItemData *> & getWheelItemsData(SortOrder so);
 	void readyWheelItemsData(SortOrder so);
 
-<<<<<<< 50ba5d82d0618e233c77083a3c2c28e4f7cdd6e2
-	std::string				m_sLastModeMenuItem;
-=======
-	RString             m_SearchQuery;
-	RString				m_sLastModeMenuItem;
->>>>>>> Filtering songwheel, no results
+	RString             		m_SearchQuery;
+	std::string			m_sLastModeMenuItem;
 	SortOrder			m_SortOrder;
 	RageSound			m_soundChangeSort;
 

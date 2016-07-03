@@ -1530,18 +1530,15 @@ bool Player::EarlyAbortDraw() const
 		!HasVisibleParts() || ActorFrame::EarlyAbortDraw();
 }
 
-<<<<<<< e75f5969bddc861e6476040479d3e7947a44dddb
 void Player::DrawPrimitives()
 {
 	bool draw_notefield= m_note_field && !IsOniDead();
-=======
 	const PlayerOptions& curr_options= m_pPlayerState->m_PlayerOptions.GetCurrent();
 	float tilt= curr_options.m_fPerspectiveTilt;
 	float skew= curr_options.m_fSkew;
 	float mini= curr_options.m_fEffects[PlayerOptions::EFFECT_MINI]+0.6f;
 	float center_y= GetY() + (GRAY_ARROWS_Y_STANDARD + GRAY_ARROWS_Y_REVERSE) / 2;
 	bool reverse= curr_options.GetReversePercentForColumn(0) > .5;
->>>>>>> Initial GPL commit for the event fork
 
 	if(m_drawing_notefield_board || m_being_drawn_by_proxy)
 	{

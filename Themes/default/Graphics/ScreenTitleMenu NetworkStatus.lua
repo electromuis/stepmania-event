@@ -2,39 +2,30 @@ local netConnected = IsNetConnected();
 local loggedOnSMO = IsNetSMOnline();
 
 local t = Def.ActorFrame{
-	Def.Quad {
-		InitCommand=cmd(y,-12;x,160;zoomto,320+32,38;vertalign,top;diffuse,Color.Black;diffusealpha,0.5);
-		OnCommand=cmd(faderight,0.45);
-		BeginCommand=function(self)
-			if netConnected then
-				self:zoomtoheight( 38 );
-			else
-				self:zoomtoheight( 24 );
-			end
-		end;
-	};
 	LoadFont("Common Normal") .. {
-		InitCommand=cmd(uppercase,true;zoom,0.75;shadowlength,1;horizalign,left);
+		InitCommand=cmd(halign,1;zoom,0.5);
 		BeginCommand=function(self)
 			-- check network status
 			if netConnected then
 				self:diffuse( color("0.95,0.975,1,1") );
 				self:diffusebottomedge( color("0.72,0.89,1,1") );
-				self:settext( Screen.String("Network OK") );
+				self:settext( ScreenString("Network OK") );
 			else
-				self:diffuse( color("1,1,1,1") );
-				self:settext( Screen.String("Offline") );
+				self:diffuse( color("0.75,0.75,0.75,1") );
+				self:settext( ScreenString("Offline") );
 			end;
 		end;
+		OffCommand=cmd(bouncebegin,0.125;zoomy,0;zoomx,1024;addx,SCREEN_WIDTH);
 	};
 };
 
 if netConnected then
 	t[#t+1] = LoadFont("Common Normal") .. {
-		InitCommand=cmd(y,16;horizalign,left;zoom,0.5875;shadowlength,1;diffuse,color("0.72,0.89,1,1"));
+		InitCommand=cmd(y,14;halign,1;zoom,0.5;diffuse,color("0.72,0.89,1,1"));
 		BeginCommand=function(self)
-			self:settext( string.format(Screen.String("Connected to %s"), GetServerName()) );
+			self:settext( string.format(ScreenString("Connected to %s"), GetServerName()) );
 		end;
+		OffCommand=cmd(bouncebegin,0.125;zoomy,0);
 	};
 end;
 

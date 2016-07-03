@@ -1,3 +1,25 @@
+--[[
+return Def.ActorFrame{
+	LoadFont("Common normal")..{
+		Text="BPM";
+		InitCommand=cmd(shadowlength,1;y,-16;zoom,0.5;strokecolor,color("#00000000"));
+	};
+	Def.SongBPMDisplay {
+		File=THEME:GetPathF("Common", "normal");
+		Name="BPMDisplay";
+		SetCommand=function(self) self:SetFromGameState() end;
+		InitCommand=cmd(shadowlength,1;strokecolor,color("#00000000"));
+		CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
+		CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
+	};
+};
+--]]
+
+local bpmLabel = LoadFont("Common normal")..{
+	Text="BPM";
+	InitCommand=cmd(shadowlength,1;y,-16;zoom,0.5;strokecolor,color("#00000000"));
+};
+
 -- check if players are playing steps with different timingdata.
 local numPlayers = GAMESTATE:GetNumPlayersEnabled()
 
@@ -11,10 +33,11 @@ local function UpdateSingleBPM(self)
 end
 
 local displaySingle = Def.ActorFrame{
-	-- manual bpm display
+	bpmLabel;
+	-- manual bpm displays
 	LoadFont("BPMDisplay", "bpm")..{
 		Name="BPMDisplay";
-		InitCommand=cmd(zoom,0.675;shadowlength,1);
+		InitCommand=cmd(zoom,0.675;shadowlength,1;strokecolor,color("#00000000"));
 	};
 
 	--[[
@@ -38,8 +61,20 @@ else
 	local stepsP1 = GAMESTATE:GetCurrentSteps(PLAYER_1)
 	local stepsP2 = GAMESTATE:GetCurrentSteps(PLAYER_2)
 
-	if not stepsP1 or not stepsP2 then
-		return displaySingle
+	-- handle edge cases
+	local isRaveOrBattle = GAMESTATE:GetPlayMode() == 'PlayMode_Rave' or GAMESTATE:GetPlayMode() == 'PlayMode_Battle'
+	if isRaveOrBattle then
+		local master = GAMESTATE:GetMasterPlayerNumber()
+		local notMaster = (master == PLAYER_1) and PLAYER_2 or PLAYER_1
+
+		if not GAMESTATE:IsHumanPlayer(notMaster) then
+			-- computer players are using the same steps as the humans.
+			if notMaster == PLAYER_1 then
+				stepsP1 = stepsP2
+			elseif notMaster == PLAYER_2 then
+				stepsP2 = stepsP1
+			end
+		end
 	end
 
 	local stP1 = stepsP1:GetStepsType()
@@ -74,16 +109,16 @@ else
 		end
 	end
 
-	local playerOffset = 36 -- was 28
 	local displayTwoPlayers = Def.ActorFrame{
+		bpmLabel;
 		-- manual bpm displays
 		LoadFont("BPMDisplay", "bpm")..{
 			Name="DisplayP1";
-			InitCommand=cmd(x,-playerOffset;zoom,0.6;shadowlength,1);
+			InitCommand=cmd(x,-28;zoom,0.6;shadowlength,1;strokecolor,color("#00000000"));
 		};
 		LoadFont("BPMDisplay", "bpm")..{
 			Name="DisplayP2";
-			InitCommand=cmd(x,playerOffset;zoom,0.6;shadowlength,1);
+			InitCommand=cmd(x,28;zoom,0.6;shadowlength,1;strokecolor,color("#00000000"));
 		};
 	};
 

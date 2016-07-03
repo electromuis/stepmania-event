@@ -14,6 +14,7 @@
 #include "OptionRowHandler.h"
 #include "LuaBinding.h"
 #include "InputEventPlus.h"
+#include <algorithm>
 
 using std::vector;
 
@@ -605,6 +606,8 @@ void ScreenOptions::PositionRows( bool bTween )
 	// Choices for each player. If only one player is active, it's the same for both.
 	int P1Choice = GAMESTATE->IsHumanPlayer(PLAYER_1)? m_iCurrentRow[PLAYER_1]: m_iCurrentRow[PLAYER_2];
 	int P2Choice = GAMESTATE->IsHumanPlayer(PLAYER_2)? m_iCurrentRow[PLAYER_2]: m_iCurrentRow[PLAYER_1];
+	int P3Choice = GAMESTATE->IsHumanPlayer(PLAYER_3) ? m_iCurrentRow[PLAYER_3] : m_iCurrentRow[PLAYER_1];
+	int P4Choice = GAMESTATE->IsHumanPlayer(PLAYER_4) ? m_iCurrentRow[PLAYER_4] : m_iCurrentRow[PLAYER_1];
 
 	vector<OptionRow*> Rows( m_pRows );
 	OptionRow *pSeparateExitRow = nullptr;
@@ -618,6 +621,10 @@ void ScreenOptions::PositionRows( bool bTween )
 			--P1Choice;
 		if( P2Choice == (int) Rows.size()-1 )
 			--P2Choice;
+		if (P3Choice == (int)Rows.size() - 1)
+			--P3Choice;
+		if (P4Choice == (int)Rows.size() - 1)
+			--P4Choice;
 
 		Rows.pop_back();
 	}
@@ -632,13 +639,15 @@ void ScreenOptions::PositionRows( bool bTween )
 	}
 	else
 	{
+		int choices[] = { P1Choice, P2Choice , P3Choice, P4Choice };
+
 		// First half:
-		const int earliest = min( P1Choice, P2Choice );
+		const int earliest = *std::min_element(choices, choices+4);
 		first_start = max( earliest - halfsize/2, 0 );
 		first_end = first_start + halfsize;
 
 		// Second half:
-		const int latest = max( P1Choice, P2Choice );
+		const int latest = *std::max_element(choices, choices + 4);
 
 		second_start = max( latest - halfsize/2, 0 );
 

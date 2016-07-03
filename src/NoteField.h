@@ -490,8 +490,6 @@ private:
 };
 
 #endif
-<<<<<<< e75f5969bddc861e6476040479d3e7947a44dddb
-=======
 
 /**
  * @file
@@ -523,4 +521,3 @@ private:
  * This branch of https://github.com/stepmania/stepmania
  * will from here on out be released as GPL v3 (wich converts from the previous MIT license)
  */
->>>>>>> Initial GPL commit for the event fork

@@ -1,4 +1,5 @@
-return Def.HelpDisplay {
+return Def.Actor{};
+--[[Def.HelpDisplay {
 	File = THEME:GetPathF("HelpDisplay", "text");
 	InitCommand=function(self)
 		local s = THEME:GetString(Var "LoadingScreen","HelpText");
@@ -8,3 +9,4 @@ return Def.HelpDisplay {
 		self:SetTipsColonSeparated( params.Text );
 	end;
 };
+--]]

@@ -81,11 +81,11 @@ void ScreenStatsOverlay::Update( float fDeltaTime )
 	if( PREFSMAN->m_bShowStats )
 	{
 		RString debugText = DISPLAY->GetStats();
-		const Style* pStyle = GAMESTATE->GetCurrentStyle(PLAYER_4);
-		if (pStyle) {
-			debugText.append("\n");
-			debugText.append(StyleTypeToString(pStyle->m_StyleType));
-		}
+		//const Style* pStyle = GAMESTATE->GetCurrentStyle(PLAYER_4);
+		//if (pStyle) {
+		//	debugText.append("\n");
+		//	debugText.append(StyleTypeToString(pStyle->m_StyleType));
+		//}
 
 		m_textStats.SetText( debugText );
 		if ( SHOW_SKIPS )

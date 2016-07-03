@@ -1,3 +1,3 @@
-return LoadFont("Common Bold") .. {
-	InitCommand=cmd(zoom,12/54;y,-1;shadowlength,1;strokecolor,Color.Outline);
+return LoadFont("Common normal") .. {
+	InitCommand=cmd(zoom,0.425;y,-3;shadowlength,1;strokecolor,color("#00000033"););
 };

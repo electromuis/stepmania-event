@@ -1,40 +1,40 @@
-local curScreen = Var "LoadingScreen";
-local curStageIndex = GAMESTATE:GetCurrentStageIndex();
-local t = Def.ActorFrame {};
+local ScreenName = Var "LoadingScreen";
 
-t[#t+1] = Def.ActorFrame {
-	LoadFont("Common Normal") .. {
-		InitCommand=cmd(y,-1;shadowlength,1;);
-		BeginCommand=function(self)
-			local top = SCREENMAN:GetTopScreen()
-			if top then
-				if not string.find(top:GetName(),"ScreenEvaluation") then
+local stages = Def.ActorFrame {
+	LoadFont("Common normal") .. {
+		InitCommand=cmd(shadowlength,1;zoom,0.5;NoStroke;visible,true);
+		BeginCommand=cmd(playcommand,"Set";);
+		CurrentSongChangedMessageCommand=cmd(finishtweening;playcommand,"Set";);
+
+		SetCommand=function(self, params)
+			local curStage = GAMESTATE:GetCurrentStage()
+			if GAMESTATE:IsCourseMode() then
+				-- stuff
+			elseif GAMESTATE:IsDemonstration() then
+				self:visible(false)
+			elseif GAMESTATE:IsEventMode() then
+				local curStageIndex = GAMESTATE:GetCurrentStageIndex();
+				if ScreenName == "ScreenGameplay" then
 					curStageIndex = curStageIndex + 1
 				end
-			end
-			self:playcommand("Set")
-		end;
-		CurrentSongChangedMessageCommand= cmd(playcommand,"Set"),
-		SetCommand=function(self)
-			local curStage = GAMESTATE:GetCurrentStage();
-			if GAMESTATE:GetCurrentCourse() then
-				self:settext( curStageIndex+1 .. " / " .. GAMESTATE:GetCurrentCourse():GetEstimatedNumStages() );
-			elseif GAMESTATE:IsEventMode() then
-				self:settextf("Stage %s", curStageIndex);
-			else
-				local thed_stage= thified_curstage_index(curScreen:find("Evaluation"))
-				if THEME:GetMetric(curScreen,"StageDisplayUseShortString") then
-					self:settext(thed_stage)
-					self:zoom(0.75);
+				-- I guess this should be behind either the Easter Eggs toggle or --dopefish.
+				if curStageIndex == 6 then
+					self:settext("I am not a number,\nI am a free man.")
 				else
-					self:settextf("%s Stage", thed_stage);
-					self:zoom(1);
-				end;
-			end;
-			-- StepMania is being stupid so we have to do this here;
-			self:diffuse(StageToColor(curStage));
-			self:diffusetopedge(ColorLightTone(StageToColor(curStage)));
+					self:settextf("#%i",curStageIndex)
+				end
+			else
+				local screen = SCREENMAN:GetTopScreen();
+				if screen and screen.GetStageStats then
+					local stageStats = screen:GetStageStats();
+					curStage = stageStats:GetStage();
+				end
+
+				self:settext( StageToLocalizedString(curStage) );
+				self:diffuse( StageToColor(s) );
+			end
 		end;
 	};
 };
-return t
+
+return stages;
