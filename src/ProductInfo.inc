@@ -2,11 +2,11 @@
 ; Don't forget to also change ProductInfo.h!
 
 ; a friendly string to refer to the product
-!define PRODUCT_FAMILY "StepMania"
+!define PRODUCT_FAMILY "StepMania-Event"
 
 ; PRODUCT_ID must NOT be "StepMania" unless you want people to uninstall 3.9
 ; when they install StepMania 5. (not recommended)
-!define PRODUCT_ID "StepMania 5.0"
+!define PRODUCT_ID "StepMania-Event 5.0"
 ; TODO: This needs to be updated with the git rev hash
 !define PRODUCT_VER "5.0-UNKNOWN"
 !define PRODUCT_DISPLAY "${PRODUCT_FAMILY} ${PRODUCT_VER}"

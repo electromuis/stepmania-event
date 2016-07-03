@@ -5,7 +5,7 @@ else()
 endif()
 
 set(CPACK_PACKAGE_NAME "${SM_EXE_NAME}")
-set(CPACK_PACKAGE_VENDOR "StepMania")
+set(CPACK_PACKAGE_VENDOR "StepMania-Event")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Rhythm Game Simulator")
 set(CPACK_PACKAGE_VERSION_MAJOR "${SM_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${SM_VERSION_MINOR}")
@@ -27,7 +27,7 @@ set(CPACK_NSIS_COMPRESSOR "/SOLID lzma")
 # Custom items for nsis go here.
 set(CPACK_SM_NSIS_REPOSITORY "https://github.com/stepmania/stepmania")
 set(CPACK_SM_NSIS_ROOT_DIR "${SM_ROOT_DIR}")
-set(CPACK_SM_NSIS_PRODUCT_ID "StepMania ${SM_VERSION_MAJOR}.${SM_VERSION_MINOR}")
+set(CPACK_SM_NSIS_PRODUCT_ID "StepMania-Event ${SM_VERSION_MAJOR}.${SM_VERSION_MINOR}")
 set(CPACK_SM_NSIS_PRODUCT_VERSION "${SM_VERSION_TRADITIONAL}.0")
 set(CPACK_SM_NSIS_HEADER_BITMAP "${SM_INSTALLER_DIR}/header-sm5.bmp")
 set(CPACK_SM_NSIS_WELCOME_BITMAP "${SM_INSTALLER_DIR}/welcome-sm5.bmp")
@@ -44,8 +44,8 @@ if(WIN32)
   # This is currently done to maintain backwards compatibility.
   # However, removing these two will allow for multiple versions of StepMania
   # to be installed relatively cleanly.
-  set(CPACK_PACKAGE_INSTALL_DIRECTORY "StepMania ${SM_VERSION_MAJOR}")
-  set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "StepMania ${SM_VERSION_MAJOR}")
+  set(CPACK_PACKAGE_INSTALL_DIRECTORY "StepMania-Event ${SM_VERSION_MAJOR}")
+  set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "StepMania-Event ${SM_VERSION_MAJOR}")
   set(CPACK_NSIS_EXECUTABLES_DIRECTORY "Program")
   set(CPACK_NSIS_INSTALL_ROOT "C:\\\\Games")
 endif()

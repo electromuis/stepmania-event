@@ -1,7 +1,7 @@
 
 [Desktop Entry]
 Encoding=UTF-8
-Name=StepMania
+Name=StepMania-Event
 GenericName=Rhythm and dance game
 TryExec=stepmania
 Exec=stepmania
