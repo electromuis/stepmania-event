@@ -292,6 +292,9 @@ void ScreenSelectMusic::BeginScreen()
 	m_bAllowOptionsMenu = m_bAllowOptionsMenuRepeat = false;
 	ZERO( m_iSelection );
 
+	FOREACH_PlayerNumber(pn)
+		GAMESTATE->ResetPlayerOptions(pn);
+
 	if( USE_OPTIONS_LIST )
 	{
 		FOREACH_PlayerNumber( pn )

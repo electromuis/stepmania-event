@@ -483,7 +483,7 @@ void GameState::JoinPlayer( PlayerNumber pn )
 			pStyle = GAMEMAN->GetFirstCompatibleStyle( m_pCurGame, GetNumSidesJoined(), cur_style->m_StepsType );
 
 		// use SetCurrentStyle in case of StyleType_OnePlayerTwoSides
-		SetCurrentStyle( pStyle, pn );
+		//SetCurrentStyle( pStyle, pn );
 	}
 
 	Message msg( MessageIDToString(Message_PlayerJoined) );
@@ -3221,7 +3221,7 @@ public:
 			luaL_error( L, "Too many sides joined for style %s", pStyle->m_szName.c_str() );
 		}
 		else if( p->GetNumSidesJoined() == 1 &&
-			( st == StyleType_TwoPlayersTwoSides || st == StyleType_TwoPlayersSharedSides ) )
+			( st == StyleType_TwoPlayersTwoSides || st == StyleType_TwoPlayersSharedSides || st == StyleType_FourPlayersFourSides ) )
 		{
 			luaL_error( L, "Too few sides joined for style %s", pStyle->m_szName.c_str() );
 		}

@@ -1,7 +1,7 @@
 local t = Def.ActorFrame{
 	Def.Quad{
 		Name="TopLine";
-		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y*0.8;zoomto,SCREEN_WIDTH,2;diffuserightedge,HSV(192,1,0.8););
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y*0.7;zoomto,SCREEN_WIDTH,2;diffuserightedge,HSV(192,1,0.8););
 		OffCommand=cmd(linear,0.375;cropright,1);
 		CancelCommand=cmd(linear,0.3;diffuserightedge,HSV(192,1,0.8);diffuseleftedge,HSV(192,0,1);cropleft,1);
 	};
@@ -14,7 +14,7 @@ local t = Def.ActorFrame{
 	};
 	Def.Quad{
 		Name="BottomLine";
-		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y*1.2;zoomto,SCREEN_WIDTH,2;diffuseleftedge,HSV(192,1,0.8););
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y*1.3;zoomto,SCREEN_WIDTH,2;diffuseleftedge,HSV(192,1,0.8););
 		OffCommand=cmd(linear,0.375;cropleft,1);
 		CancelCommand=cmd(linear,0.3;diffuseleftedge,HSV(192,1,0.8);diffuserightedge,HSV(192,0,1);cropright,1);
 	};

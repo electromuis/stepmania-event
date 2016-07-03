@@ -6,6 +6,8 @@
 #include "RageDisplay.h"
 #include "RageLog.h"
 #include "ScreenDimensions.h"
+#include "GameState.h"
+#include "Style.h"
 
 REGISTER_SCREEN_CLASS( ScreenStatsOverlay );
 
@@ -78,7 +80,14 @@ void ScreenStatsOverlay::Update( float fDeltaTime )
 	this->SetVisible( PREFSMAN->m_bShowStats );
 	if( PREFSMAN->m_bShowStats )
 	{
-		m_textStats.SetText( DISPLAY->GetStats() );
+		RString debugText = DISPLAY->GetStats();
+		const Style* pStyle = GAMESTATE->GetCurrentStyle(PLAYER_4);
+		if (pStyle) {
+			debugText.append("\n");
+			debugText.append(StyleTypeToString(pStyle->m_StyleType));
+		}
+
+		m_textStats.SetText( debugText );
 		if ( SHOW_SKIPS )
 			UpdateSkips();
 	}
