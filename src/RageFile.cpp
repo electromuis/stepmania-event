@@ -66,6 +66,7 @@ bool RageFile::Open( const std::string& path, int mode )
 	}
 
 	int error;
+
 	m_File = FILEMAN->Open( path, mode, error );
 
 	if( m_File == nullptr )

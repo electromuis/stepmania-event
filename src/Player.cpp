@@ -879,7 +879,8 @@ void Player::Update( float fDeltaTime )
 				m_soundAttackEnding.Play(false);
 		}
 
-		float fMiniPercent = m_pPlayerState->m_PlayerOptions.GetCurrent().m_fEffects[PlayerOptions::EFFECT_MINI]+0.6f;
+		//todo mini offset per playstyle
+		float fMiniPercent = m_pPlayerState->m_PlayerOptions.GetCurrent().m_fEffects[PlayerOptions::EFFECT_MINI]+0.5f;
 		float fTinyPercent = m_pPlayerState->m_PlayerOptions.GetCurrent().m_fEffects[PlayerOptions::EFFECT_TINY];
 		float fJudgmentZoom = min( std::pow(0.5f, fMiniPercent+fTinyPercent), 1.0f );
 
@@ -1536,7 +1537,8 @@ void Player::DrawPrimitives()
 	const PlayerOptions& curr_options= m_pPlayerState->m_PlayerOptions.GetCurrent();
 	float tilt= curr_options.m_fPerspectiveTilt;
 	float skew= curr_options.m_fSkew;
-	float mini= curr_options.m_fEffects[PlayerOptions::EFFECT_MINI]+0.6f;
+	//todo mini offset per playstyle
+	float mini= curr_options.m_fEffects[PlayerOptions::EFFECT_MINI]+0.5f;
 	float center_y= GetY() + (GRAY_ARROWS_Y_STANDARD + GRAY_ARROWS_Y_REVERSE) / 2;
 	bool reverse= curr_options.GetReversePercentForColumn(0) > .5;
 

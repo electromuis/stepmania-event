@@ -413,7 +413,8 @@ float ArrowEffects::GetYOffset( const PlayerState* pPlayerState, int iCol, float
 static void ArrowGetReverseShiftAndScale(int iCol, float fYReverseOffsetPixels, float &fShiftOut, float &fScaleOut)
 {
 	// XXX: Hack: we need to scale the reverse shift by the zoom.
-	float fMiniPercent = curr_options->m_fEffects[PlayerOptions::EFFECT_MINI]+0.6f;
+	//todo mini offset per playstyle
+	float fMiniPercent = curr_options->m_fEffects[PlayerOptions::EFFECT_MINI]+0.5f;
 	float fZoom = 1 - fMiniPercent*0.5f;
 
 	// don't divide by 0
@@ -643,7 +644,8 @@ static float GetCenterLine()
 {
 	/* Another mini hack: if EFFECT_MINI is on, then our center line is at
 	 * eg. 320, not 160. */
-	const float fMiniPercent = curr_options->m_fEffects[PlayerOptions::EFFECT_MINI]+0.6f;
+	//todo mini offset per playstyle
+	const float fMiniPercent = curr_options->m_fEffects[PlayerOptions::EFFECT_MINI]+0.5f;
 	const float fZoom = 1 - fMiniPercent*0.5f;
 	return CENTER_LINE_Y / fZoom;
 }

@@ -255,7 +255,7 @@ void GameCommand::LoadOne( const Command& cmd )
 		m_LuaFunction.SetFromExpression( sValue );
 		if(m_LuaFunction.IsNil())
 		{
-			MAKE_INVALID("Lua error in game command: \"" + sValue + "\" evaluated to nil");
+			MAKE_INVALID("Lua error in game :" + sValue + "\" evaluated to nil");
 		}
 	}
 

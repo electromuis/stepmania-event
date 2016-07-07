@@ -12,6 +12,28 @@ t[#t+1] = LoadActor("_warning")..{
 t[#t+1] = StandardDecorationFromFile( "NowPlaying", "NowPlaying" );
 t[#t+1] = StandardDecorationFromFile( "StageDisplay", "StageDisplay" );
 
+--todo make by playstyle?
+
+local splitSize = SCREEN_WIDTH/4
+
+t[#t+1] = Def.Quad{
+    InitCommand=cmd(x,splitSize*1;y,SCREEN_CENTER_Y+37;zoomto,2,SCREEN_HEIGHT;diffusebottomedge,HSV(192,1,0.8););
+    OnCommand=cmd(cropbottom,1;sleep,0.2;bouncebegin,0.2;cropbottom,0);
+    OffCommand=cmd(linear,0.5;croptop,1);
+};
+
+t[#t+1] = Def.Quad{
+    InitCommand=cmd(x,splitSize*2;y,SCREEN_CENTER_Y+37;zoomto,2,SCREEN_HEIGHT;diffusebottomedge,HSV(192,1,0.8););
+    OnCommand=cmd(cropbottom,1;sleep,0.2;bouncebegin,0.2;cropbottom,0);
+    OffCommand=cmd(linear,0.5;croptop,1);
+};
+
+t[#t+1] = Def.Quad{
+    InitCommand=cmd(x,splitSize*3;y,SCREEN_CENTER_Y+37;zoomto,2,SCREEN_HEIGHT;diffusebottomedge,HSV(192,1,0.8););
+    OnCommand=cmd(cropbottom,1;sleep,0.2;bouncebegin,0.2;cropbottom,0);
+    OffCommand=cmd(linear,0.5;croptop,1);
+};
+
 -- Song Meter Display
 t[#t+1] = Def.ActorFrame{
 	Name="SongMeterDisplayFrame";
@@ -45,8 +67,27 @@ t[#t+1] = Def.ActorFrame{
 			};
 		};
 	};
-	if theme_config:get_data().TimingDisplay then
-		songMeterDisplay[#songMeterDisplay+1] = CreateSegments(pn);
+};
+
+
+
+	Def.Quad{
+		InitCommand=cmd(x,SCREEN_CENTER_X-8;y,SCREEN_CENTER_Y-50;zoomto,2,SCREEN_HEIGHT;diffusebottomedge,HSV(192,1,0.8););
+		OnCommand=cmd(cropbottom,1;sleep,0.2;bouncebegin,0.2;cropbottom,0);
+		OffCommand=cmd(linear,0.5;croptop,1);
+	};
+
+--- blah
+--t[#t+1] = StandardDecorationFromFile( "LifeFrame", "LifeFrame" );
+--t[#t+1] = StandardDecorationFromFile( "ScoreFrame", "ScoreFrame" );
+
+--[[
+if ShowStandardDecoration("ModIconRows") then
+	for pn in ivalues(PlayerNumber) do
+		local t2 = Def.ModIconRow {
+				InitCommand=cmd(Load,"ModIconRowGameplay"..ToEnumShortString(pn),pn);
+			};	
+		t[#t+1] = StandardDecorationFromTable( "ModIconRow" .. ToEnumShortString(pn), t2 );
 	end
 end
 
