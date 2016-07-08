@@ -24,6 +24,7 @@ list(APPEND SMDATA_GLOBAL_SINGLETON_SRC
   "StatsManager.cpp"
   "ThemeManager.cpp"
   "UnlockManager.cpp"
+  "WebServer.cpp"
 )
 list(APPEND SMDATA_GLOBAL_SINGLETON_HPP
   "AnnouncerManager.h"
@@ -51,6 +52,7 @@ list(APPEND SMDATA_GLOBAL_SINGLETON_HPP
   "StatsManager.h"
   "ThemeManager.h"
   "UnlockManager.h"
+  "WebServer.h"
 )
 
 if(WITH_NETWORKING)

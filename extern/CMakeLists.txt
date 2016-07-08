@@ -1,6 +1,7 @@
 include(CMakeProject-lua.cmake)
 include(CMakeProject-glew.cmake)
 include(CMakeProject-json.cmake)
+include(CMakeProject-cppnetlib.cmake)
 if (APPLE OR MSVC)
   include(CMakeProject-mad.cmake)
   include(CMakeProject-zlib.cmake)

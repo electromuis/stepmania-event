@@ -36,6 +36,7 @@
 #endif
 
 // StepMania global classes
+#include "WebServer.h"
 #include "ThemeManager.h"
 #include "NoteSkinManager.h"
 #include "PrefsManager.h"
@@ -1068,6 +1069,7 @@ int sm_main(int argc, char* argv[])
 	THEME		= new ThemeManager;
 	ANNOUNCER	= new AnnouncerManager;
 	NOTESKIN	= new NoteSkinManager;
+	WEBSERVER   = new WebServer;
 
 	// Switch to the last used game type, and set up the theme and announcer.
 	SwitchToLastPlayedGame();

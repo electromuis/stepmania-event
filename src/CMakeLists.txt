@@ -330,6 +330,7 @@ list(APPEND SMDATA_LINK_LIB
   "png"
   "glew"
   "jpeg"
+  "cppnetlib"
 )
 include(../extern/CMakeProject-mmmagic.cmake)
 
@@ -525,6 +526,7 @@ if(NOT APPLE)
     "${SM_EXTERN_DIR}/glew-1.5.8/include"
     "${SM_EXTERN_DIR}/jsoncpp/include"
     "${SM_EXTERN_DIR}/zlib"
+    "${SM_EXTERN_DIR}/cpp-netlib/include"
   )
   if(MSVC)
     if (WITH_OGG)
