@@ -22,8 +22,15 @@ private:
 	void StartServer();
 	boost::shared_ptr<boost::thread> m_serverThread;
 	boost::shared_ptr<http_server> m_server;
+
 };
 
 extern WebServer*	WEBSERVER;	// global and accessible from anywhere in our program
 
 #endif
+
+/*
+* (c) 2016- Electromuis, Anton Grootes
+* This branch of https://github.com/stepmania/stepmania
+* will from here on out be released as GPL v3 (wich converts from the previous MIT license)
+*/

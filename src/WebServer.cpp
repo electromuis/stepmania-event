@@ -1,4 +1,7 @@
+#include "global.h"
+
 #include "WebServer.h"
+#include "RageLog.h"
 
 WebServer* WEBSERVER = NULL;
 
@@ -24,17 +27,18 @@ struct WebServer::handler {
 	}
 
 	void log(http_server::string_type const &info) {
-		std::clog << "webserver/error: " << info << std::endl;
+		LOG->Trace("webserver/error: %s", info );
 	}
 };
 
 
 void WebServer::StartServer() {
 	handler handler_{ *this };
-	http_server::options options(handler_);
+	//http_server::options options(handler_);
 	
-	m_server.reset(new http_server(options.address("0.0.0.0").port(81)));
-	std::clog << "webserver/notice: Starting public server." << std::endl;
+	//m_server.reset(new http_server(options.address("0.0.0.0").port(81)));
+	LOG->Trace("webserver/notice: Starting public server.");
+	
 	
 	m_server->run();
 }
@@ -49,11 +53,16 @@ WebServer::~WebServer() {
 }
 
 http_server::response WebServer::GETresponse(const http_server::request &request) {
-	
+	return http_server::response::stock_reply(http_server::response::ok, "nothing to see here");
 	
 }
 
 http_server::response WebServer::POSTresponse(const http_server::request &request) {
-	
+	return http_server::response::stock_reply(http_server::response::ok, "nothing to see here");
 }
 
+/*
+* (c) 2016- Electromuis, Anton Grootes
+* This branch of https://github.com/stepmania/stepmania
+* will from here on out be released as GPL v3 (wich converts from the previous MIT license)
+*/
