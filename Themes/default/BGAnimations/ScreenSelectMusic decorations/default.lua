@@ -40,6 +40,8 @@ local function LoadCursor(player)
 					CurrentStepsP2ChangedMessageCommand=cmd(playcommand,"UpdateAlpha");
                     CurrentStepsP3ChangedMessageCommand=cmd(playcommand,"UpdateAlpha");
                     CurrentStepsP4ChangedMessageCommand=cmd(playcommand,"UpdateAlpha");
+                    CurrentSongChangedMessageCommand=cmd(playcommand,"UpdateAlpha");
+                    CurrentCourseChangedMessageCommand=cmd(playcommand,"UpdateAlpha");
                     
 					UpdateAlphaCommand=function(self)
                         if GAMESTATE:IsHumanPlayer(player)==false then return end;
@@ -60,6 +62,15 @@ local function LoadCursor(player)
                         
                         self:linear(.08);
                         self:diffusealpha(defuseval);
+                        
+                        if TOURNAMENTMAN:IsActive() then
+                            local steps = GAMESTATE:GetCurrentSteps(PLAYER_1)
+                            for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
+                                if pn ~= PLAYER_1 and steps ~= GAMESTATE:GetCurrentSteps(pn) then  
+                                    GAMESTATE:SetCurrentSteps(pn, steps)
+                                end
+                            end
+                        end
 					end;
 					PlayerJoinedMessageCommand=function(self,param )
 						if param.Player ~= player then return end;
@@ -67,7 +78,7 @@ local function LoadCursor(player)
 					end;
 				};
 				Def.ActorFrame {
-					InitCommand=cmd(x,-(112 + PlayerNumber:Reverse()[player]*16););
+					InitCommand=cmd(x,-(162 + PlayerNumber:Reverse()[player]*-16););
 					children={
 						Font("mentone","24px") .. {
 							InitCommand=cmd(settext,pname(player);diffuse,PlayerColor(player);shadowlength,1;zoom,0.5;shadowcolor,color("#00000044");NoStroke);

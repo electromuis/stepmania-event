@@ -114,10 +114,18 @@ MusicWheelItem::MusicWheelItem( RString sType ):
 
 	this->SubscribeToMessage( Message_CurrentStepsP1Changed );
 	this->SubscribeToMessage( Message_CurrentStepsP2Changed );
+	this->SubscribeToMessage(Message_CurrentStepsP3Changed);
+	this->SubscribeToMessage(Message_CurrentStepsP4Changed);
+	
 	this->SubscribeToMessage( Message_CurrentTrailP1Changed );
 	this->SubscribeToMessage( Message_CurrentTrailP2Changed );
+	this->SubscribeToMessage(Message_CurrentTrailP3Changed);
+	this->SubscribeToMessage(Message_CurrentTrailP4Changed);
+
 	this->SubscribeToMessage( Message_PreferredDifficultyP1Changed );
 	this->SubscribeToMessage( Message_PreferredDifficultyP2Changed );
+	this->SubscribeToMessage(Message_PreferredDifficultyP3Changed);
+	this->SubscribeToMessage(Message_PreferredDifficultyP4Changed);
 }
 
 MusicWheelItem::MusicWheelItem( const MusicWheelItem &cpy ):
@@ -377,10 +385,16 @@ void MusicWheelItem::HandleMessage( const Message &msg )
 {
 	if( msg == Message_CurrentStepsP1Changed ||
 	    msg == Message_CurrentStepsP2Changed ||
+		msg == Message_CurrentStepsP3Changed ||
+		msg == Message_CurrentStepsP4Changed ||
 	    msg == Message_CurrentTrailP1Changed ||
 	    msg == Message_CurrentTrailP2Changed ||
+		msg == Message_CurrentTrailP3Changed ||
+		msg == Message_CurrentTrailP4Changed ||
 	    msg == Message_PreferredDifficultyP1Changed ||
-	    msg == Message_PreferredDifficultyP2Changed )
+	    msg == Message_PreferredDifficultyP2Changed ||
+		msg == Message_PreferredDifficultyP3Changed || 
+		msg == Message_PreferredDifficultyP4Changed )
 	{
 		RefreshGrades();
 	}

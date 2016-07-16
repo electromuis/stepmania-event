@@ -21,6 +21,7 @@
 #include "NetworkSyncManager.h"
 #include "RageTimer.h"
 #include "RageInput.h"
+#include "TournamentManager.h"
 
 static RageTimer g_GameplayTimer;
 
@@ -292,6 +293,7 @@ void GameLoop::RunGameLoop()
 		SCREENMAN->Update( fDeltaTime );
 		MEMCARDMAN->Update();
 		NSMAN->Update( fDeltaTime );
+		TOURNAMENTMAN->Update(fDeltaTime);
 
 		/* Important: Process input AFTER updating game logic, or input will be
 		 * acting on song beat from last frame */

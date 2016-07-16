@@ -94,4 +94,7 @@ for i=359,0,-1 do
 	};
 end;
 
+--Kill any running tournaments
+TOURNAMENTMAN:Terminate()
+
 return t

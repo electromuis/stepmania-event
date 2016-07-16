@@ -153,11 +153,15 @@ end
 
  --show player speedmods
 for pn, p in ipairs(GAMESTATE:GetHumanPlayers()) do
-    speedframe[#speedframe+1] = Def.ActorFrame {
+    local nactor = Def.ActorFrame {
         InitCommand=cmd(xy,ScreenMetric('SpeedP'..pn..'X'), ScreenMetric('SpeedP'..pn..'Y'));
         Def.Quad {
             InitCommand=function(self)
-                self:zoomto(80,60):diffuse(PlayerColor(p)):diffusealpha(0.4)
+                --if TOURNAMENTMAN:IsActive() then
+                --    self:zoomto(80,70):diffuse(PlayerColor(p)):diffusealpha(0.4):y(5)
+                --else
+                    self:zoomto(80,60):diffuse(PlayerColor(p)):diffusealpha(0.4)
+                --end
             end
         };
         Def.BitmapText {
@@ -211,6 +215,21 @@ for pn, p in ipairs(GAMESTATE:GetHumanPlayers()) do
             end;
         };
     }
+    
+    if TOURNAMENTMAN:IsActive() then
+        nactor[#nactor+1] = Def.BitmapText {
+            Name="PlayerText";
+            Font="Common normal";
+            InitCommand=cmd(y,32;queuecommand,"UpdateName";zoom,0.7);
+            UpdateNameCommand=function(self)
+                self:settext(TOURNAMENTMAN:GetPlayerName(p))
+                --self:settext("apple")
+            end;
+            TournamentUpdateMessageCommand=cmd(queuecommand,"UpdateName");
+        };
+    end
+    
+    speedframe[#speedframe+1] = nactor
 end
 
 t[#t+1] = speedframe

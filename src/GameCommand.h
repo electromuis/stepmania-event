@@ -117,6 +117,7 @@ public:
 	bool m_bApplyDefaultOptions;
 	// sm-ssc also adds:
 	bool m_bFadeMusic;
+	bool m_bStartTournament;
 	float m_fMusicFadeOutVolume;
 	// currently, GameSoundManager uses consts for fade out/in times, so this
 	// is kind of pointless, but I want to have it working eventually. -aj

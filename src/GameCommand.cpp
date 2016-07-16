@@ -22,6 +22,7 @@
 #include "LocalizedString.h"
 #include "arch/ArchHooks/ArchHooks.h"
 #include "ScreenPrompt.h"
+#include "TournamentManager.h"
 
 static LocalizedString COULD_NOT_LAUNCH_BROWSER( "GameCommand", "Could not launch web browser." );
 
@@ -64,6 +65,7 @@ void GameCommand::Init()
 	m_bStopMusic = false;
 	m_bApplyDefaultOptions = false;
 	m_bFadeMusic = false;
+	m_bStartTournament = false;
 	m_fMusicFadeOutVolume = -1.0f;
 	m_fMusicFadeOutSeconds = -1.0f;
 }
@@ -475,6 +477,9 @@ void GameCommand::LoadOne( const Command& cmd )
 		}
 	}
 
+	else if (sName == "tournament") {
+		m_bStartTournament = true;
+	}
 	else
 	{
 		MAKE_INVALID(ssprintf( "Command '%s' is not valid.", cmd.GetOriginalCommandString().c_str()));
@@ -884,6 +889,10 @@ void GameCommand::ApplySelf( const vector<PlayerNumber> &vpns ) const
 		{
 			PO_GROUP_ASSIGN(GAMESTATE->m_pPlayerState[pn]->m_PlayerOptions, ModsLevel_Stage, m_LifeType, LifeType_Battery);
 		}
+	}
+
+	if (m_bStartTournament == true) {
+		TOURNAMENTMAN->Activate();
 	}
 }
 

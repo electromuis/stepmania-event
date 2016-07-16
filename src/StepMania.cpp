@@ -36,6 +36,7 @@
 #endif
 
 // StepMania global classes
+#include "TournamentManager.h"
 #include "ThemeManager.h"
 #include "NoteSkinManager.h"
 #include "PrefsManager.h"
@@ -302,6 +303,7 @@ void ShutdownGame()
 	SAFE_DELETE( SOUND ); // uses GAMESTATE, PREFSMAN
 	SAFE_DELETE( PREFSMAN );
 	SAFE_DELETE( GAMESTATE );
+	SAFE_DELETE(TOURNAMENTMAN);
 	SAFE_DELETE( GAMEMAN );
 	SAFE_DELETE( NOTESKIN );
 	SAFE_DELETE( THEME );
@@ -1164,6 +1166,7 @@ int sm_main(int argc, char* argv[])
 	NSMAN 		= new NetworkSyncManager( pLoadingWindow );
 	MESSAGEMAN	= new MessageManager;
 	STATSMAN	= new StatsManager;
+	TOURNAMENTMAN = new TournamentManager;
 
 	// Initialize which courses are ranking courses here.
 	SONGMAN->UpdateRankingCourses();

@@ -29,6 +29,7 @@
 #include "CommonMetrics.h"
 #include "ScoreKeeperNormal.h"
 #include "InputEventPlus.h"
+#include "TournamentManager.h"
 
 // metrics that are common to all ScreenEvaluation classes
 #define BANNER_WIDTH			THEME->GetMetricF(m_sName,"BannerWidth")
@@ -221,6 +222,7 @@ void ScreenEvaluation::Init()
 		}
 	}
 
+	
 	if(STATSMAN->m_vPlayedStageStats.empty())
 	{
 		LuaHelpers::ReportScriptError("PlayerStageStats is empty!  Do not use SM_GoToNextScreen on ScreenGameplay, use SM_DoNextScreen instead so that ScreenGameplay can clean up properly.");
@@ -244,6 +246,19 @@ void ScreenEvaluation::Init()
 
 	// Run this here, so STATSMAN->m_CurStageStats is available to overlays.
 	ScreenWithMenuElements::Init();
+
+	//Send scores to the tournament manager
+	if (TOURNAMENTMAN->IsActive()) {
+		int sendScores[NUM_PLAYERS];
+		int sendTimes[NUM_PLAYERS];
+		for (int i = 0; i < NUM_PLAYERS; ++i) {
+			sendScores[i] = static_cast<int>(m_pStageStats->m_player[i].GetPercentDancePoints()*100);
+			sendTimes[i] = static_cast<int>(m_pStageStats->m_player[i].m_fAliveSeconds);
+		}
+
+		TOURNAMENTMAN->SendScores(sendScores, sendTimes, NUM_PLAYERS);
+	}
+
 
 	// Calculate grades
 	Grade grade[NUM_PLAYERS];

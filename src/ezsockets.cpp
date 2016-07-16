@@ -365,6 +365,9 @@ int EzSockets::PeekPack(char *data, unsigned int max)
 	PeekData((char*)&size, 4);
 	size = ntohl(size);
 
+	if(!data)
+		return size;
+
 	if (blocking)
 		while (inBuffer.length()<(size+4) && !IsError())
 			pUpdateRead();

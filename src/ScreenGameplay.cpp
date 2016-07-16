@@ -60,6 +60,7 @@
 #include "SongUtil.h"
 #include "Song.h"
 #include "XmlFileUtil.h"
+#include "TournamentManager.h"
 #include "Profile.h" // for replay data stuff
 
 // Defines
@@ -330,6 +331,9 @@ ScreenGameplay::ScreenGameplay()
 
 void ScreenGameplay::Init()
 {
+	//No player changes allowed while playing
+	TOURNAMENTMAN->LockSelection(true);
+
 	SubscribeToMessage( "Judgment" );
 
 	PLAYER_TYPE.Load(			m_sName, "PlayerType" );
@@ -2685,6 +2689,9 @@ void ScreenGameplay::StageFinished( bool bBackedOut )
 
 	STATSMAN->CalcAccumPlayedStageStats();
 	GAMESTATE->FinishStage();
+
+	//Release again
+	TOURNAMENTMAN->LockSelection(false);
 }
 
 void ScreenGameplay::HandleScreenMessage( const ScreenMessage SM )

@@ -159,7 +159,7 @@ local function OptionNameString(str) return THEME:GetString('OptionNames',str) e
 -- theme preferences
 local ultralightPrefs = {
 	AutoSetStyle = {
-		Default = true,
+		Default = false,
 		Choices = { OptionNameString('Off'), OptionNameString('On') },
 		Values = { false, true }
 	},
@@ -170,6 +170,11 @@ local ultralightPrefs = {
 	},
 	GameplayFooter = {
 		Default = false,
+		Choices = { OptionNameString('Off'), OptionNameString('On') },
+		Values = { false, true }
+	},
+    OpenEvent = {
+		Default = true,
 		Choices = { OptionNameString('Off'), OptionNameString('On') },
 		Values = { false, true }
 	},
