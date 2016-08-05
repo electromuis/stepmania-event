@@ -55,6 +55,7 @@
 #include "InputQueue.h"
 #include "SongCacheIndex.h"
 #include "BannerCache.h"
+#include "WebServer.h"
 //#include "BackgroundCache.h"
 #include "UnlockManager.h"
 #include "RageFileManager.h"
@@ -317,6 +318,7 @@ void ShutdownGame()
 	SAFE_DELETE( FILEMAN );
 	SAFE_DELETE( LUA );
 	SAFE_DELETE( HOOKS );
+	SAFE_DELETE(WEBSERVER);
 }
 
 static void HandleException( const RString &sError )
@@ -1164,6 +1166,7 @@ int sm_main(int argc, char* argv[])
 	NSMAN 		= new NetworkSyncManager( pLoadingWindow );
 	MESSAGEMAN	= new MessageManager;
 	STATSMAN	= new StatsManager;
+	WEBSERVER   = new WebServer;
 
 	// Initialize which courses are ranking courses here.
 	SONGMAN->UpdateRankingCourses();

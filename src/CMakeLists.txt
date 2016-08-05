@@ -330,6 +330,7 @@ list(APPEND SMDATA_LINK_LIB
   "png"
   "glew"
   "jpeg"
+  "civetweb"
 )
 include(../extern/CMakeProject-mmmagic.cmake)
 
@@ -524,6 +525,7 @@ if(NOT APPLE)
   list(APPEND SM_INCLUDE_DIRS
     "${SM_EXTERN_DIR}/glew-1.5.8/include"
     "${SM_EXTERN_DIR}/jsoncpp/include"
+    "${SM_EXTERN_DIR}/civetweb/include"
     "${SM_EXTERN_DIR}/zlib"
   )
   if(MSVC)

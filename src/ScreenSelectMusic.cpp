@@ -26,6 +26,7 @@
 #include "PlayerState.h"
 #include "CommonMetrics.h"
 #include "BannerCache.h"
+#include "WebServer.h"
 //#include "BackgroundCache.h"
 #include "ScreenPrompt.h"
 #include "Song.h"
@@ -280,7 +281,13 @@ void ScreenSelectMusic::BeginScreen()
 
 	OPTIONS_MENU_AVAILABLE.Load( m_sName, "OptionsMenuAvailable" );
 	PlayCommand( "Mods" );
+
+
 	m_MusicWheel.BeginScreen();
+	if(WEBSERVER->m_queueMusic){
+		m_MusicWheel.SelectSong(WEBSERVER->GetNextSong());
+		AfterMusicChange();
+	}
 
 	m_SelectionState = SelectionState_SelectingSong;
 	ZERO( m_bStepsChosen );

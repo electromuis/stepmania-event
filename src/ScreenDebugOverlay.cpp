@@ -30,6 +30,7 @@
 #include "ScreenSyncOverlay.h"
 #include "ThemeMetric.h"
 #include "XmlToLua.h"
+#include "WebServer.h"
 
 static bool g_bIsDisplayed = false;
 static bool g_bIsSlow = false;
@@ -584,6 +585,7 @@ static LocalizedString CPU				( "ScreenDebugOverlay", "CPU" );
 static LocalizedString SONG			( "ScreenDebugOverlay", "Song" );
 static LocalizedString MACHINE			( "ScreenDebugOverlay", "Machine" );
 static LocalizedString SYNC_TEMPO		( "ScreenDebugOverlay", "Tempo" );
+static LocalizedString TOGGLE_QUEUE		( "ScreenDebugOverlay", "Toggle Song Queue" );
 
 class DebugLineAutoplay : public IDebugLine
 {
@@ -1194,6 +1196,18 @@ class DebugLineMenuTimer : public IDebugLine
 	}
 };
 
+class DebugLineToggleQueue : public IDebugLine
+{
+	virtual RString GetDisplayTitle() { return TOGGLE_QUEUE.GetValue(); }
+	virtual RString GetDisplayValue() { return RString(); }
+	virtual bool IsEnabled() { return WEBSERVER->m_queueMusic; }
+	virtual void DoAndLog( RString &sMessageOut )
+	{
+		WEBSERVER->m_queueMusic = !WEBSERVER->m_queueMusic;
+		IDebugLine::DoAndLog( sMessageOut );
+	}
+};
+
 class DebugLineFlushLog : public IDebugLine
 {
 	virtual RString GetDisplayTitle() { return FLUSH_LOG.GetValue(); }
@@ -1338,6 +1352,7 @@ DECLARE_ONE( DebugLineConvertXML );
 DECLARE_ONE( DebugLineWriteProfiles );
 DECLARE_ONE( DebugLineWritePreferences );
 DECLARE_ONE( DebugLineMenuTimer );
+DECLARE_ONE( DebugLineToggleQueue );
 DECLARE_ONE( DebugLineFlushLog );
 DECLARE_ONE( DebugLinePullBackCamera );
 DECLARE_ONE( DebugLineVolumeDown );
