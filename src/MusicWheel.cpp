@@ -259,7 +259,7 @@ MusicWheel::~MusicWheel()
 	}
 }
 
-void MusicWheel::SearchSongs(RString query)
+void MusicWheel::SearchSongs(std::string query)
 {
 	m_SearchQuery = query;
 }

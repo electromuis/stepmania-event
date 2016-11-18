@@ -148,7 +148,7 @@ namespace SongUtil
 	void SortSongPointerArrayBySectionName( std::vector<Song*> &vpSongsInOut, SortOrder so );
 	void SortByMostRecentlyPlayedForMachine( std::vector<Song*> &vpSongsInOut );
 	void SortSongPointerArrayByLength( std::vector<Song*> &vpSongsInOut );
-	void FilterSongPointerArray(std::vector<Song*> &vpSongsInOut, RString sQuery);
+	void FilterSongPointerArray(std::vector<Song*> &vpSongsInOut, std::string sQuery);
 
 	int CompareSongPointersByGroup(const Song *pSong1, const Song *pSong2);
 

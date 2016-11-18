@@ -128,6 +128,8 @@ static const AutoMappings g_AutoKeyMappings_Dance = AutoMappings (
 	AutoMappingEntry( 0, KEY_KP_C9,		DANCE_BUTTON_UPRIGHT,		true )
 );
 
+static const int DANCE_COL_SPACING = 64;
+
 static const Style g_Style_Dance_Single =
 {	// STYLE_DANCE_SINGLE
 	true,				// m_bUsedForGameplay
@@ -152,16 +154,16 @@ static const Style g_Style_Dance_Single =
 			{ TRACK_4, nullptr },
 		},
 		{	// PLAYER_3
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+			{ TRACK_1, nullptr },
+			{ TRACK_2, nullptr },
+			{ TRACK_3, nullptr },
+			{ TRACK_4, nullptr },
 		},
 		{	// PLAYER_4
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+			{ TRACK_1, nullptr },
+			{ TRACK_2, nullptr },
+			{ TRACK_3, nullptr },
+			{ TRACK_4, nullptr },
 		}
 	},
 	{	// m_iInputColumn[NUM_GameController][NUM_GameButton]
@@ -195,22 +197,22 @@ static const Style g_Style_Dance_Versus =
 			{ TRACK_4, nullptr },
 		},
 		{	// PLAYER_2
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+			{ TRACK_1, nullptr },
+			{ TRACK_2, nullptr },
+			{ TRACK_3, nullptr },
+			{ TRACK_4, nullptr },
 		},
 		{	// PLAYER_3
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+			{ TRACK_1, nullptr },
+			{ TRACK_2, nullptr },
+			{ TRACK_3, nullptr },
+			{ TRACK_4, nullptr },
 		},
 		{	// PLAYER_4
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+			{ TRACK_1, nullptr },
+			{ TRACK_2, nullptr },
+			{ TRACK_3, nullptr },
+			{ TRACK_4, nullptr },
 		}
 	},
 	{
@@ -238,28 +240,28 @@ static const Style g_Style_Dance_Quad =
 	4,				// m_iColsPerPlayer
 	{	// m_ColumnInfo[NUM_PLAYERS][MAX_COLS_PER_PLAYER];
 		{	// PLAYER_1
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+			{ TRACK_1,nullptr },
+			{ TRACK_2,nullptr },
+			{ TRACK_3,nullptr },
+			{ TRACK_4,nullptr },
 		},
 		{	// PLAYER_2
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+			{ TRACK_1,nullptr },
+			{ TRACK_2,nullptr },
+			{ TRACK_3,nullptr },
+			{ TRACK_4,nullptr },
 		},
 		{	// PLAYER_3
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+			{ TRACK_1,nullptr },
+			{ TRACK_2,nullptr },
+			{ TRACK_3,nullptr },
+			{ TRACK_4,nullptr },
 		},
 		{	// PLAYER_4
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+			{ TRACK_1,nullptr },
+			{ TRACK_2,nullptr },
+			{ TRACK_3,nullptr },
+			{ TRACK_4,nullptr },
 		},
 	},
 	{

@@ -407,15 +407,15 @@ void SongUtil::SortSongPointerArrayByTitle( vector<Song*> &vpSongsInOut )
 	sort( vpSongsInOut.begin(), vpSongsInOut.end(), CompareSongPointersByTitle );
 }
 
-void SongUtil::FilterSongPointerArray(vector<Song*> &vpSongsInOut, RString query)
+void SongUtil::FilterSongPointerArray(vector<Song*> &vpSongsInOut, std::string query)
 {
 	vector<Song*>::iterator it;
 	for (it = vpSongsInOut.begin(); it != vpSongsInOut.end();)
 	{
 		if (!(
-			((*it)->GetDisplayMainTitle().MakeLower().find(query.MakeLower())!=-1) ||
-			(uiLevenshteinDistance((*it)->GetDisplayMainTitle().MakeLower(), query.MakeLower()) < 5) ||
-			(uiLevenshteinDistance((*it)->GetDisplayArtist().MakeLower(), query.MakeLower()) < 5)
+			((*it)->GetDisplayMainTitle().find(query)!=-1) ||
+			(uiLevenshteinDistance((*it)->GetDisplayMainTitle(), query) < 5) ||
+			(uiLevenshteinDistance((*it)->GetDisplayArtist(), query) < 5)
 			))
 		{
 			it = vpSongsInOut.erase(it);

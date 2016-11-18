@@ -39,12 +39,11 @@ ScreenEnding::ScreenEnding()
 			GAMESTATE->JoinPlayer(pn);
 		}
 
-		GAMESTATE->m_pCurSong.Set( SONGMAN->GetRandomSong() );
 		GAMESTATE->m_pCurCourse.Set( SONGMAN->GetRandomCourse() );
 
 		FOREACH_PlayerNumber(pn)
 		{
-			GAMESTATE->m_pCurSteps[pn].Set( GAMESTATE->m_pCurSong->GetAllSteps()[0] );
+			GAMESTATE->m_pCurSteps[pn].Set( GAMESTATE->get_curr_song()->GetAllSteps()[0] );
 			STATSMAN->m_CurStageStats.m_player[pn].m_vpPossibleSteps.push_back( GAMESTATE->m_pCurSteps[pn] );
 			STATSMAN->m_CurStageStats.m_player[pn].m_iStepsPlayed = 1;
 			PO_GROUP_ASSIGN( GAMESTATE->m_pPlayerState[pn]->m_PlayerOptions, ModsLevel_Stage, m_fScrollSpeed, 2.0f );

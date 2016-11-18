@@ -940,16 +940,6 @@ void Actor::UpdateInternal(float delta_time)
 				m_fSecsIntoEffect-= GetEffectPeriod();
 			}
 			break;
-		case CLOCK_TIMER:
-			m_fSecsIntoEffect+= delta_time;
-			m_fEffectDelta= delta_time;
-			// Wrap the counter, so it doesn't increase indefinitely (causing loss
-			// of precision if a screen is left to sit for a day).
-			if(m_fSecsIntoEffect > GetEffectPeriod())
-			{
-				m_fSecsIntoEffect-= GetEffectPeriod();
-			}
-			break;
 		case CLOCK_TIMER_GLOBAL:
 			generic_global_timer_update(RageTimer::GetUsecsSinceStart(),
 				m_fEffectDelta, m_fSecsIntoEffect);
@@ -982,40 +972,10 @@ void Actor::UpdateInternal(float delta_time)
 			generic_global_timer_update(g_fCurrentBGMBeatNoOffset,
 				m_fEffectDelta, m_fSecsIntoEffect);
 			break;
-		case CLOCK_BGM_TIME_NO_OFFSET:
+			case CLOCK_BGM_TIME_NO_OFFSET:
 			generic_global_timer_update(g_fCurrentBGMTimeNoOffset,
 				m_fEffectDelta, m_fSecsIntoEffect);
 			break;
-		default:
-			if(m_EffectClock >= CLOCK_LIGHT_1 && m_EffectClock <= CLOCK_LIGHT_LAST)
-			{
-				generic_global_timer_update(
-					g_fCabinetLights[m_EffectClock - CLOCK_LIGHT_1],m_fEffectDelta, m_fSecsIntoEffect);
-				break;
-			case CLOCK_BGM_BEAT:
-				generic_global_timer_update(g_fCurrentBGMBeat,
-					m_fEffectDelta, m_fSecsIntoEffect);
-				break;
-			case CLOCK_BGM_BEAT_PLAYER1:
-				generic_global_timer_update(g_vfCurrentBGMBeatPlayer[PLAYER_1],
-					m_fEffectDelta, m_fSecsIntoEffect);
-				break;
-			case CLOCK_BGM_BEAT_PLAYER2:
-				generic_global_timer_update(g_vfCurrentBGMBeatPlayer[PLAYER_2],
-					m_fEffectDelta, m_fSecsIntoEffect);
-				break;
-			case CLOCK_BGM_TIME:
-				generic_global_timer_update(g_fCurrentBGMTime,
-					m_fEffectDelta, m_fSecsIntoEffect);
-				break;
-			case CLOCK_BGM_BEAT_NO_OFFSET:
-				generic_global_timer_update(g_fCurrentBGMBeatNoOffset,
-					m_fEffectDelta, m_fSecsIntoEffect);
-				break;
-			case CLOCK_BGM_TIME_NO_OFFSET:
-				generic_global_timer_update(g_fCurrentBGMTimeNoOffset,
-					m_fEffectDelta, m_fSecsIntoEffect);
-				break;
 			default:
 				if(m_EffectClock >= CLOCK_LIGHT_1 && m_EffectClock <= CLOCK_LIGHT_LAST)
 				{

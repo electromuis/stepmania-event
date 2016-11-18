@@ -80,7 +80,7 @@ void ScreenStatsOverlay::Update( float fDeltaTime )
 	this->SetVisible( PREFSMAN->m_bShowStats );
 	if( PREFSMAN->m_bShowStats )
 	{
-		RString debugText = DISPLAY->GetStats();
+		std::string debugText = DISPLAY->GetStats();
 		//const Style* pStyle = GAMESTATE->GetCurrentStyle(PLAYER_4);
 		//if (pStyle) {
 		//	debugText.append("\n");
