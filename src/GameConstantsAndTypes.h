@@ -1,4 +1,4 @@
-/* GameConstantsAndTypes - Things used in many places that don't change often. */
+﻿/* GameConstantsAndTypes - Things used in many places that don't change often. */
 
 #ifndef GAME_CONSTANTS_AND_TYPES_H
 #define GAME_CONSTANTS_AND_TYPES_H
@@ -556,6 +556,7 @@ enum StyleType
 	StyleType_OnePlayerOneSide,		/**< Single style */
 	StyleType_TwoPlayersTwoSides,		/**< Versus style */
 	StyleType_FourPlayersFourSides,		/**< Quad style */
+	StyleType_EightPlayersEightSides,		/**< Quad style */
 	StyleType_OnePlayerTwoSides,		/**< Double style */
 	StyleType_TwoPlayersSharedSides,	/**< Routine style */
 	NUM_StyleType,

@@ -1,4 +1,4 @@
-#ifndef GAME_INPUT_H
+﻿#ifndef GAME_INPUT_H
 #define GAME_INPUT_H
 
 #include "EnumHelper.h"
@@ -12,6 +12,10 @@ enum GameController
 	GameController_2,	/**< The right controller */
 	GameController_3,	/**< The right controller */
 	GameController_4,	/**< The right controller */
+	GameController_5,	/**< The left controller */
+	GameController_6,	/**< The right controller */
+	GameController_7,	/**< The right controller */
+	GameController_8,	/**< The right controller */
 	NUM_GameController,	/**< The number of controllers allowed. */
 	GameController_Invalid,
 };

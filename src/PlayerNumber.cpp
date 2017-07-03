@@ -1,4 +1,4 @@
-#include "global.h"
+﻿#include "global.h"
 #include "PlayerNumber.h"
 #include "LuaManager.h"
 #include "LocalizedString.h"
@@ -8,6 +8,10 @@ static const char *PlayerNumberNames[] = {
 	"P2",
 	"P3",
 	"P4",
+	"P5",
+	"P6",
+	"P7",
+	"P8"
 };
 XToString( PlayerNumber );
 XToLocalizedString( PlayerNumber );

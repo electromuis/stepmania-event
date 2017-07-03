@@ -1,4 +1,4 @@
-#include "global.h"
+﻿#include "global.h"
 #include "StepMania.h"
 #include "arch/Dialog/Dialog.h"
 #include "GameManager.h"
@@ -173,9 +173,37 @@ static const Style g_Style_Dance_Single =
 			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
 			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
 			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+		},
+		{	// PLAYER_1
+				{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
+				{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+		},
+		{	// PLAYER_2
+				{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
+				{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+		},
+		{	// PLAYER_3
+				{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
+				{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+		},
+		{	// PLAYER_4
+				{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
+				{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
 		}
 	},
 	{	// m_iInputColumn[NUM_GameController][NUM_GameButton]
+		{ 0, 3, 2, 1, Style::END_MAPPING },
+		{ 0, 3, 2, 1, Style::END_MAPPING },
+		{ 0, 3, 2, 1, Style::END_MAPPING },
+		{ 0, 3, 2, 1, Style::END_MAPPING },
 		{ 0, 3, 2, 1, Style::END_MAPPING },
 		{ 0, 3, 2, 1, Style::END_MAPPING },
 		{ 0, 3, 2, 1, Style::END_MAPPING },
@@ -196,7 +224,7 @@ static const Style g_Style_Dance_Versus =
 	false,				// m_bUsedForHowToPlay
 	"versus",			// m_szName
 	StepsType_dance_single,	// m_StepsType
-	StyleType_TwoPlayersTwoSides,		// m_StyleType
+	StyleType_EightPlayersEightSides,		// m_StyleType
 	4,				// m_iColsPerPlayer
 	{	// m_ColumnInfo[NUM_PLAYERS][MAX_COLS_PER_PLAYER];
 		{	// PLAYER_1
@@ -222,9 +250,37 @@ static const Style g_Style_Dance_Versus =
 			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
 			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
 			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+		},
+		{	// PLAYER_1
+				{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
+				{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+		},
+		{	// PLAYER_2
+				{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
+				{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+		},
+		{	// PLAYER_3
+				{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
+				{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
+		},
+		{	// PLAYER_4
+				{ TRACK_1,	-DANCE_COL_SPACING*1.5f, NULL },
+				{ TRACK_2,	-DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_3,	+DANCE_COL_SPACING*0.5f, NULL },
+				{ TRACK_4,	+DANCE_COL_SPACING*1.5f, NULL },
 		}
 	},
 	{
+		{ 0, 3, 2, 1, Style::END_MAPPING },
+		{ 0, 3, 2, 1, Style::END_MAPPING },
+		{ 0, 3, 2, 1, Style::END_MAPPING },
+		{ 0, 3, 2, 1, Style::END_MAPPING },
 		{ 0, 3, 2, 1, Style::END_MAPPING },
 		{ 0, 3, 2, 1, Style::END_MAPPING },
 		{ 0, 3, 2, 1, Style::END_MAPPING },
@@ -3433,6 +3489,9 @@ void GameManager::GetCompatibleStyles( const Game *pGame, int iNumPlayers, vecto
 			break;
 		case StyleType_FourPlayersFourSides:
 			iNumPlayersRequired = 4;
+			break;
+		case StyleType_EightPlayersEightSides:
+			iNumPlayersRequired = 8;
 			break;
 		}
 

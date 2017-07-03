@@ -1,4 +1,4 @@
-/* PlayerNumber - A simple type representing a player. */
+﻿/* PlayerNumber - A simple type representing a player. */
 
 #ifndef PlayerNumber_H
 #define PlayerNumber_H
@@ -13,6 +13,10 @@ enum PlayerNumber
 	PLAYER_2,
 	PLAYER_3,
 	PLAYER_4,
+	PLAYER_5,
+	PLAYER_6,
+	PLAYER_7,
+	PLAYER_8,
 	NUM_PlayerNumber,	// leave this at the end
 	PlayerNumber_Invalid
 };

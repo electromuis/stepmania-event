@@ -1,4 +1,4 @@
-#include "global.h"
+﻿#include "global.h"
 #include "MemoryCardManager.h"
 #include "arch/MemoryCard/MemoryCardDriver.h"	// for UsbStorageDevice
 #include "ScreenManager.h"
@@ -59,6 +59,10 @@ const RString MEM_CARD_MOUNT_POINT[NUM_PLAYERS] =
 	"/@mc2/",
 	"/@mc3/",
 	"/@mc4/",
+	"/@mc5/",
+	"/@mc6/",
+	"/@mc7/",
+	"/@mc8/",
 };
 
 static const RString MEM_CARD_MOUNT_POINT_INTERNAL[NUM_PLAYERS] =
@@ -68,6 +72,10 @@ static const RString MEM_CARD_MOUNT_POINT_INTERNAL[NUM_PLAYERS] =
 	"/@mc2int/",
 	"/@mc3int/",
 	"/@mc4int/",
+	"/@mc5int/",
+	"/@mc6int/",
+	"/@mc7int/",
+	"/@mc8int/",
 };
 
 // Only access the memory card driver in a timeout-safe thread.

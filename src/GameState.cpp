@@ -1,4 +1,4 @@
-#include "global.h"
+﻿#include "global.h"
 #include "GameState.h"
 #include "Actor.h"
 #include "AdjustSync.h"
@@ -1424,11 +1424,15 @@ static LocalizedString PLAYER1	("GameState","Player 1");
 static LocalizedString PLAYER2	("GameState","Player 2");
 static LocalizedString PLAYER3  ("GameState","Player 3");
 static LocalizedString PLAYER4  ("GameState","Player 4");
+static LocalizedString PLAYER5  ("GameState", "Player 5");
+static LocalizedString PLAYER6  ("GameState", "Player 6");
+static LocalizedString PLAYER7  ("GameState", "Player 7");
+static LocalizedString PLAYER8  ("GameState", "Player 8");
 static LocalizedString CPU		("GameState","CPU");
 RString GameState::GetPlayerDisplayName( PlayerNumber pn ) const
 {
 	ASSERT( IsPlayerEnabled(pn) );
-	const LocalizedString *pDefaultNames[] = { &PLAYER1, &PLAYER2, &PLAYER3, &PLAYER4 };
+	const LocalizedString *pDefaultNames[] = { &PLAYER1, &PLAYER2, &PLAYER3, &PLAYER4, &PLAYER5, &PLAYER6, &PLAYER7, &PLAYER8 };
 	if( IsHumanPlayer(pn) )
 	{
 		if( !PROFILEMAN->GetPlayerName(pn).empty() )
@@ -1652,6 +1656,7 @@ bool GameState::IsHumanPlayer( PlayerNumber pn ) const
 	{
 	case StyleType_FourPlayersFourSides:
 	case StyleType_TwoPlayersTwoSides:
+	case StyleType_EightPlayersEightSides:
 	case StyleType_TwoPlayersSharedSides:
 		return true;
 	case StyleType_OnePlayerOneSide:

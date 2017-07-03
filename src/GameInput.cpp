@@ -1,4 +1,4 @@
-#include "global.h"
+﻿#include "global.h"
 #include "GameInput.h"
 #include "RageLog.h"
 #include "RageUtil.h"
@@ -11,6 +11,10 @@ static const char *GameControllerNames[] = {
 	"2",
 	"3",
 	"4",
+	"5",
+	"6",
+	"7",
+	"8"
 };
 XToString( GameController );
 StringToX( GameController );

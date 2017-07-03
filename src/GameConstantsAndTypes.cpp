@@ -1,4 +1,4 @@
-#include "global.h"
+﻿#include "global.h"
 #include "GameConstantsAndTypes.h"
 #include "GameState.h"
 #include "RageUtil.h"
@@ -423,6 +423,7 @@ static const char *StyleTypeNames[] = {
 	"OnePlayerOneSide",
 	"TwoPlayersTwoSides",
 	"FourPlayersFourSides",
+	"EightPlayersEightSides",
 	"OnePlayerTwoSides",
 	"TwoPlayersSharedSides",
 };
