@@ -1,3 +1,8 @@
-return LoadFont("Common normal") .. {
-	InitCommand=cmd(zoom,0.425;y,-3;shadowlength,1;strokecolor,color("#00000033"););
+local textcolor = "#FFFFFF";
+if SL.Global.ActiveColorIndex > 5 then
+	textcolor = "#1E282F";
+end
+
+return LoadFont("_miso") .. {
+	InitCommand=cmd(zoom, 0.65; diffuse,color(textcolor););
 };

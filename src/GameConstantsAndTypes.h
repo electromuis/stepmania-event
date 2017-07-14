@@ -556,7 +556,8 @@ enum StyleType
 	StyleType_OnePlayerOneSide,		/**< Single style */
 	StyleType_TwoPlayersTwoSides,		/**< Versus style */
 	StyleType_FourPlayersFourSides,		/**< Quad style */
-	StyleType_EightPlayersEightSides,		/**< Quad style */
+	StyleType_SixPlayersSixSides,		/**< 8p style */
+	StyleType_EightPlayersEightSides,		/**< 8p style */
 	StyleType_OnePlayerTwoSides,		/**< Double style */
 	StyleType_TwoPlayersSharedSides,	/**< Routine style */
 	NUM_StyleType,

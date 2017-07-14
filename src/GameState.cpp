@@ -428,7 +428,9 @@ void GameState::JoinPlayer( PlayerNumber pn )
 	if(cur_style != NULL && !(pn == PLAYER_1 &&
 			(cur_style->m_StyleType == StyleType_TwoPlayersTwoSides ||
 				cur_style->m_StyleType == StyleType_TwoPlayersSharedSides ||
-				cur_style->m_StyleType == StyleType_FourPlayersFourSides)))
+				cur_style->m_StyleType == StyleType_FourPlayersFourSides ||
+				cur_style->m_StyleType == StyleType_SixPlayersSixSides ||
+				cur_style->m_StyleType == StyleType_EightPlayersEightSides)))
 	{
 		const Style *pStyle;
 		// Only use one player for StyleType_OnePlayerTwoSides and StepsTypes
@@ -1634,6 +1636,8 @@ bool GameState::IsHumanPlayer( PlayerNumber pn ) const
 			StyleType type = GetCurrentStyle(pn)->m_StyleType;
 			switch( type )
 			{
+				case StyleType_EightPlayersEightSides:
+				case StyleType_SixPlayersSixSides:
 				case StyleType_FourPlayersFourSides:
 				case StyleType_TwoPlayersTwoSides:
 				case StyleType_TwoPlayersSharedSides:
@@ -3131,7 +3135,7 @@ public:
 			luaL_error( L, "Too many sides joined for style %s", pStyle->m_szName );
 		}
 		else if( p->GetNumSidesJoined() == 1 &&
-			( st == StyleType_TwoPlayersTwoSides || st == StyleType_TwoPlayersSharedSides || st == StyleType_FourPlayersFourSides ) )
+			( st == StyleType_TwoPlayersTwoSides || st == StyleType_TwoPlayersSharedSides || st == StyleType_FourPlayersFourSides || st == StyleType_SixPlayersSixSides || st == StyleType_EightPlayersEightSides) )
 		{
 			luaL_error( L, "Too few sides joined for style %s", pStyle->m_szName );
 		}

@@ -1,26 +1,19 @@
-local gc = Var("GameCommand");
-local focusZoom = 0.9 -- was 1
-local unfocusZoom = 0.7 -- was 0.75
-local cursorWidth = 160 -- was 192
+local index = Var("GameCommand"):GetIndex()
 
-return Def.ActorFrame {
-	InitCommand=cmd(halign,0);
-	Def.Quad{
-		InitCommand=cmd(zoomto,cursorWidth,26;diffuse,HSVA(192,0.8,1,0.45);blend,Blend.Add;fadeleft,0.5;faderight,0.35;skewx,-0.1;);
-		OnCommand=cmd(glowshift;effectcolor1,color("1,1,1,0");effectcolor2,color("1,1,1,0.125"););
-		GainFocusCommand=cmd(stoptweening;cropright,0;cropleft,1;linear,0.05;cropleft,0;);
-		LoseFocusCommand=cmd(stoptweening;cropright,0;linear,0.05;cropright,1;);
-	};
-	-- top add
-	Def.Quad{
-		InitCommand=cmd(zoomto,cursorWidth,3;blend,Blend.Add;diffusealpha,0.125;vertalign,top;x,9.6;y,-13;fadebottom,0.9;skewx,-0.025);
-		GainFocusCommand=cmd(visible,true);
-		LoseFocusCommand=cmd(visible,false);
-	};
-	Font("mentone","24px") .. {
-		Text=gc:GetText();
-		OnCommand=cmd(x,-64;y,-1;strokecolor,HSVA(0,0,0,0);horizalign,left;shadowlength,1);
-		GainFocusCommand=cmd(stoptweening;bouncebegin,0.25;zoom,focusZoom;diffuse,HSVA(192,0.8,1,1););
-		LoseFocusCommand=cmd(stoptweening;bounceend,0.25;zoom,unfocusZoom;diffuse,HSVA(192,0.0,0.8,0.85););
-	};
-};
+local t = Def.ActorFrame{}
+
+-- this renders the text of a single choice in the scroller
+t[#t+1] = LoadFont("_wendy small")..{
+	Name="Choice"..index,
+	Text=THEME:GetString( 'ScreenTitleMenu', Var("GameCommand"):GetText() ),
+
+	InitCommand=cmd(zoom,0.3),
+	OnCommand=cmd(diffusealpha,0; sleep,tonumber(index) * 0.075; linear,0.2;diffusealpha,1),
+	OffCommand=cmd(sleep,tonumber(index) * 0.075; linear,0.18; diffusealpha, 0),
+
+	GainFocusCommand=cmd(stoptweening; zoom,0.5; accelerate,0.15; diffuse, PlayerColor(PLAYER_2); glow,color("1,1,1,0.5");decelerate,0.05;glow,color("1,1,1,0.0")),
+	LoseFocusCommand=cmd(stoptweening; zoom,0.4; accelerate,0.2; diffuse,color("#888888"); glow,color("1,1,1,0.0"))
+
+}
+
+return t

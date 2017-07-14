@@ -1,6 +1,14 @@
-return Def.ActorFrame {
-	-- bottom line
+return Def.ActorFrame{
+	InitCommand=cmd(x, 26),
+
 	Def.Quad{
-		InitCommand=cmd(x,48;y,16;zoomto,SCREEN_CENTER_X,2;diffuse,color("1,1,1,0.5");fadeleft,0.25;faderight,0.25);
-	};
-};
+		InitCommand=function(self) self:diffuse(color("#000a11")):zoomto(_screen.w/2.1675, _screen.h/15):diffusealpha(0.5) end
+	},
+	Def.Quad{
+		InitCommand=function(self)
+			self:diffuse( ThemePrefs.Get("RainbowMode") and Color.White or color("#0a141b"))
+				:diffusealpha( ThemePrefs.Get("RainbowMode") and 0.5 or 1 )
+				:zoomto(_screen.w/2.1675, _screen.h/15 - 1)
+		 end
+	}
+}

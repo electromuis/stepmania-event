@@ -1,7 +1,11 @@
-local t = Def.ActorFrame{
-	Def.Quad{
-		InitCommand=cmd(FullScreen;diffuse,HSV(192,1,0.05);diffusebottomedge,HSV(192,0.75,0.125));
-	};
-};
+local t = Def.ActorFrame{}
 
-return t;
+if ThemePrefs.Get("RainbowMode") then
+	t[#t+1] = Def.Quad{
+		InitCommand=function(self) self:FullScreen():Center():diffuse( Color.White ) end
+	}
+end
+
+t[#t+1] = LoadActor( THEME:GetPathB("", "_shared background normal"))
+
+return t

@@ -28,7 +28,7 @@ LuaDeclareType( PlayerNumber );
 /** @brief A foreach loop to handle the different players. */
 #define FOREACH_PlayerNumber( pn ) FOREACH_ENUM( PlayerNumber, pn )
 
-const PlayerNumber	OPPOSITE_PLAYER[NUM_PLAYERS] = { PLAYER_4, PLAYER_3, PLAYER_2, PLAYER_1 };
+const PlayerNumber	OPPOSITE_PLAYER[NUM_PLAYERS] = { PLAYER_8, PLAYER_7, PLAYER_6, PLAYER_5, PLAYER_3, PLAYER_2, PLAYER_1 };
 
 
 enum MultiPlayer

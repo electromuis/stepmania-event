@@ -1,4 +1,4 @@
-#include "global.h"
+﻿#include "global.h"
 #include "GameCommand.h"
 #include "RageUtil.h"
 #include "RageLog.h"
@@ -733,15 +733,34 @@ void GameCommand::ApplySelf( const vector<PlayerNumber> &vpns ) const
 		case StyleType_TwoPlayersSharedSides:
 			GAMESTATE->JoinPlayer( PLAYER_1 );
 			GAMESTATE->JoinPlayer( PLAYER_2 );
-			//GAMESTATE->JoinPlayer(PLAYER_3);
-			//GAMESTATE->JoinPlayer(PLAYER_4);
 			break;
 		case StyleType_FourPlayersFourSides:
-			FOREACH_PlayerNumber(pn) {
-				GAMESTATE->JoinPlayer(pn);
-			}
+				GAMESTATE->JoinPlayer(PLAYER_1);
+				GAMESTATE->JoinPlayer(PLAYER_2);
+				GAMESTATE->JoinPlayer(PLAYER_3);
+				GAMESTATE->JoinPlayer(PLAYER_4);
 
 			break;
+		case StyleType_SixPlayersSixSides:
+				GAMESTATE->JoinPlayer(PLAYER_1);
+				GAMESTATE->JoinPlayer(PLAYER_2);
+				GAMESTATE->JoinPlayer(PLAYER_3);
+				GAMESTATE->JoinPlayer(PLAYER_4);
+				GAMESTATE->JoinPlayer(PLAYER_5);
+				GAMESTATE->JoinPlayer(PLAYER_6);
+
+				break;
+		case StyleType_EightPlayersEightSides:
+				GAMESTATE->JoinPlayer(PLAYER_1);
+				GAMESTATE->JoinPlayer(PLAYER_2);
+				GAMESTATE->JoinPlayer(PLAYER_3);
+				GAMESTATE->JoinPlayer(PLAYER_4);
+				GAMESTATE->JoinPlayer(PLAYER_5);
+				GAMESTATE->JoinPlayer(PLAYER_6);
+				GAMESTATE->JoinPlayer(PLAYER_7);
+				GAMESTATE->JoinPlayer(PLAYER_8);
+
+				break;
 		default:
 			LuaHelpers::ReportScriptError("Invalid StyleType: " + m_pStyle->m_StyleType);
 		}

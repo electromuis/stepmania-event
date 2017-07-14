@@ -1,30 +1,43 @@
-local x = Def.ActorFrame{
-	Def.Quad{
-		Name="TopLine";
-		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-40;zoomto,SCREEN_WIDTH,2;diffuserightedge,HSV(192,1,0.8);cropleft,1);
-		OnCommand=cmd(decelerate,0.75;cropleft,0);
-		OffCommand=cmd(bouncebegin,0.5;y,SCREEN_CENTER_Y*0.6);
-	};
-	Def.Quad{
-		Name="BottomLine";
-		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y+40;zoomto,SCREEN_WIDTH,2;diffuseleftedge,HSV(192,1,0.8);cropright,1);
-		OnCommand=cmd(decelerate,0.75;cropright,0);
-		OffCommand=cmd(bouncebegin,0.5;y,SCREEN_CENTER_Y*1.4);
-	};
-	Font("mentone","24px")..{
-		Text=ScreenString("LoadProfiles");
-		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;diffuse,color("1,1,1,1");shadowlength,1;strokecolor,color("0,0,0,0"));
-		OffCommand=cmd(linear,0.15;diffusealpha,0);
-	};
-};
+local tweentime = 0.325
 
-x[#x+1] = Def.Actor {
-	BeginCommand=function(self)
-		setenv("Network",false) -- reset network env
-		if SCREENMAN:GetTopScreen():HaveProfileToLoad() then self:sleep(1); end;
-		self:queuecommand("Load");
-	end;
-	LoadCommand=function() SCREENMAN:GetTopScreen():Continue(); end;
-};
+return Def.ActorFrame{
+	InitCommand=function(self)
+		self:Center():draworder(101)
+	end,
 
-return x;
+	Def.Quad{
+		Name="FadeToBlack",
+		InitCommand=function(self)
+			self:horizalign(right):vertalign(bottom):FullScreen()
+			self:diffuse( ThemePrefs.Get("RainbowMode") and Color.White or Color.Black ):diffusealpha(0)
+		end,
+		OnCommand=function(self)
+			self:sleep(tweentime):linear(tweentime):diffusealpha(1)
+		end
+	},
+
+	Def.Quad{
+		Name="HorizontalWhiteSwoosh",
+		InitCommand=function(self)
+			self:horizalign(center):vertalign(middle)
+				:diffuse( ThemePrefs.Get("RainbowMode") and Color.Black or Color.White )
+				:zoomto(_screen.w + 100,50):faderight(0.1):fadeleft(0.1):cropright(1)
+		end,
+		OnCommand=function(self)
+			self:linear(tweentime):cropright(0):sleep(tweentime)
+			self:linear(tweentime):cropleft(1)
+			self:sleep(0.1):queuecommand("Load")
+		end,
+		LoadCommand=function(self)
+			SCREENMAN:GetTopScreen():Continue()
+		end
+	},
+
+	Def.BitmapText{
+		Font="_wendy small",
+		Text=THEME:GetString("ScreenProfileLoad","Loading Profiles..."),
+		InitCommand=function(self)
+			self:diffuse( ThemePrefs.Get("RainbowMode") and Color.White or Color.Black ):zoom(0.6)
+		end
+	}
+}

@@ -1,4 +1,4 @@
-#include "global.h"
+﻿#include "global.h"
 #include "Actor.h"
 #include "ActorFrame.h"
 #include "RageDisplay.h"
@@ -870,6 +870,22 @@ void Actor::UpdateInternal(float delta_time)
 			generic_global_timer_update(g_vfCurrentBGMBeatPlayer[PLAYER_4],
 										m_fEffectDelta, m_fSecsIntoEffect);
 			break;
+		case CLOCK_BGM_BEAT_PLAYER5:
+				generic_global_timer_update(g_vfCurrentBGMBeatPlayer[PLAYER_5],
+						m_fEffectDelta, m_fSecsIntoEffect);
+				break;
+		case CLOCK_BGM_BEAT_PLAYER6:
+				generic_global_timer_update(g_vfCurrentBGMBeatPlayer[PLAYER_6],
+						m_fEffectDelta, m_fSecsIntoEffect);
+				break;
+		case CLOCK_BGM_BEAT_PLAYER7:
+				generic_global_timer_update(g_vfCurrentBGMBeatPlayer[PLAYER_7],
+						m_fEffectDelta, m_fSecsIntoEffect);
+				break;
+		case CLOCK_BGM_BEAT_PLAYER8:
+				generic_global_timer_update(g_vfCurrentBGMBeatPlayer[PLAYER_8],
+						m_fEffectDelta, m_fSecsIntoEffect);
+				break;
 		case CLOCK_BGM_TIME:
 			generic_global_timer_update(g_fCurrentBGMTime,
 				m_fEffectDelta, m_fSecsIntoEffect);
