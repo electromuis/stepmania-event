@@ -380,19 +380,19 @@ void GameState::JoinPlayer( PlayerNumber pn )
 		{
 			players_joined+= m_bSideIsJoined[i];
 		}
-		if(players_joined > 0)
-		{
-			const Style* cur_style= GetCurrentStyle(PLAYER_INVALID);
-			if(cur_style)
-			{
-				const Style* new_style= GAMEMAN->GetFirstCompatibleStyle(m_pCurGame,
-					players_joined + 1, cur_style->m_StepsType);
-				if(new_style == NULL)
-				{
-					return;
-				}
-			}
-		}
+		//if(players_joined > 0)
+		//{
+		//	const Style* cur_style= GetCurrentStyle(PLAYER_INVALID);
+		//	if(cur_style)
+		//	{
+		//		const Style* new_style= GAMEMAN->GetFirstCompatibleStyle(m_pCurGame,
+		//			players_joined + 1, cur_style->m_StepsType);
+		//		if(new_style == NULL)
+		//		{
+		//			return;
+		//		}
+		//	}
+		//}
 	}
 	/* If joint premium and we're not taking away a credit for the 2nd join,
 	 * give the new player the same number of stage tokens that the old player
@@ -1637,11 +1637,14 @@ bool GameState::IsHumanPlayer( PlayerNumber pn ) const
 			switch( type )
 			{
 				case StyleType_EightPlayersEightSides:
+						return pn <= PLAYER_8;
 				case StyleType_SixPlayersSixSides:
+						return pn <= PLAYER_6;
 				case StyleType_FourPlayersFourSides:
+						return pn <= PLAYER_4;
 				case StyleType_TwoPlayersTwoSides:
 				case StyleType_TwoPlayersSharedSides:
-					return true;
+						return pn <= PLAYER_2;
 				case StyleType_OnePlayerOneSide:
 				case StyleType_OnePlayerTwoSides:
 					return pn == this->GetMasterPlayerNumber();
@@ -1658,11 +1661,15 @@ bool GameState::IsHumanPlayer( PlayerNumber pn ) const
 	StyleType type = GetCurrentStyle(pn)->m_StyleType;
 	switch( type )
 	{
-	case StyleType_FourPlayersFourSides:
-	case StyleType_TwoPlayersTwoSides:
 	case StyleType_EightPlayersEightSides:
+			return pn <= PLAYER_8;
+	case StyleType_SixPlayersSixSides:
+			return pn <= PLAYER_6;
+	case StyleType_FourPlayersFourSides:
+			return pn <= PLAYER_4;
+	case StyleType_TwoPlayersTwoSides:
 	case StyleType_TwoPlayersSharedSides:
-		return true;
+			return pn <= PLAYER_2;
 	case StyleType_OnePlayerOneSide:
 	case StyleType_OnePlayerTwoSides:
 		return pn == this->GetMasterPlayerNumber();

@@ -2708,6 +2708,12 @@
 		<Constant name='SCREEN_WIDTH' value='854'/>
 		<Constant name='PLAYER_1' value='&apos;PlayerNumber_P1&apos;'/>
 		<Constant name='PLAYER_2' value='&apos;PlayerNumber_P2&apos;'/>
+		<Constant name='PLAYER_3' value='&apos;PlayerNumber_P3&apos;'/>
+		<Constant name='PLAYER_4' value='&apos;PlayerNumber_P4&apos;'/>
+		<Constant name='PLAYER_5' value='&apos;PlayerNumber_P5&apos;'/>
+		<Constant name='PLAYER_6' value='&apos;PlayerNumber_P6&apos;'/>
+		<Constant name='PLAYER_7' value='&apos;PlayerNumber_P7&apos;'/>
+		<Constant name='PLAYER_8' value='&apos;PlayerNumber_P8&apos;'/>
 		<Constant name='_VERSION' value='&apos;Lua 5.1&apos;'/>
 		<Constant name='bottom' value='&apos;VertAlign_Bottom&apos;'/>
 		<Constant name='center' value='&apos;HorizAlign_Center&apos;'/>
