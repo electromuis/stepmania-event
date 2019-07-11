@@ -1,7 +1,8 @@
-﻿#ifndef MemoryCardDriverThreaded_Folder_H
+#ifndef MemoryCardDriverThreaded_Folder_H
 #define MemoryCardDriverThreaded_Folder_H 1
 
 #include "MemoryCardDriver.h"
+#include "PlayerNumber.h"
 
 class MemoryCardDriverThreaded_Folder : public MemoryCardDriver
 {
@@ -16,10 +17,11 @@ protected:
 	void GetUSBStorageDevices( vector<UsbStorageDevice>& vDevicesOut );
 	bool USBStorageDevicesChanged();
 	bool TestWrite( UsbStorageDevice* pDevice );
-	bool FolderExists(RString path);
+	time_t FolderTime(RString path);
 
-	int GetActivePlayerMask();
-	int m_LastDevices;
+	void ReadActivePlayerTimes();
+	time_t m_LastDevices[NUM_PlayerNumber];
+	time_t m_NewDevices[NUM_PlayerNumber];
 };
 
 #endif
