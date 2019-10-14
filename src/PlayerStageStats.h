@@ -5,6 +5,7 @@
 #include "RadarValues.h"
 #include "HighScore.h"
 #include "PlayerNumber.h"
+#include "NoteTypes.h"
 #include <map>
 class Steps;
 class Style;
@@ -13,6 +14,57 @@ struct lua_State;
 class PlayerStageStats
 {
 public:
+    struct PlayerInputEvent
+    {
+        PlayerInputEvent(int col, float sBeatPosition, bool held, bool release)
+        {
+            colIndex = col;
+            songBeatPosition = sBeatPosition;
+            inputHeld = held;
+            inputRelease = release;
+        }
+
+        /** @brief Column index of the target arrow */
+        int colIndex;
+        /** @brief Beat position in the song where the input event happened */
+        float songBeatPosition;
+        /** @brief Was the input held */
+        bool inputHeld;
+        /** @brief Was the input released */
+        bool inputRelease;
+    };
+    
+    struct NoteScoreWithBeatPosition
+    {
+        NoteScoreWithBeatPosition(TapNoteScore tns, float sBeatPosition, float offsetSeconds)
+        {
+            tapNoteScore = tns;
+            holdNoteScore = HNS_None;
+            songBeatPosition = sBeatPosition;
+            noteOffsetSeconds = offsetSeconds;
+        }
+
+        NoteScoreWithBeatPosition(HoldNoteScore hns, float sBeatPosition, float offsetSeconds)
+        {
+            tapNoteScore = TNS_None;
+            holdNoteScore = hns;
+            songBeatPosition = sBeatPosition;
+            noteOffsetSeconds = offsetSeconds;
+        }
+        
+        TapNoteScore tapNoteScore;
+        HoldNoteScore holdNoteScore;
+        /** @brief The beat position in the song where the note was hit */
+        float songBeatPosition;
+        /**
+         * @brief Offset in seconds from the exact note time.
+         *
+         * Negative numbers mean the note was hit early; positive numbers mean it was hit late.
+         * These values are only meaningful for graded taps (tapNoteScore >= TNS_W5).
+         * */
+        float noteOffsetSeconds;
+    };
+    
 	/** @brief Set up the PlayerStageStats with default values. */
 	PlayerStageStats() { InternalInit(); }
 	void InternalInit();
@@ -64,6 +116,10 @@ public:
 	int		m_iPossibleGradePoints;
 	int		m_iTapNoteScores[NUM_TapNoteScore];
 	int		m_iHoldNoteScores[NUM_HoldNoteScore];
+	
+	vector<PlayerInputEvent> m_playerInputEvents;
+    vector<NoteScoreWithBeatPosition> m_noteScoresWithBeatPosition;
+	
 	/** @brief The Player's current combo. */
 	unsigned int		m_iCurCombo;
 	/** @brief The Player's max combo. */

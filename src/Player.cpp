@@ -2005,6 +2005,9 @@ void Player::Step( int col, int row, const RageTimer &tm, bool bHeld, bool bRele
 			fSongBeat = m_Timing->GetBeatFromElapsedTime( fPositionSeconds );
 	}
 	
+	// Add step input with timestamp to PlayerStageStats
+	m_pPlayerStageStats->m_playerInputEvents.push_back(PlayerStageStats::PlayerInputEvent(col, fSongBeat, bHeld, bRelease));
+	
 	const int iSongRow = row == -1 ? BeatToNoteRow( fSongBeat ) : row;
 
 	if( col != -1 && !bRelease )

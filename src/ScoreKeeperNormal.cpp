@@ -389,6 +389,23 @@ int ScoreKeeperNormal::CalcNextToastyAt(int level)
 void ScoreKeeperNormal::HandleTapScore( const TapNote &tn )
 {
 	TapNoteScore tns = tn.result.tns;
+	float fTapNoteOffset = tn.result.fTapNoteOffset;
+
+    const float lastBeatUpdate = m_pPlayerState->m_Position.m_LastBeatUpdate.Ago();
+    // Get the current song position in seconds, account for music rate
+    const float currentMusicSeconds = m_pPlayerState->m_Position.m_fMusicSeconds +
+            (lastBeatUpdate*GAMESTATE->m_SongOptions.GetCurrent().m_fMusicRate);
+    
+    // Add the offset in seconds to the current song time to get the exact song time that the note was hit
+    const float noteHitTimeSeconds = currentMusicSeconds + fTapNoteOffset;
+
+    // The beat position when the note was hit
+    const float noteHitBeatPosition = GAMESTATE->m_pCurSong->m_SongTiming.GetBeatFromElapsedTime(noteHitTimeSeconds);
+	
+    // Push the tap note score to player stage stats
+	m_pPlayerStageStats->m_noteScoresWithBeatPosition.push_back(
+	        PlayerStageStats::NoteScoreWithBeatPosition(tns, noteHitBeatPosition, fTapNoteOffset)
+    );
 
 	if( tn.type == TapNoteType_Mine )
 	{
@@ -617,6 +634,23 @@ void ScoreKeeperNormal::HandleTapRowScore( const NoteData &nd, int iRow )
 void ScoreKeeperNormal::HandleHoldScore( const TapNote &tn )
 {
 	HoldNoteScore holdScore = tn.HoldResult.hns;
+    float fTapNoteOffset = tn.result.fTapNoteOffset;
+
+    const float lastBeatUpdate = m_pPlayerState->m_Position.m_LastBeatUpdate.Ago();
+    // Get the current song position in seconds, account for music rate
+    const float currentMusicSeconds = m_pPlayerState->m_Position.m_fMusicSeconds +
+        (lastBeatUpdate*GAMESTATE->m_SongOptions.GetCurrent().m_fMusicRate);
+
+    // Add the offset in seconds to the current song time to get the exact song time that the note was hit
+    const float noteHitTimeSeconds = currentMusicSeconds + fTapNoteOffset;
+
+    // The beat position when the note was hit
+    const float noteHitBeatPosition = GAMESTATE->m_pCurSong->m_SongTiming.GetBeatFromElapsedTime(noteHitTimeSeconds);
+
+    // Push the tap note score to player stage stats
+    m_pPlayerStageStats->m_noteScoresWithBeatPosition.push_back(
+            PlayerStageStats::NoteScoreWithBeatPosition(holdScore, noteHitBeatPosition, fTapNoteOffset)
+    );
 
 	// update dance points totals
 	if( !m_pPlayerStageStats->m_bFailed )
