@@ -308,19 +308,19 @@ void StatsManager::SavePadmissScore( const StageStats *pSS, PlayerNumber pn )
 	XNode *inputEvents = xml->AppendChild("InputEvents");
     for (auto m_playerInputEvent : playerStats->m_playerInputEvents) {
         XNode *inputEvent = inputEvents->AppendChild("InputEvent");
-        inputEvent->AppendChild("SongBeatPosition", m_playerInputEvent.songBeatPosition);
-        inputEvent->AppendChild("ColIndex", m_playerInputEvent.colIndex);
-        inputEvent->AppendChild("InputHeld", m_playerInputEvent.inputHeld);
-        inputEvent->AppendChild("InputReleased", m_playerInputEvent.inputRelease);
+        inputEvent->AppendAttr("Beat", m_playerInputEvent.songBeatPosition);
+        inputEvent->AppendAttr("Col", m_playerInputEvent.colIndex);
+        inputEvent->AppendAttr("Released", m_playerInputEvent.inputRelease);
     }
 
     XNode *noteScores = xml->AppendChild("NoteScoresWithBeatPosition");
     for (auto m_noteScore : playerStats->m_noteScoresWithBeatPosition) {
         XNode *noteScore = noteScores->AppendChild("NoteScore");
-        noteScore->AppendChild("SongBeatPosition", m_noteScore.songBeatPosition);
-        noteScore->AppendChild("NoteOffsetSeconds", m_noteScore.noteOffsetSeconds);
-        noteScore->AppendChild("HoldNoteScore", HoldNoteScoreToString(m_noteScore.holdNoteScore));
-        noteScore->AppendChild("TapNoteScore", TapNoteScoreToString(m_noteScore.tapNoteScore));
+        noteScore->AppendAttr("Beat", m_noteScore.songBeatPosition);
+        noteScore->AppendAttr("Col", m_noteScore.colIndex);
+        noteScore->AppendAttr("Offset", m_noteScore.noteOffsetSeconds);
+        noteScore->AppendAttr("HoldNoteScore", HoldNoteScoreToString(m_noteScore.holdNoteScore));
+        noteScore->AppendAttr("TapNoteScore", TapNoteScoreToString(m_noteScore.tapNoteScore));
     }
 
 	XNode *taps = xml->AppendChild( "TapNoteScores" );

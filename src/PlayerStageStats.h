@@ -16,11 +16,10 @@ class PlayerStageStats
 public:
     struct PlayerInputEvent
     {
-        PlayerInputEvent(int col, float sBeatPosition, bool held, bool release)
+        PlayerInputEvent(int col, float sBeatPosition, bool release)
         {
             colIndex = col;
             songBeatPosition = sBeatPosition;
-            inputHeld = held;
             inputRelease = release;
         }
 
@@ -28,33 +27,35 @@ public:
         int colIndex;
         /** @brief Beat position in the song where the input event happened */
         float songBeatPosition;
-        /** @brief Was the input held */
-        bool inputHeld;
         /** @brief Was the input released */
         bool inputRelease;
     };
     
     struct NoteScoreWithBeatPosition
     {
-        NoteScoreWithBeatPosition(TapNoteScore tns, float sBeatPosition, float offsetSeconds)
+        NoteScoreWithBeatPosition(int col, TapNoteScore tns, float sBeatPosition, float offsetSeconds)
         {
+            colIndex = col;
             tapNoteScore = tns;
             holdNoteScore = HNS_None;
             songBeatPosition = sBeatPosition;
             noteOffsetSeconds = offsetSeconds;
         }
 
-        NoteScoreWithBeatPosition(HoldNoteScore hns, float sBeatPosition, float offsetSeconds)
+        NoteScoreWithBeatPosition(int col, HoldNoteScore hns, float sBeatPosition, float offsetSeconds)
         {
+            colIndex = col;
             tapNoteScore = TNS_None;
             holdNoteScore = hns;
             songBeatPosition = sBeatPosition;
             noteOffsetSeconds = offsetSeconds;
         }
-        
+
+        /** @brief Column index of the target arrow */
+        int colIndex;
         TapNoteScore tapNoteScore;
         HoldNoteScore holdNoteScore;
-        /** @brief The beat position in the song where the note was hit */
+        /** @brief The beat position in the song where the note was judged */
         float songBeatPosition;
         /**
          * @brief Offset in seconds from the exact note time.

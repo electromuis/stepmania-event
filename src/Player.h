@@ -253,6 +253,10 @@ protected:
 	bool m_bTickHolds;
 	// This exists so that the board can be drawn underneath combo/judge. -Kyz
 	bool m_drawing_notefield_board;
+
+    void AddToNoteScoresWithBeatPositions(int track, const HoldNoteScore &hns, const TapNote &tn) const;
+    void UpdateTapNoteScores(int track, const TapNote &tn) const;
+    void AddToNoteScoresWithBeatPosition(int track, const TapNote &tn) const;
 };
 
 class PlayerPlus
