@@ -1504,10 +1504,11 @@ void Player::AddToNoteScoresWithBeatPositions(int track, const HoldNoteScore &hn
     float tapNoteOffset = tn.result.fTapNoteOffset;
     int col = track;
 
+    PlayerStageStats::NoteScoreWithBeatPosition noteScoreWithBeatPosition = 
+            PlayerStageStats::NoteScoreWithBeatPosition(col, hns, judgeBeatPosition, tapNoteOffset);
+
     // Push the tap note score to player stage stats
-    m_pPlayerStageStats->m_noteScoresWithBeatPosition.push_back(
-            PlayerStageStats::NoteScoreWithBeatPosition(col, hns, judgeBeatPosition, tapNoteOffset)
-    );
+    m_pPlayerStageStats->m_noteScoresWithBeatPosition.push_back(&noteScoreWithBeatPosition);
 }
 
 void Player::ApplyWaitingTransforms()
@@ -2018,9 +2019,11 @@ void Player::Step( int col, int row, const RageTimer &tm, bool bHeld, bool bRele
 		if( GAMESTATE->m_pCurSteps[m_pPlayerState->m_PlayerNumber] )
 			fSongBeat = m_Timing->GetBeatFromElapsedTime( fPositionSeconds );
 	}
+
+    PlayerStageStats::PlayerInputEvent playerInputEvent = PlayerStageStats::PlayerInputEvent(col, fSongBeat, bRelease);
 	
 	// Add step input with timestamp to PlayerStageStats
-	m_pPlayerStageStats->m_playerInputEvents.push_back(PlayerStageStats::PlayerInputEvent(col, fSongBeat, bRelease));
+	m_pPlayerStageStats->m_playerInputEvents.push_back(&playerInputEvent);
 	
 	const int iSongRow = row == -1 ? BeatToNoteRow( fSongBeat ) : row;
 
@@ -2986,10 +2989,11 @@ void Player::AddToNoteScoresWithBeatPosition(int track, const TapNote &tn) const
     float tapNoteOffset = tn.result.fTapNoteOffset;
     int col = track;
 
+    PlayerStageStats::NoteScoreWithBeatPosition noteScoreWithBeatPosition =
+            PlayerStageStats::NoteScoreWithBeatPosition(col, tn.result.tns, judgeBeatPosition, tapNoteOffset);
+
     // Push the tap note score to player stage stats
-    m_pPlayerStageStats->m_noteScoresWithBeatPosition.push_back(
-            PlayerStageStats::NoteScoreWithBeatPosition(col, tn.result.tns, judgeBeatPosition, tapNoteOffset)
-    );
+    m_pPlayerStageStats->m_noteScoresWithBeatPosition.push_back(&noteScoreWithBeatPosition);
 }
 
 void Player::HandleHoldCheckpoint(int iRow, 

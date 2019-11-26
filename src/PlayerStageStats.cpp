@@ -106,10 +106,10 @@ void PlayerStageStats::AddStats( const PlayerStageStats& other )
 	for( int h=0; h<NUM_HoldNoteScore; h++ )
 		m_iHoldNoteScores[h] += other.m_iHoldNoteScores[h];
 
-    FOREACH_CONST(PlayerInputEvent, other.m_playerInputEvents, inputEvent)
-        m_playerInputEvents.push_back(*inputEvent);
-    FOREACH_CONST(NoteScoreWithBeatPosition, other.m_noteScoresWithBeatPosition, ns)
-        m_noteScoresWithBeatPosition.push_back(*ns);
+    for(PlayerInputEvent *inputEvent : other.m_playerInputEvents)
+        m_playerInputEvents.push_back(inputEvent);
+    for(NoteScoreWithBeatPosition *ns : other.m_noteScoresWithBeatPosition)
+        m_noteScoresWithBeatPosition.push_back(ns);
 	
 	m_iCurCombo += other.m_iCurCombo;
 	m_iMaxCombo += other.m_iMaxCombo;

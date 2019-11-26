@@ -118,8 +118,8 @@ public:
 	int		m_iTapNoteScores[NUM_TapNoteScore];
 	int		m_iHoldNoteScores[NUM_HoldNoteScore];
 	
-	vector<PlayerInputEvent> m_playerInputEvents;
-    vector<NoteScoreWithBeatPosition> m_noteScoresWithBeatPosition;
+	vector<PlayerInputEvent*> m_playerInputEvents;
+    vector<NoteScoreWithBeatPosition*> m_noteScoresWithBeatPosition;
 	
 	/** @brief The Player's current combo. */
 	unsigned int		m_iCurCombo;
