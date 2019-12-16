@@ -21,6 +21,7 @@
 
 static ThemeMetric<TapNoteScore> g_MinScoreToMaintainCombo( "Gameplay", "MinScoreToMaintainCombo" );
 static ThemeMetric<bool> g_MineHitIncrementsMissCombo( "Gameplay", "MineHitIncrementsMissCombo" );
+static Preference<bool> g_PadmissEnabled("MemoryCardPadmissEnabled", false);
 
 const float LESSON_PASS_THRESHOLD = 0.8f;
 
@@ -106,10 +107,12 @@ void PlayerStageStats::AddStats( const PlayerStageStats& other )
 	for( int h=0; h<NUM_HoldNoteScore; h++ )
 		m_iHoldNoteScores[h] += other.m_iHoldNoteScores[h];
 
-    for(PlayerInputEvent *inputEvent : other.m_playerInputEvents)
-        m_playerInputEvents.push_back(inputEvent);
-    for(NoteScoreWithBeatPosition *ns : other.m_noteScoresWithBeatPosition)
-        m_noteScoresWithBeatPosition.push_back(ns);
+	if (g_PadmissEnabled) {
+		for (PlayerInputEvent inputEvent : other.m_playerInputEvents)
+			m_playerInputEvents.push_back(inputEvent);
+		for (NoteScoreWithBeatPosition ns : other.m_noteScoresWithBeatPosition)
+			m_noteScoresWithBeatPosition.push_back(ns);
+	}
 	
 	m_iCurCombo += other.m_iCurCombo;
 	m_iMaxCombo += other.m_iMaxCombo;

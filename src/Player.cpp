@@ -149,6 +149,7 @@ static Preference<float> m_fTimingWindowJump	( "TimingWindowJump",		0.25 );
 static Preference<float> m_fMaxInputLatencySeconds	( "MaxInputLatencySeconds",	0.0 );
 static Preference<bool> g_bEnableAttackSoundPlayback	( "EnableAttackSounds", true );
 static Preference<bool> g_bEnableMineSoundPlayback	( "EnableMineHitSound", true );
+static Preference<bool> g_PadmissEnabled( "MemoryCardPadmissEnabled", false );
 
 /** @brief How much life is in a hold note when you start on it? */
 ThemeMetric<float> INITIAL_HOLD_LIFE		( "Player", "InitialHoldLife" );
@@ -1491,7 +1492,9 @@ void Player::UpdateHoldNotes( int iSongRow, float fDeltaTime, vector<TrackRowTap
 		TapNote &tn = *vTN[0].pTN;
 		SetHoldJudgment( tn, iFirstTrackWithMaxEndRow );
 
-        AddToNoteScoresWithBeatPositions(iFirstTrackWithMaxEndRow, hns, tn);
+		if( g_PadmissEnabled )
+			AddToNoteScoresWithBeatPositions(iFirstTrackWithMaxEndRow, hns, tn);
+
         HandleHoldScore( tn );
 
 		//LOG->Trace("hold result = %s",StringConversion::ToString(tn.HoldResult.hns).c_str());
@@ -1504,11 +1507,8 @@ void Player::AddToNoteScoresWithBeatPositions(int track, const HoldNoteScore &hn
     float tapNoteOffset = tn.result.fTapNoteOffset;
     int col = track;
 
-    PlayerStageStats::NoteScoreWithBeatPosition noteScoreWithBeatPosition = 
-            PlayerStageStats::NoteScoreWithBeatPosition(col, hns, judgeBeatPosition, tapNoteOffset);
-
     // Push the tap note score to player stage stats
-    m_pPlayerStageStats->m_noteScoresWithBeatPosition.push_back(&noteScoreWithBeatPosition);
+    m_pPlayerStageStats->m_noteScoresWithBeatPosition.push_back(PlayerStageStats::NoteScoreWithBeatPosition(col, hns, judgeBeatPosition, tapNoteOffset));
 }
 
 void Player::ApplyWaitingTransforms()
@@ -2020,10 +2020,10 @@ void Player::Step( int col, int row, const RageTimer &tm, bool bHeld, bool bRele
 			fSongBeat = m_Timing->GetBeatFromElapsedTime( fPositionSeconds );
 	}
 
-    PlayerStageStats::PlayerInputEvent playerInputEvent = PlayerStageStats::PlayerInputEvent(col, fSongBeat, bRelease);
-	
-	// Add step input with timestamp to PlayerStageStats
-	m_pPlayerStageStats->m_playerInputEvents.push_back(&playerInputEvent);
+	if (g_PadmissEnabled) {
+		// Add step input with timestamp to PlayerStageStats
+		m_pPlayerStageStats->m_playerInputEvents.push_back(PlayerStageStats::PlayerInputEvent(col, fSongBeat, bRelease));
+	}
 	
 	const int iSongRow = row == -1 ? BeatToNoteRow( fSongBeat ) : row;
 
@@ -2989,11 +2989,8 @@ void Player::AddToNoteScoresWithBeatPosition(int track, const TapNote &tn) const
     float tapNoteOffset = tn.result.fTapNoteOffset;
     int col = track;
 
-    PlayerStageStats::NoteScoreWithBeatPosition noteScoreWithBeatPosition =
-            PlayerStageStats::NoteScoreWithBeatPosition(col, tn.result.tns, judgeBeatPosition, tapNoteOffset);
-
     // Push the tap note score to player stage stats
-    m_pPlayerStageStats->m_noteScoresWithBeatPosition.push_back(&noteScoreWithBeatPosition);
+    m_pPlayerStageStats->m_noteScoresWithBeatPosition.push_back(PlayerStageStats::NoteScoreWithBeatPosition(col, tn.result.tns, judgeBeatPosition, tapNoteOffset));
 }
 
 void Player::HandleHoldCheckpoint(int iRow, 
