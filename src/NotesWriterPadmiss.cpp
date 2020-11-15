@@ -1,5 +1,5 @@
 #include "global.h"
-#include "NotesWriterJson.h"
+#include "NotesWriterPadmiss.h"
 #include "TimingData.h"
 #include "json/value.h"
 #include "JsonUtil.h"
@@ -181,10 +181,8 @@ bool NotesWriterPadmiss::WriteSteps( const RString &sFile, const Steps &chart )
 
 	JsonUtil::SerializeArrayValues(out.m_vsKeysoundFile, root["KeySounds"]);
 
-	vector<const Steps*> vpSteps;
 
-	vpSteps.push_back(&chart);
-	JsonUtil::SerializeVectorPointers<Steps>(vpSteps, Serialize, root["Charts"]);
+	Serialize(chart, root["Chart"]);
 	
 	return JsonUtil::WriteFile(root, sFile, false);
 }

@@ -93,13 +93,15 @@ list(APPEND SM_DATA_NOTEWRITE_SRC
             "NotesWriterDWI.cpp"
             "NotesWriterJson.cpp"
             "NotesWriterSM.cpp"
-            "NotesWriterSSC.cpp")
+            "NotesWriterSSC.cpp"
+			"NotesWriterPadmiss.cpp")
 
 list(APPEND SM_DATA_NOTEWRITE_HPP
             "NotesWriterDWI.h"
             "NotesWriterJson.h"
             "NotesWriterSM.h"
-            "NotesWriterSSC.h")
+            "NotesWriterSSC.h"
+			"NotesWriterPadmiss.h")
 
 source_group("Data Structures\\\\Notes Writers"
              FILES

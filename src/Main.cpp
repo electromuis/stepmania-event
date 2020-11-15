@@ -5,7 +5,7 @@
 #include "RageFileManager.h"
 
 #include "NotesLoaderSM.h"
-#include "NotesWriterJson.h"
+#include "NotesWriterPadmiss.h"
 #include "Song.h"
 
 #include <iostream>
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 			RString outputFile = f + "-" + std::to_string(chartNum) + ".json";
 
 			if (!FILEMAN->DoesFileExist(outputFile)) {
-				NotesWriterJson::WriteSteps(outputFile, *step);
+				NotesWriterPadmiss::WriteSteps(outputFile, *step);
 
 				std::cout << "Wrote json for: " << outputFile << "\n";
 			}
