@@ -89,7 +89,7 @@ Song::Song()
 	m_bHasBanner = false;
 	m_bHasBackground = false;
 	m_loaded_from_autosave= false;
-	split( CommonMetrics::IMAGES_TO_CACHE, ",", ImageDir );
+	//split( CommonMetrics::IMAGES_TO_CACHE, ",", ImageDir );
 }
 
 Song::~Song()

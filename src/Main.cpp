@@ -1,8 +1,71 @@
 #include "global.h"
-#include "StepMania.h"
+
+#include "arch/ArchHooks/ArchHooks.h"
+#include "LuaManager.h"
+#include "RageFileManager.h"
+
+#include "NotesLoaderSM.h"
+#include "NotesWriterJson.h"
+#include "Song.h"
+
+#include <iostream>
+
+using namespace std;
+
+#define SAFE_DELETE(p)       do { delete (p);     (p)=nullptr; } while( false )
 
 int main(int argc, char* argv[]) {
-	return sm_main(argc, argv);
+	//return sm_main(argc, argv);
+
+	HOOKS = ArchHooks::Create();
+	HOOKS->Init();
+
+	LUA = new LuaManager;
+	HOOKS->RegisterWithLua();
+
+	FILEMAN = new RageFileManager(argv[0]);
+	FILEMAN->MountInitialFilesystems();
+
+	RString sPath = "/";
+
+	vector<RString> files;
+	SMLoader loaderSM;
+
+	loaderSM.GetApplicableFiles(sPath, files);
+
+	for (auto f : files) {
+		Song* pSong = new Song;
+
+		if(loaderSM.LoadFromSimfile(f, *pSong, false)) {
+			std::cout << "Loaded: " << f << "\n";
+		}
+		else {
+			std::cout << "Failed loading: " << f << "\n";
+			continue;
+		}
+
+		int chartNum = 0;
+		for (auto step : pSong->GetAllSteps()) {
+			RString outputFile = f + "-" + std::to_string(chartNum) + ".json";
+
+			if (!FILEMAN->DoesFileExist(outputFile)) {
+				NotesWriterJson::WriteSteps(outputFile, *step);
+
+				std::cout << "Wrote json for: " << outputFile << "\n";
+			}
+			else {
+				std::cout << outputFile << " already exists\n";
+			}
+
+			chartNum++;
+		}
+
+		SAFE_DELETE(pSong);
+	}
+
+	SAFE_DELETE(FILEMAN);
+	SAFE_DELETE(LUA);
+	SAFE_DELETE(PREFSMAN);
 }
 
 /*

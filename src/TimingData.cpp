@@ -753,7 +753,6 @@ bool TimingData::DoesLabelExist( const RString& sLabel ) const
 
 void TimingData::GetBeatAndBPSFromElapsedTime(GetBeatArgs& args) const
 {
-	args.elapsed_time += GAMESTATE->m_SongOptions.GetCurrent().m_fMusicRate * PREFSMAN->m_fGlobalOffsetSeconds;
 	GetBeatAndBPSFromElapsedTimeNoOffset(args);
 }
 
