@@ -3,9 +3,14 @@
 #include "Plugin.h"
 #include "RageLog.h"
 
-REGISTER_PLUGIN(TestPlugin, "Test Plugin", "0.1.1")
+REGISTER_PLUGIN(PluginTest, "Test Plugin", "0.1.1")
 
 PluginTest::PluginTest()
 {
 	LOG->Info("Loaded the actual plugintest :o");
+}
+
+void PluginTest::Update(float fDeltaTime)
+{
+
 }

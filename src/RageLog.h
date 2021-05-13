@@ -3,7 +3,7 @@
 #ifndef RAGE_LOG_H
 #define RAGE_LOG_H
 
-class RageLog
+class PLUGIN__API_EXPORT RageLog
 {
 public:
 	RageLog();
@@ -43,7 +43,7 @@ private:
 	void AddToRecentLogs( const RString &buf );
 };
 
-extern RageLog*	LOG;	// global and accessible from anywhere in our program
+extern PLUGIN__API_EXPORT RageLog*	LOG;	// global and accessible from anywhere in our program
 #endif
 
 /*

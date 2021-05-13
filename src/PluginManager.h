@@ -9,8 +9,8 @@
 #include "dynalo/dynalo.hpp"
 using namespace dynalo;
 
-class DYNALO_EXPORT IPlugin;
-DYNALO_EXPORT typedef IPlugin* (*GetPluginFunc)();
+class DYNALO_EXPORT PluginBase;
+DYNALO_EXPORT typedef PluginBase* (*GetPluginFunc)();
 
 struct PluginDetails
 {
@@ -27,7 +27,7 @@ struct PluginDetails
 
 #define REGISTER_PLUGIN(classType, pluginName, pluginVersion)                  \
 extern "C" {																   \
-    DYNALO_EXPORT IPlugin* getPlugin()									       \
+    DYNALO_EXPORT PluginBase* getPlugin()									   \
     {                                                                          \
         static classType singleton;                                            \
         return &singleton;                                                     \
@@ -43,16 +43,15 @@ extern "C" {																   \
 
 class PluginBase {
 public:
-	PluginBase();
-	virtual ~PluginBase();
+	PluginBase() {};
 
-	void Update(float fDeltaTime);
+	virtual void Update(float fDeltaTime) = 0;
 };
 
 class LoadedPlugin  {
 public:
 	LoadedPlugin(RString libraryPath);
-	~LoadedPlugin();
+	
 	bool Load();
 
 	void Update(float fDeltaTime);
@@ -64,7 +63,7 @@ public:
 
 private:
 	bool loaded = false;
-	library library;
+	library &library;
 	PluginDetails* loadedDetails = nullptr;
 };
 

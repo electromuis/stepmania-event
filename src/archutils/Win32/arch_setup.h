@@ -132,6 +132,12 @@ int64_t llabs( int64_t i ) { return i >= 0 ? i : -i; }
 #define CRASH_HANDLER
 #endif
 
+#ifdef  PLUGIN__API_EXPORT__
+#define PLUGIN__API_EXPORT __declspec(dllimport)  
+#else
+#define PLUGIN__API_EXPORT __declspec(dllexport)  
+#endif
+
 #if defined(__GNUC__) // It might be MinGW or Cygwin(?)
 #include "archutils/Common/gcc_byte_swaps.h"
 #elif defined(_MSC_VER) && (_MSC_VER >= 1310) // Byte swap functions were first implemented in Visual Studio .NET 2003

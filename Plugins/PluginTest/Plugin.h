@@ -6,7 +6,9 @@
 
 
 
-class PluginTest : PluginBase {
+class PluginTest : public PluginBase {
 public:
 	PluginTest();
+
+	virtual void Update(float fDeltaTime);
 };

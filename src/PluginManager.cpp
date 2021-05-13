@@ -11,16 +11,19 @@ PluginManager* PLUGINMAN = nullptr;
 
 LoadedPlugin::LoadedPlugin(RString libraryPath)
 {
-	loaded = false;
-
 	library = dynalo::library(libraryPath);
 
+	loaded = false;
+
+	/*
 	if (library->get_native_handle() == dynalo::native::invalid_handle()) {
 		throw "Failed loading: " + libraryPath;
 	}
 
 	loadedDetails = library->get_function<PluginDetails>("exports");
+	
 	LOG->Info("Plugin name: " + RString(loadedDetails->pluginName));
+	*/
 }
 
 PluginManager::PluginManager()
@@ -30,7 +33,7 @@ PluginManager::PluginManager()
 
 PluginManager::~PluginManager()
 {
-	for (Plugin* plugin : plugins)
+	for (LoadedPlugin* plugin : plugins)
 	{
 		delete plugin;
 	}
