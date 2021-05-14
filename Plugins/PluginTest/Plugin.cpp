@@ -1,5 +1,6 @@
 #pragma once
 
+#include "global.h"
 #include "Plugin.h"
 #include "RageLog.h"
 

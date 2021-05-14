@@ -63,8 +63,9 @@ public:
 
 private:
 	bool loaded = false;
-	library &library;
+	library* loadedLibrary = nullptr;
 	PluginDetails* loadedDetails = nullptr;
+	PluginBase* pluginBase = nullptr;
 };
 
 class PluginManager
