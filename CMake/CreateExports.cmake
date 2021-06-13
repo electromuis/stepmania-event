@@ -1,10 +1,20 @@
-set(DEF_FILE "${CMAKE_CURRENT_BINARY_DIR}/src/StepMania.dir/Debug/exports.def")
+set(BUILD_DIR "${PROJECT_BINARY_DIR}/src/${SM}.dir/${CMAKE_BUILD_TYPE}")
+set(DEF_FILE "${BUILD_DIR}/exports.def")
+set(OBJS_FILE "${BUILD_DIR}/objects2.txt")
 
-execute_process(COMMAND ${CMAKE_COMMAND}  -E __create_def "${DEF_FILE}" "C:/dev/stepmania/Build/src/StepMania.dir/Debug//objects.txt"
-  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-  OUTPUT_VARIABLE cmd_out)
+file(GLOB OBJ_FILES ${BUILD_DIR}/*.obj)
+foreach(LINE IN LISTS OBJ_FILES)
+	file(APPEND ${OBJS_FILE} "${LINE}\n")
+endforeach()
   
-message(STATUS "${cmd_out}")
+execute_process(
+	COMMAND ${CMAKE_COMMAND}
+		-E __create_def "${DEF_FILE}"
+		"${OBJS_FILE}"
+		
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	OUTPUT_VARIABLE cmd_out
+)
 
 set(pattern "==")
 

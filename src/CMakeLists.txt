@@ -96,18 +96,25 @@ else()
       endif()
     endforeach()
   endif()
-  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-  add_executable("${SM_EXE_NAME}" ${SMDATA_ALL_FILES_SRC}
-                 ${SMDATA_ALL_FILES_HPP})
+  
+	add_executable("${SM_EXE_NAME}" ${SMDATA_ALL_FILES_SRC}
+                 ${SMDATA_ALL_FILES_HPP})	 
 				 
-	#set_target_properties("${SM_EXE_NAME}" PROPERTIES ENABLE_EXPORTS 1)
-	#set_target_properties("${SM_EXE_NAME}" PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 1)
+	set_target_properties("${SM_EXE_NAME}" PROPERTIES ENABLE_EXPORTS 1)
 	
 	add_custom_command(
-    TARGET "${SM_EXE_NAME}"
-    PRE_LINK
-    COMMAND ${CMAKE_COMMAND} -DSM="${SM_EXE_NAME}" -P "${CMAKE_SOURCE_DIR}/CMake/CreateExports.cmake"
-    COMMENT " Make exports.def "
+		TARGET "${SM_EXE_NAME}"
+		PRE_LINK
+		
+		COMMAND ${CMAKE_COMMAND}
+			-DSM="${SM_EXE_NAME}"
+			-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE_INIT}"
+			-DPROJECT_BINARY_DIR="${PROJECT_BINARY_DIR}"
+			-DCMAKE_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
+			-P "${CMAKE_SOURCE_DIR}/CMake/CreateExports.cmake"
+			
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		COMMENT " Make exports.def "
     )
 
 				 

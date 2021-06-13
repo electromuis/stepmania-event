@@ -79,7 +79,7 @@ void PluginManager::LoadAvailiblePlugins()
 	LOG->Info("Count: " + files.size());
 	for (RString file : files)
 	{
-		file = "C:\\dev\\stepmania" + file;
+		file = RageFileManagerUtil::sInitialWorkingDirectory + file;
 
 		LOG->Info("Attempting to load plugin: " + file);
 
