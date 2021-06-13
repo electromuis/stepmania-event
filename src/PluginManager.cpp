@@ -6,6 +6,8 @@
 #include <RageFileManager.h>
 #include <RageLog.h>
 
+
+
 PluginManager* PLUGINMAN = nullptr;
 
 
@@ -33,8 +35,22 @@ bool LoadedPlugin::Load()
 }
 
 PluginManager::PluginManager()
+{	
+	LoadStepmaniaPointer();
+	LoadAvailiblePlugins();
+}
+
+void PluginManager::LoadStepmaniaPointer()
 {
-	loadAvailiblePlugins();
+	stepmaniaPointer.hooks = HOOKS;
+	stepmaniaPointer.lua = LUA;
+	stepmaniaPointer.log = LOG;
+	stepmaniaPointer.prefsManager = PREFSMAN;
+	stepmaniaPointer.messageManager = MESSAGEMAN;
+	stepmaniaPointer.gameState = GAMESTATE;
+	stepmaniaPointer.gameManager = GAMEMAN;
+	stepmaniaPointer.songManager = SONGMAN;
+	stepmaniaPointer.bookKeeper = BOOKKEEPER;
 }
 
 PluginManager::~PluginManager()
@@ -47,7 +63,7 @@ PluginManager::~PluginManager()
 	plugins.clear();
 }
 
-void PluginManager::loadAvailiblePlugins()
+void PluginManager::LoadAvailiblePlugins()
 {
 	vector<LoadedPlugin*> plugins = vector<LoadedPlugin*>();
 	vector<RString> files = vector<RString>();
@@ -63,7 +79,7 @@ void PluginManager::loadAvailiblePlugins()
 	LOG->Info("Count: " + files.size());
 	for (RString file : files)
 	{
-		file = "/mnt/c/dev/stepmania" + file;
+		file = "C:\\dev\\stepmania" + file;
 
 		LOG->Info("Attempting to load plugin: " + file);
 

@@ -96,8 +96,21 @@ else()
       endif()
     endforeach()
   endif()
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
   add_executable("${SM_EXE_NAME}" ${SMDATA_ALL_FILES_SRC}
                  ${SMDATA_ALL_FILES_HPP})
+				 
+	#set_target_properties("${SM_EXE_NAME}" PROPERTIES ENABLE_EXPORTS 1)
+	#set_target_properties("${SM_EXE_NAME}" PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 1)
+	
+	add_custom_command(
+    TARGET "${SM_EXE_NAME}"
+    PRE_LINK
+    COMMAND ${CMAKE_COMMAND} -DSM="${SM_EXE_NAME}" -P "${CMAKE_SOURCE_DIR}/CMake/CreateExports.cmake"
+    COMMENT " Make exports.def "
+    )
+
+				 
 endif()
 
 set_target_properties("${SM_EXE_NAME}"
@@ -166,7 +179,7 @@ endif()
 
 set_target_properties("${SM_EXE_NAME}"
                       PROPERTIES COMPILE_FLAGS "${SM_COMPILE_FLAGS}")
-
+					  
 set_target_properties("${SM_EXE_NAME}"
                       PROPERTIES OUTPUT_NAME_DEBUG
                                  "${SM_NAME_DEBUG}"
@@ -200,7 +213,8 @@ if(WIN32)
                                    RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL
                                    "${SM_PROGRAM_DIR}"
                                    RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO
-                                   "${SM_PROGRAM_DIR}")
+                                   "${SM_PROGRAM_DIR}"
+								   WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
   if(MSVC)
     # Allow for getting a virtualdub stack trace.
@@ -529,6 +543,7 @@ if(WIN32)
                         PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
   set_target_properties("${SM_EXE_NAME}"
                         PROPERTIES LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:WINDOWS")
+
 
 elseif(APPLE)
   # The following were removed from SMDATA_LINK_LIB to "match" StepMania's

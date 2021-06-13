@@ -11,7 +11,7 @@
 #endif
 #include <map>
 
-PLUGIN__API_EXPORT RageLog* LOG;		// global and accessible from anywhere in the program
+RageLog* LOG;		// global and accessible from anywhere in the program
 
 /*
  * We have a couple log types and a couple logs.

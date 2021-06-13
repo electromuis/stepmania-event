@@ -1061,9 +1061,6 @@ int sm_main(int argc, char* argv[])
 	// Create game objects
 	GAMESTATE	= new GameState;
 
-	// Load the plugin system including plugin files
-	PLUGINMAN = new PluginManager;
-
 	// This requires PREFSMAN, for PREFSMAN->m_bShowLoadingWindow.
 	LoadingWindow *pLoadingWindow = LoadingWindow::Create();
 	if(pLoadingWindow == nullptr)
@@ -1226,6 +1223,9 @@ int sm_main(int argc, char* argv[])
 
 	if( GetCommandlineArgument("netip") )
 		NSMAN->DisplayStartupStatus();	// If we're using networking show what happened
+
+	// Load the plugin system including plugin files
+	PLUGINMAN = new PluginManager;
 
 	// Run the main loop.
 	GameLoop::RunGameLoop();

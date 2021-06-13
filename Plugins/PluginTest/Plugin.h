@@ -11,4 +11,5 @@ public:
 	PluginTest();
 
 	virtual void Update(float fDeltaTime);
+	void Start(StepmaniaPointer* stepmaniaPointer);
 };

@@ -9,6 +9,21 @@
 #include "dynalo/dynalo.hpp"
 using namespace dynalo;
 
+// All the includes we need in out StepmaniaPointer
+
+#include "AnnouncerManager.h"
+#include "arch/ArchHooks/ArchHooks.h"
+#include "LuaManager.h"
+#include "RageLog.h"
+#include "PrefsManager.h"
+#include "MessageManager.h"
+#include "GameState.h"
+#include "GameManager.h"
+#include "SongManager.h"
+#include "Bookkeeper.h"
+
+class PluginManager;
+
 class DYNALO_EXPORT PluginBase;
 DYNALO_EXPORT typedef PluginBase* (*GetPluginFunc)();
 
@@ -41,11 +56,64 @@ extern "C" {																   \
     };                                                                         \
 }
 
+struct StepmaniaPointer {
+	
+	// Game/engine core related
+	ArchHooks* hooks;
+	LuaManager* lua;
+	RageLog* log;
+	PrefsManager* prefsManager;
+	MessageManager* messageManager;
+	GameState* gameState;
+	GameManager* gameManager;
+	SongManager* songManager;
+	Bookkeeper* bookKeeper;
+
+	/*
+	// Asset/file related
+	RageFileManager* fileManger;
+	PluginManager* pluginManager;
+	ThemeManager* themeManager;
+	AnnouncerManager* announcerManager;
+	SongCacheIndex* songCacheIndex;
+	CryptManager* cryptManager;
+	
+	CharacterManager* characterManager;
+
+	// Profile related
+	UnlockManager* unlockManager;
+	ProfileManager* profileManager;
+	MemoryCardManager* memoryCardManager;
+	StatsManager* statsManager;
+
+	// Render related
+	NoteSkinManager* noteSkinManager;
+	ImageCache* imageCache;
+	FontManager* fontManager;
+	ScreenManager* screenManager;
+
+	// Input/hardware related
+	RageSoundManager* rageSoundManager;
+	GameSoundManager* gameSoundManager;
+	LightsManager* lightsManager;
+	InputFilter* inputFilter;
+	InputMapper* inputMapper;
+	InputQueue* inputQueue;
+	NetworkSyncManager* networkSyncManager;
+	RageInput* inputManager;
+	//todo CodeDetector
+	*/
+};
+
 class PluginBase {
 public:
 	PluginBase() {};
 
+	void Start(StepmaniaPointer* sm);
 	virtual void Update(float fDeltaTime) = 0;
+
+protected:
+	StepmaniaPointer* sm;
 };
 
 class LoadedPlugin  {
@@ -74,9 +142,12 @@ public:
 	PluginManager();
 	~PluginManager();
 
-	void loadAvailiblePlugins();
 private:
+	void LoadAvailiblePlugins();
+	void LoadStepmaniaPointer();
+
 	vector<LoadedPlugin*> plugins;
+	StepmaniaPointer stepmaniaPointer;
 };
 
 extern PluginManager* PLUGINMAN;

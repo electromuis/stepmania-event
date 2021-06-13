@@ -43,7 +43,7 @@ private:
 	void AddToRecentLogs( const RString &buf );
 };
 
-PLUGIN__API_EXPORT extern RageLog*	LOG;	// global and accessible from anywhere in our program
+extern RageLog*	LOG;	// global and accessible from anywhere in our program
 #endif
 
 /*
