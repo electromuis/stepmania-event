@@ -2,6 +2,8 @@
 #define ANNOUNCER_MANAGER_H
 
 #include "RageTypes.h"
+#include "global.h"
+
 /** @brief The commentators who say seemlingly random things during gameplay. */
 class AnnouncerManager
 {
@@ -42,7 +44,7 @@ protected:
 };
 
 
-extern AnnouncerManager*	ANNOUNCER;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern AnnouncerManager*	ANNOUNCER;	// global and accessible from anywhere in our program
 	
 #endif
 

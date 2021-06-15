@@ -4,7 +4,7 @@ set(OBJS_FILE "${BUILD_DIR}/objects2.txt")
 
 file(GLOB OBJ_FILES ${BUILD_DIR}/*.obj)
 foreach(LINE IN LISTS OBJ_FILES)
-	file(APPEND ${OBJS_FILE} "${LINE}\n")
+	#file(APPEND ${OBJS_FILE} "${LINE}\n")
 endforeach()
   
 execute_process(

@@ -3,6 +3,8 @@
 #ifndef FONTMANAGER_H
 #define FONTMANAGER_H
 
+#include "global.h"
+
 class Font;
 struct Game;
 
@@ -18,7 +20,7 @@ public:
 	//void PruneFonts();
 };
 
-extern FontManager*	FONT;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern FontManager*	FONT;	// global and accessible from anywhere in our program
 
 
 #endif

@@ -1,23 +1,44 @@
 #pragma once
 
+#include <iostream>
+using namespace std;
+
 #include "global.h"
 #include "Plugin.h"
+
+#include "RageLog.h"
 
 REGISTER_PLUGIN(PluginTest, "Test Plugin", "0.1.1")
 
 PluginTest::PluginTest()
+	:subscriber(this)
+{	
+	subscriber.SubscribeToMessage("Judgment");
+	LOG->Info("Test plugin loaded");
+}
+
+PluginTest::~PluginTest()
+{
+	LOG->Info("Test plugin unloaded");
+}
+
+void PluginTest::Stepped()
+{
+	LOG->Info("Test plugin feels a step");
+}
+
+PluginMessageSubscriber::PluginMessageSubscriber(PluginTest* plugin)
+	:plugin(plugin)
 {
 
 }
 
-void PluginTest::Update(float fDeltaTime)
+PluginMessageSubscriber::~PluginMessageSubscriber()
 {
-
+	UnsubscribeAll();
 }
 
-void PluginTest::Start(StepmaniaPointer* stepmaniaPointer)
+void PluginMessageSubscriber::HandleMessage(const Message& msg)
 {
-	sm = stepmaniaPointer;
-
-	sm->log->Info("Loaded the actual plugintest :o");
+	plugin->Stepped();
 }

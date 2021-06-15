@@ -3,6 +3,8 @@
 
 #include "DateTime.h"
 #include <map>
+#include "global.h"
+
 class XNode;
 
 /** @brief Track when coins were put into the machine. */
@@ -64,7 +66,7 @@ private:
 	map<Date,int> m_mapCoinsForHour;
 };
 
-extern Bookkeeper*	BOOKKEEPER;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern Bookkeeper*	BOOKKEEPER;	// global and accessible from anywhere in our program
 
 #endif
 

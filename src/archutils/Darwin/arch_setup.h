@@ -29,13 +29,14 @@ extern "C" int sm_main( int argc, char *argv[] );
 # define __MACOSX__
 #endif
 
-#define PLUGIN__API_EXPORT
-
 #include <libkern/OSByteOrder.h>
 #define ArchSwap32(n) OSSwapInt32((n))
 #define ArchSwap24(n) (ArchSwap32((n)) >> 8)
 #define ArchSwap16(n) OSSwapInt16((n))
 #define HAVE_BYTE_SWAPS
+
+// Unix doesn't need to import global variables
+#define GLOBALS_IMPORT_PREFIX
 
 #endif
 

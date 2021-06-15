@@ -1,6 +1,7 @@
 #ifndef RAGE_SOUNDS_H
 #define RAGE_SOUNDS_H
 
+#include "global.h"
 #include "PlayerNumber.h"
 
 class TimingData;
@@ -70,7 +71,7 @@ public:
 	void PushSelf( lua_State *L );
 };
 
-extern GameSoundManager *SOUND;
+GLOBALS_IMPORT_PREFIX extern GameSoundManager *SOUND;
 #endif
 
 /*

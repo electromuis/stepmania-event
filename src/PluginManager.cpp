@@ -36,41 +36,25 @@ bool LoadedPlugin::Load()
 
 PluginManager::PluginManager()
 {	
-	LoadStepmaniaPointer();
 	LoadAvailiblePlugins();
-}
-
-void PluginManager::LoadStepmaniaPointer()
-{
-	stepmaniaPointer.hooks = HOOKS;
-	stepmaniaPointer.lua = LUA;
-	stepmaniaPointer.log = LOG;
-	stepmaniaPointer.prefsManager = PREFSMAN;
-	stepmaniaPointer.messageManager = MESSAGEMAN;
-	stepmaniaPointer.gameState = GAMESTATE;
-	stepmaniaPointer.gameManager = GAMEMAN;
-	stepmaniaPointer.songManager = SONGMAN;
-	stepmaniaPointer.bookKeeper = BOOKKEEPER;
 }
 
 PluginManager::~PluginManager()
 {
-	for (LoadedPlugin* plugin : plugins)
-	{
-		delete plugin;
-	}
 
-	plugins.clear();
 }
 
 void PluginManager::LoadAvailiblePlugins()
 {
-	vector<LoadedPlugin*> plugins = vector<LoadedPlugin*>();
 	vector<RString> files = vector<RString>();
 
 	LOG->Info("Reading plugins: ");
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+	#define LOAD_WIN32
+#endif
+
+#if defined(LOAD_WIN32)
 	FILEMAN->GetDirListing("Plugins\\*.dll", files, false, true);
 #else
 	FILEMAN->GetDirListing("Plugins\\*.so", files, false, true);
@@ -79,19 +63,20 @@ void PluginManager::LoadAvailiblePlugins()
 	LOG->Info("Count: " + files.size());
 	for (RString file : files)
 	{
-		file = RageFileManagerUtil::sInitialWorkingDirectory + file;
+		file = FILEMAN->ResolvePath(file);
+
+		// Remove leading / on windows
+#if defined(LOAD_WIN32)
+		file = file.substr(1);
+#endif
 
 		LOG->Info("Attempting to load plugin: " + file);
 
-		LoadedPlugin* plugin = nullptr;
-
 		try {
-			plugin = new LoadedPlugin(file);
+			plugins.push_back(LoadedPlugin(file));
 		}
 		catch (...) {
 			LOG->Info("Failed loading: " + file);
 		}
-	
-		plugins.push_back(plugin);
 	}
 }

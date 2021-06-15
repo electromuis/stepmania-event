@@ -1,6 +1,7 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
+#include "global.h"
 #include "Attack.h"
 #include "Difficulty.h"
 #include "GameConstantsAndTypes.h"
@@ -456,7 +457,7 @@ MultiPlayer GetNextEnabledMultiPlayer( MultiPlayer mp );
 
 
 
-extern GameState*	GAMESTATE;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern GameState*	GAMESTATE;	// global and accessible from anywhere in our program
 
 #endif
 

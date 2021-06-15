@@ -56,64 +56,11 @@ extern "C" {																   \
     };                                                                         \
 }
 
-struct StepmaniaPointer {
-	
-	// Game/engine core related
-	ArchHooks* hooks;
-	LuaManager* lua;
-	RageLog* log;
-	PrefsManager* prefsManager;
-	MessageManager* messageManager;
-	GameState* gameState;
-	GameManager* gameManager;
-	SongManager* songManager;
-	Bookkeeper* bookKeeper;
-
-	/*
-	// Asset/file related
-	RageFileManager* fileManger;
-	PluginManager* pluginManager;
-	ThemeManager* themeManager;
-	AnnouncerManager* announcerManager;
-	SongCacheIndex* songCacheIndex;
-	CryptManager* cryptManager;
-	
-	CharacterManager* characterManager;
-
-	// Profile related
-	UnlockManager* unlockManager;
-	ProfileManager* profileManager;
-	MemoryCardManager* memoryCardManager;
-	StatsManager* statsManager;
-
-	// Render related
-	NoteSkinManager* noteSkinManager;
-	ImageCache* imageCache;
-	FontManager* fontManager;
-	ScreenManager* screenManager;
-
-	// Input/hardware related
-	RageSoundManager* rageSoundManager;
-	GameSoundManager* gameSoundManager;
-	LightsManager* lightsManager;
-	InputFilter* inputFilter;
-	InputMapper* inputMapper;
-	InputQueue* inputQueue;
-	NetworkSyncManager* networkSyncManager;
-	RageInput* inputManager;
-	//todo CodeDetector
-	*/
-};
-
 class PluginBase {
 public:
 	PluginBase() {};
 
-	void Start(StepmaniaPointer* sm);
-	virtual void Update(float fDeltaTime) = 0;
-
-protected:
-	StepmaniaPointer* sm;
+	bool Update(float fDeltaTime) { return false; };
 };
 
 class LoadedPlugin  {
@@ -121,8 +68,6 @@ public:
 	LoadedPlugin(RString libraryPath);
 	
 	bool Load();
-
-	void Update(float fDeltaTime);
 
 	bool IsLoaded()
 	{
@@ -141,13 +86,10 @@ class PluginManager
 public:
 	PluginManager();
 	~PluginManager();
-
 private:
 	void LoadAvailiblePlugins();
-	void LoadStepmaniaPointer();
 
-	vector<LoadedPlugin*> plugins;
-	StepmaniaPointer stepmaniaPointer;
+	vector<LoadedPlugin> plugins;
 };
 
 extern PluginManager* PLUGINMAN;

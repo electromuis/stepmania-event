@@ -3,6 +3,7 @@
 #ifndef INPUT_FILTER_H
 #define INPUT_FILTER_H
 
+#include "global.h"
 #include "RageInputDevice.h"
 
 enum InputEventType
@@ -96,7 +97,7 @@ private:
 	InputFilter& operator=(const InputFilter& rhs);
 };
 
-extern InputFilter*	INPUTFILTER;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern InputFilter*	INPUTFILTER;	// global and accessible from anywhere in our program
 
 #endif
 
