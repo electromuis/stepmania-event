@@ -54,7 +54,7 @@ private:
 	LuaManager(const LuaManager& rhs);
 };
 
-extern LuaManager *LUA;
+GLOBALS_IMPORT_PREFIX extern LuaManager *LUA;
 
 
 /** @brief Utilities for working with Lua. */

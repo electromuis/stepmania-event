@@ -27,6 +27,11 @@ void PluginTest::Stepped()
 	LOG->Info("Test plugin feels a step");
 }
 
+void PluginTest::Update(float fDeltaTime)
+{
+
+}
+
 PluginMessageSubscriber::PluginMessageSubscriber(PluginTest* plugin)
 	:plugin(plugin)
 {

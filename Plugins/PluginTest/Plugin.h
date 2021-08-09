@@ -22,6 +22,8 @@ public:
 	PluginTest();
 	~PluginTest();
 
+	void Update(float fDeltaTime);
+
 	void Stepped();
 private:
 	PluginMessageSubscriber subscriber;

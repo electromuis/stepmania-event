@@ -24,7 +24,7 @@ LoadedPlugin::LoadedPlugin(RString libraryPath)
 	loadedDetails = loadedLibrary->get_function<PluginDetails>("exports");
 	
 	LOG->Info("Plugin name: " + RString(loadedDetails->pluginName));
-	Load();
+	loaded = Load();
 }
 
 bool LoadedPlugin::Load()
@@ -32,6 +32,13 @@ bool LoadedPlugin::Load()
 	pluginBase = loadedDetails->initializeFunc();
 
 	return true;
+}
+
+void LoadedPlugin::Update(float fDeltaTime)
+{
+	if (loaded) {
+		pluginBase->Update(fDeltaTime);
+	}
 }
 
 PluginManager::PluginManager()
@@ -78,5 +85,13 @@ void PluginManager::LoadAvailiblePlugins()
 		catch (...) {
 			LOG->Info("Failed loading: " + file);
 		}
+	}
+}
+
+void PluginManager::Update(float fDeltaTime)
+{
+	for (LoadedPlugin plugin : plugins)
+	{
+		plugin.Update(fDeltaTime);
 	}
 }

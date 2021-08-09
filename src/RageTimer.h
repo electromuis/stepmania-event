@@ -50,7 +50,7 @@ private:
 	static float Difference( const RageTimer &lhs, const RageTimer &rhs );
 };
 
-extern const RageTimer RageZeroTimer;
+GLOBALS_IMPORT_PREFIX extern const RageTimer RageZeroTimer;
 
 // For profiling how long some chunk of code takes. -Kyz
 #define START_TIME(name) uint64_t name##_start_time= RageTimer::GetUsecsSinceStart();

@@ -60,7 +60,7 @@ class PluginBase {
 public:
 	PluginBase() {};
 
-	bool Update(float fDeltaTime) { return false; };
+	virtual void Update(float fDeltaTime) = 0;
 };
 
 class LoadedPlugin  {
@@ -74,6 +74,8 @@ public:
 		return loaded;
 	}
 
+	void Update(float fDeltaTime);
+
 private:
 	bool loaded = false;
 	library* loadedLibrary = nullptr;
@@ -86,6 +88,9 @@ class PluginManager
 public:
 	PluginManager();
 	~PluginManager();
+
+	void Update(float fDeltaTime);
+
 private:
 	void LoadAvailiblePlugins();
 
