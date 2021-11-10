@@ -10,6 +10,12 @@ enum GameController
 {
 	GameController_1 = 0,	/**< The left controller */
 	GameController_2,	/**< The right controller */
+	GameController_3,	/**< The right controller */
+	GameController_4,	/**< The right controller */
+	GameController_5,	/**< The right controller */
+	GameController_6,	/**< The right controller */
+	GameController_7,	/**< The right controller */
+	GameController_8,	/**< The right controller */
 	NUM_GameController,	/**< The number of controllers allowed. */
 	GameController_Invalid,
 };

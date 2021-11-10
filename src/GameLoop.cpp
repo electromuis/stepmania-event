@@ -282,8 +282,8 @@ void GameLoop::UpdateAllButDraw(bool bRunningFromVBLANK)
 	TEXTUREMAN->Update(fDeltaTime);
 	GAMESTATE->Update(fDeltaTime);
 	SCREENMAN->Update(fDeltaTime);
-	MEMCARDMAN->Update();
-	NSMAN->Update(fDeltaTime);
+	//MEMCARDMAN->Update();
+	//NSMAN->Update(fDeltaTime);
 
 	/* Important: Process input AFTER updating game logic, or input will be
 	* acting on song beat from last frame */
@@ -291,7 +291,7 @@ void GameLoop::UpdateAllButDraw(bool bRunningFromVBLANK)
 
 	//bandaid for low max audio sample counter
 	SOUNDMAN->low_sample_count_workaround();
-	LIGHTSMAN->Update(fDeltaTime);
+	//LIGHTSMAN->Update(fDeltaTime);
 	
 }
 

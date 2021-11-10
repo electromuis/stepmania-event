@@ -1686,7 +1686,13 @@ bool GameState::IsHumanPlayer( PlayerNumber pn ) const
 			{
 				case StyleType_TwoPlayersTwoSides:
 				case StyleType_TwoPlayersSharedSides:
-					return true;
+					return pn < 2;
+				case StyleType_FourPlayersFourSides:
+					return pn < 4;
+				case StyleType_SixPlayersSixSides:
+					return pn < 6;
+				case StyleType_EightPlayersEightSides:
+					return pn < 8;
 				case StyleType_OnePlayerOneSide:
 				case StyleType_OnePlayerTwoSides:
 					return pn == this->GetMasterPlayerNumber();
@@ -1705,7 +1711,13 @@ bool GameState::IsHumanPlayer( PlayerNumber pn ) const
 	{
 	case StyleType_TwoPlayersTwoSides:
 	case StyleType_TwoPlayersSharedSides:
-		return true;
+		return pn < 2;
+	case StyleType_FourPlayersFourSides:
+		return pn < 4;
+	case StyleType_SixPlayersSixSides:
+		return pn < 6;
+	case StyleType_EightPlayersEightSides:
+		return pn < 8;
 	case StyleType_OnePlayerOneSide:
 	case StyleType_OnePlayerTwoSides:
 		return pn == this->GetMasterPlayerNumber();

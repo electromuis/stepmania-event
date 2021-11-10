@@ -44,6 +44,7 @@ function GameplayMargins(enabled_players, styletype)
 	-- Use a fake style width because calculating the real style width throws off
 	-- the code in the engine.
 	local fake_style_width= 272
+	
 	-- Handle the case of a single player that is centered first because it's
 	-- simpler.
 	if Center1Player() then
@@ -55,6 +56,7 @@ function GameplayMargins(enabled_players, styletype)
 		-- center margin width will be ignored.
 		return left, 80, right
 	end
+	
 	local half_screen= _screen.w / 2
 	local left= {[PLAYER_1]= 0, [PLAYER_2]= half_screen}
 	for i, pn in ipairs(enabled_players) do

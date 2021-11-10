@@ -517,7 +517,7 @@ void ScreenGameplay::Init()
 		m_Toasty.Load( THEME->GetPathB(m_sName,"toasty") );
 		this->AddChild( &m_Toasty );
 	}
-
+	/*
 	// Use the margin function to calculate where the notefields should be and
 	// what size to zoom them to.  This way, themes get margins to put cut-ins
 	// in, and the engine can have players on different styles without the
@@ -601,13 +601,13 @@ void ScreenGameplay::Init()
 #undef CENTER_PLAYER_BLOCK
 		float player_x= edge + left_marge + (field_space / 2.0f);
 		float field_zoom= field_space / style_width;
-		/*
-		LuaHelpers::ReportScriptErrorFmt("Positioning player %d at %.0f:  "
-			"screen_space %.0f, left_edge %.0f, field_space %.0f, left_marge %.0f,"
-			" right_marge %.0f, style_width %.0f, field_zoom %.2f.",
-			pi->m_pn+1, player_x, screen_space, left_edge[pi->m_pn], field_space,
-			left_marge, right_marge, style_width, field_zoom);
-		*/
+		
+		//LuaHelpers::ReportScriptErrorFmt("Positioning player %d at %.0f:  "
+		//	"screen_space %.0f, left_edge %.0f, field_space %.0f, left_marge %.0f,"
+		//	" right_marge %.0f, style_width %.0f, field_zoom %.2f.",
+		//	pi->m_pn+1, player_x, screen_space, left_edge[pi->m_pn], field_space,
+		//	left_marge, right_marge, style_width, field_zoom);
+		
 		pi->GetPlayerState()->m_NotefieldZoom= min(1.0f, field_zoom);
 
 		pi->m_pPlayer->SetX(player_x);
@@ -616,6 +616,44 @@ void ScreenGameplay::Init()
 		this->AddChild( pi->m_pPlayer );
 		pi->m_pPlayer->PlayCommand( "On" );
 	}
+	*/
+
+	Lua* L = LUA->Get();
+	RString sName = "Func";
+	RString luaError = "Error: ";
+	int i = 1;
+
+	int field_width;
+	LuaHelpers::RunExpression(L, "PlayFieldWidth", sName);
+	LuaHelpers::RunScriptOnStack(L, luaError, 0, 1, true);
+	LuaHelpers::Pop(L, field_width);
+
+	float field_zoom;
+	LuaHelpers::RunExpression(L, "GetPlayFieldZoom", sName);
+	LuaHelpers::RunScriptOnStack(L, luaError, 0, 1, true);
+	LuaHelpers::Pop(L, field_zoom);
+
+	FOREACH_EnabledPlayerInfo(m_vPlayerInfo, pi)
+	{
+        RString sName = ssprintf("Player%s", pi->GetName().c_str());
+		pi->m_pPlayer->SetName(sName);
+		pi->GetPlayerState()->m_NotefieldZoom = min(1.0f, field_zoom);
+
+		float player_x;
+		LuaHelpers::RunExpression(L, "GetPlayerPlayfieldX", sName);
+		lua_pushinteger(L, pi->m_pn);
+		LuaHelpers::RunScriptOnStack(L, luaError, 1, 1, true);
+		LuaHelpers::Pop(L, player_x);
+
+		pi->m_pPlayer->SetX(player_x);
+		pi->m_pPlayer->RunCommands(PLAYER_INIT_COMMAND);
+		this->AddChild(pi->m_pPlayer);
+		pi->m_pPlayer->PlayCommand("On");
+
+		i++;
+	}
+
+	LUA->Release(L);
 
 	FOREACH_EnabledPlayerInfoNotDummy( m_vPlayerInfo, pi )
 	{

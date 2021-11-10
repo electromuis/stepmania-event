@@ -112,12 +112,12 @@ MusicWheelItem::MusicWheelItem( RString sType ):
 		LOAD_ALL_COMMANDS_AND_SET_XY( m_pGradeDisplay[p] );
 	}
 
-	this->SubscribeToMessage( Message_CurrentStepsP1Changed );
-	this->SubscribeToMessage( Message_CurrentStepsP2Changed );
-	this->SubscribeToMessage( Message_CurrentTrailP1Changed );
-	this->SubscribeToMessage( Message_CurrentTrailP2Changed );
-	this->SubscribeToMessage( Message_PreferredDifficultyP1Changed );
-	this->SubscribeToMessage( Message_PreferredDifficultyP2Changed );
+	FOREACH_PlayerNumber(p)
+	{
+		this->SubscribeToMessage(MessageID(Message_CurrentStepsP1Changed + p));
+		this->SubscribeToMessage(MessageID(Message_CurrentTrailP1Changed + p));
+		this->SubscribeToMessage(MessageID(Message_PreferredDifficultyP1Changed + p));
+	}
 }
 
 MusicWheelItem::MusicWheelItem( const MusicWheelItem &cpy ):
@@ -377,12 +377,19 @@ void MusicWheelItem::RefreshGrades()
 void MusicWheelItem::HandleMessage( const Message &msg )
 {
 	if(!IsLoaded()) { return; }
-	if( msg == Message_CurrentStepsP1Changed ||
-	    msg == Message_CurrentStepsP2Changed ||
-	    msg == Message_CurrentTrailP1Changed ||
-	    msg == Message_CurrentTrailP2Changed ||
-	    msg == Message_PreferredDifficultyP1Changed ||
-	    msg == Message_PreferredDifficultyP2Changed )
+
+	bool update = false;
+	FOREACH_PlayerNumber(p)
+	{
+		if (
+			msg == MessageID(Message_CurrentStepsP1Changed + p) ||
+			msg == MessageID(Message_CurrentTrailP1Changed + p) ||
+			msg == MessageID(Message_PreferredDifficultyP1Changed + p)
+		)
+			update = true;
+	}
+
+	if(update)
 	{
 		const MusicWheelItemData *pWID = dynamic_cast<const MusicWheelItemData*>( m_pData );
 		MusicWheelItemType type = MusicWheelItemType_Invalid;

@@ -138,6 +138,66 @@ static const int DANCE_COL_SPACING = 64;
  * just arroweffects.cpp for rowspacing (ArrowRowSpacing)
  */
 
+#define Dance_Single_Cols() \
+{ \
+	{ TRACK_1, -DANCE_COL_SPACING * 1.5f, nullptr }, \
+	{ TRACK_2,	-DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_3,	+DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_4,	+DANCE_COL_SPACING * 1.5f, nullptr }, \
+}, \
+{ \
+	{ TRACK_1,	-DANCE_COL_SPACING * 1.5f, nullptr }, \
+	{ TRACK_2,	-DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_3,	+DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_4,	+DANCE_COL_SPACING * 1.5f, nullptr } \
+}, \
+{ \
+	{ TRACK_1,	-DANCE_COL_SPACING * 1.5f, nullptr }, \
+	{ TRACK_2,	-DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_3,	+DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_4,	+DANCE_COL_SPACING * 1.5f, nullptr } \
+}, \
+{ \
+	{ TRACK_1,	-DANCE_COL_SPACING * 1.5f, nullptr }, \
+	{ TRACK_2,	-DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_3,	+DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_4,	+DANCE_COL_SPACING * 1.5f, nullptr } \
+}, \
+{ \
+	{ TRACK_1,	-DANCE_COL_SPACING * 1.5f, nullptr }, \
+	{ TRACK_2,	-DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_3,	+DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_4,	+DANCE_COL_SPACING * 1.5f, nullptr } \
+}, \
+{ \
+	{ TRACK_1,	-DANCE_COL_SPACING * 1.5f, nullptr }, \
+	{ TRACK_2,	-DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_3,	+DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_4,	+DANCE_COL_SPACING * 1.5f, nullptr } \
+}, \
+{ \
+	{ TRACK_1,	-DANCE_COL_SPACING * 1.5f, nullptr }, \
+	{ TRACK_2,	-DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_3,	+DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_4,	+DANCE_COL_SPACING * 1.5f, nullptr } \
+}, \
+{ \
+	{ TRACK_1,	-DANCE_COL_SPACING * 1.5f, nullptr }, \
+	{ TRACK_2,	-DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_3,	+DANCE_COL_SPACING * 0.5f, nullptr }, \
+	{ TRACK_4,	+DANCE_COL_SPACING * 1.5f, nullptr } \
+} \
+
+#define Dance_Single_Inputs() \
+	{ 0, 3, 2, 1, Style::END_MAPPING }, \
+	{ 0, 3, 2, 1, Style::END_MAPPING }, \
+	{ 0, 3, 2, 1, Style::END_MAPPING }, \
+	{ 0, 3, 2, 1, Style::END_MAPPING }, \
+	{ 0, 3, 2, 1, Style::END_MAPPING }, \
+	{ 0, 3, 2, 1, Style::END_MAPPING }, \
+	{ 0, 3, 2, 1, Style::END_MAPPING }, \
+	{ 0, 3, 2, 1, Style::END_MAPPING }
+
 static const Style g_Style_Dance_Single =
 {	// STYLE_DANCE_SINGLE
 	true,				// m_bUsedForGameplay
@@ -148,24 +208,8 @@ static const Style g_Style_Dance_Single =
 	StepsType_dance_single,	// m_StepsType
 	StyleType_OnePlayerOneSide,		// m_StyleType
 	4,				// m_iColsPerPlayer
-	{	// m_ColumnInfo[NUM_PLAYERS][MAX_COLS_PER_PLAYER];
-		{	// PLAYER_1
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, nullptr },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, nullptr },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, nullptr },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, nullptr },
-		},
-		{	// PLAYER_2
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, nullptr },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, nullptr },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, nullptr },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, nullptr },
-		},
-	},
-	{	// m_iInputColumn[NUM_GameController][NUM_GameButton]
-		{ 0, 3, 2, 1, Style::END_MAPPING },
-		{ 0, 3, 2, 1, Style::END_MAPPING }
-	},
+	{ Dance_Single_Cols() },
+	{ Dance_Single_Inputs() },
 	{	// m_iColumnDrawOrder[MAX_COLS_PER_PLAYER];
 		0, 1, 2, 3
 	},
@@ -183,24 +227,65 @@ static const Style g_Style_Dance_Versus =
 	StepsType_dance_single,	// m_StepsType
 	StyleType_TwoPlayersTwoSides,		// m_StyleType
 	4,				// m_iColsPerPlayer
-	{	// m_ColumnInfo[NUM_PLAYERS][MAX_COLS_PER_PLAYER];
-		{	// PLAYER_1
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, nullptr },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, nullptr },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, nullptr },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, nullptr },
-		},
-		{	// PLAYER_2
-			{ TRACK_1,	-DANCE_COL_SPACING*1.5f, nullptr },
-			{ TRACK_2,	-DANCE_COL_SPACING*0.5f, nullptr },
-			{ TRACK_3,	+DANCE_COL_SPACING*0.5f, nullptr },
-			{ TRACK_4,	+DANCE_COL_SPACING*1.5f, nullptr },
-		},
+	{ Dance_Single_Cols() },
+	{ Dance_Single_Inputs() },
+	{	// m_iColumnDrawOrder[MAX_COLS_PER_PLAYER];
+		0, 1, 2, 3
 	},
-	{
-		{ 0, 3, 2, 1, Style::END_MAPPING },
-		{ 0, 3, 2, 1, Style::END_MAPPING }
+	true, // m_bCanUseBeginnerHelper
+	false, // m_bLockDifficulties
+};
+
+static const Style g_Style_Dance_Versus4 =
+{	// STYLE_DANCE_VERSUS
+	true,				// m_bUsedForGameplay
+	false,				// m_bUsedForEdit
+	true,				// m_bUsedForDemonstration
+	false,				// m_bUsedForHowToPlay
+	"versus4",			// m_szName
+	StepsType_dance_single,	// m_StepsType
+	StyleType_FourPlayersFourSides,		// m_StyleType
+	4,				// m_iColsPerPlayer
+	{ Dance_Single_Cols() },
+	{ Dance_Single_Inputs() },
+	{	// m_iColumnDrawOrder[MAX_COLS_PER_PLAYER];
+		0, 1, 2, 3
 	},
+	true, // m_bCanUseBeginnerHelper
+	false, // m_bLockDifficulties
+};
+
+static const Style g_Style_Dance_Versus6 =
+{	// STYLE_DANCE_VERSUS
+	true,				// m_bUsedForGameplay
+	false,				// m_bUsedForEdit
+	true,				// m_bUsedForDemonstration
+	false,				// m_bUsedForHowToPlay
+	"versus6",			// m_szName
+	StepsType_dance_single,	// m_StepsType
+	StyleType_SixPlayersSixSides,		// m_StyleType
+	4,				// m_iColsPerPlayer
+	{ Dance_Single_Cols() },
+	{ Dance_Single_Inputs() },
+	{	// m_iColumnDrawOrder[MAX_COLS_PER_PLAYER];
+		0, 1, 2, 3
+	},
+	true, // m_bCanUseBeginnerHelper
+	false, // m_bLockDifficulties
+};
+
+static const Style g_Style_Dance_Versus8 =
+{	// STYLE_DANCE_VERSUS
+	true,				// m_bUsedForGameplay
+	false,				// m_bUsedForEdit
+	true,				// m_bUsedForDemonstration
+	false,				// m_bUsedForHowToPlay
+	"versus8",			// m_szName
+	StepsType_dance_single,	// m_StepsType
+	StyleType_EightPlayersEightSides,		// m_StyleType
+	4,				// m_iColsPerPlayer
+	{ Dance_Single_Cols() },
+	{ Dance_Single_Inputs() },
 	{	// m_iColumnDrawOrder[MAX_COLS_PER_PLAYER];
 		0, 1, 2, 3
 	},
@@ -486,6 +571,9 @@ static const Style *g_apGame_Dance_Styles[] =
 {
 	&g_Style_Dance_Single,
 	&g_Style_Dance_Versus,
+	&g_Style_Dance_Versus4,
+	&g_Style_Dance_Versus6,
+	&g_Style_Dance_Versus8,
 	&g_Style_Dance_Double,
 	&g_Style_Dance_Couple,
 	&g_Style_Dance_Solo,
@@ -3351,6 +3439,15 @@ void GameManager::GetCompatibleStyles( const Game *pGame, int iNumPlayers, vecto
 		case StyleType_TwoPlayersTwoSides:
 		case StyleType_TwoPlayersSharedSides:
 			iNumPlayersRequired = 2;
+			break;
+		case StyleType_FourPlayersFourSides:
+			iNumPlayersRequired = 4;
+			break;
+		case StyleType_SixPlayersSixSides:
+			iNumPlayersRequired = 6;
+			break;
+		case StyleType_EightPlayersEightSides:
+			iNumPlayersRequired = 8;
 			break;
 		}
 

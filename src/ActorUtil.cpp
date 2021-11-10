@@ -474,12 +474,27 @@ void ActorUtil::LoadAllCommandsFromName( Actor& actor, const RString &sMetricsGr
 	set<RString> vsValueNames;
 	THEME->GetMetricsThatBeginWith( sMetricsGroup, sName, vsValueNames );
 
+	RString spoofName = "";
+	Regex re("^([0-9a-zA-Z\\s]+)P([0-9]+)$");
+	vector<RString> matches;
+	if (vsValueNames.size() == 0 && re.Compare(sName, matches) && matches[1] != "1")
+	{
+		spoofName = matches[0] + "P1";
+		THEME->GetMetricsThatBeginWith(sMetricsGroup, spoofName, vsValueNames);
+		LOG->Info("Spoofed actor commands <" + sName + "> to P1");
+	}
+
 	for (RString const & sv : vsValueNames)
 	{
+		RString myValue = sv;
+		if (spoofName.length() > 0) {
+			myValue.Replace(spoofName, sName);
+		}
+
 		static const RString sEnding = "Command"; 
-		if( EndsWith(sv,sEnding) )
+		if( EndsWith(myValue,sEnding) )
 		{
-			RString sCommandName( sv.begin()+sName.size(), sv.end()-sEnding.size() );
+			RString sCommandName(myValue.begin()+sName.size(), myValue.end()-sEnding.size() );
 			LoadCommandFromName( actor, sMetricsGroup, sCommandName, sName );
 		}
 	}

@@ -836,6 +836,38 @@ try_element_again:
 		return false;
 	}
 
+	Regex re("^([0-9a-zA-Z\\s]+)P([0-9]+)$");
+	vector<RString> matches;
+	if (re.Compare(sElement, matches)) {
+		int player = stoi(matches[1]);
+		if (player > 2 && player <= 8) {
+			RString spoofElementName = matches[0] + "P1";
+
+			if (GetPathInfoToAndFallback(out, category, sMetricsGroup, spoofElementName))	// we found something
+			{
+				LOG->Info("Spoofed missing element <" + sMetricsGroup + " " + sElement + "> to P1");
+
+				Cache[sFileName] = out;
+				return true;
+			}
+		}
+	}
+	matches.clear();
+	if (re.Compare(sMetricsGroup, matches)) {
+		int player = stoi(matches[1]);
+		if (player > 2 && player <= 8) {
+			RString spoofGroupName = matches[0] + "P1";
+
+			if (GetPathInfoToAndFallback(out, category, spoofGroupName, sElement))	// we found something
+			{
+				LOG->Info("Spoofed missing element <" + sMetricsGroup + " " + sElement + "> to P1");
+
+				Cache[sFileName] = out;
+				return true;
+			}
+		}
+	}
+
 	const RString &sCategory = ElementCategoryToString(category);
 
 	// We can't fall back on _missing in Other: the file types are unknown.
@@ -980,6 +1012,8 @@ bool ThemeManager::GetMetricRawRecursive( const IniFile &ini, const RString &sMe
 	return false;
 }
 
+static RString lastSearch = "";
+
 RString ThemeManager::GetMetricRaw( const IniFile &ini, const RString &sMetricsGroup_, const RString &sValueName_ )
 {
 	/* Ugly: the parameters to this function may be a reference into g_vThemes, or something
@@ -994,6 +1028,67 @@ RString ThemeManager::GetMetricRaw( const IniFile &ini, const RString &sMetricsG
 		{
 			return ret;
 		}
+
+		Regex metricRe("^([0-9a-zA-Z]+[a-z])?P([0-9]+)([A-Z][0-9a-zA-Z]*)?$");
+		Regex groupRe("^([0-9a-zA-Z]+[a-z])P([0-9]+)$");
+		vector<RString> metricMatches;
+		vector<RString> groupMatches;
+		if (
+			lastSearch != sValueName &&
+			(metricRe.Compare(sValueName, metricMatches) || groupRe.Compare(sMetricsGroup, groupMatches))
+		) {
+			lastSearch = sValueName;
+
+			int player; //stoi(matches[1]);
+			RString metricName, groupName, p1Value;
+
+			if (metricMatches.size() > 0) {
+				player = stoi(metricMatches[1]);
+				metricName = metricMatches[0] + "P#" + metricMatches[2];
+				groupName = sMetricsGroup;
+
+				ThemeManager::GetMetricRawRecursive(ini, sMetricsGroup, metricMatches[0] + "P1" + metricMatches[2], p1Value);
+			}
+			else if(groupMatches.size() > 0) {
+				player = stoi(groupMatches[1]);
+				groupName = groupMatches[0] + "P#";
+				metricName = sValueName;
+
+				ThemeManager::GetMetricRawRecursive(ini, groupMatches[0] + "P1", sValueName, p1Value);
+			}
+
+			if (
+				player > 0 &&
+				player < PlayerNumber_Invalid
+			) {
+				Lua* L = LUA->Get();
+				RString sName = "Func";
+				LuaHelpers::RunExpression(L, "GetPlayerMetric", sName);
+
+				if (lua_type(L, -1) == LUA_TFUNCTION) {
+					LOG->Info("Redirect player metric <" + metricName + "> to GetPlayerMetric");
+
+					lua_pushstring(L, p1Value);
+					lua_pushstring(L, groupName);
+					lua_pushstring(L, metricName);
+					Enum::Push(L, PlayerNumber(player - 1));
+
+					RString error = sName + ": ";
+					LuaHelpers::RunScriptOnStack(L, error, 4, 1, true);
+					LuaHelpers::Pop(L, ret);
+					LUA->Release(L);
+
+					return ret;
+
+				}
+				else {
+					LUA->Release(L);
+				}
+
+				
+			}
+		}
+
 		RString sCurMetricPath = GetMetricsIniPath( m_sCurThemeName );
 		RString sDefaultMetricPath = GetMetricsIniPath( SpecialFiles::BASE_THEME_NAME );
 		
@@ -1294,6 +1389,21 @@ void ThemeManager::GetMetricsThatBeginWith( const RString &sMetricsGroup_, const
 	while( !sMetricsGroup.empty() )
 	{
 		const XNode *cur = g_pLoadedThemeData->iniMetrics.GetChild( sMetricsGroup );
+
+		if (cur == nullptr)
+		{
+			Regex re("^([0-9a-zA-Z\\s]+)P([0-9]+)([A-Z])?$");
+			vector<RString> matches;
+			if (re.Compare(sMetricsGroup, matches)) {
+				int player = stoi(matches[1]);
+				if (player > 0 && player <= PlayerNumber_Invalid) {
+					LOG->Info("Spoofed missing metric group <" + sMetricsGroup + "> to P1");
+					sMetricsGroup = matches[0] + "P1" + matches[2];
+					cur = g_pLoadedThemeData->iniMetrics.GetChild(sMetricsGroup);
+				}
+			}
+		}
+
 		if( cur != nullptr )
 		{
 			// Iterate over all metrics that match.

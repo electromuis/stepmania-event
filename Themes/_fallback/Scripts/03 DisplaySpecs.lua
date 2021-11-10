@@ -101,6 +101,7 @@ local winFracs = {
 	{n=4, d=3},
 	{n=16, d=10},
 	{n=16, d=9},
+	{n=32, d=9},
 	{n=8, d=3}
 }
 -- Maximum distance between aspect ratios to be considered equivalent

@@ -838,6 +838,9 @@ float ArrowEffects::GetXPos( const PlayerState* pPlayerState, int iColNum, float
 				break;
 			case StyleType_OnePlayerOneSide:
 			case StyleType_TwoPlayersTwoSides: // fall through
+			case StyleType_FourPlayersFourSides:
+			case StyleType_SixPlayersSixSides:
+			case StyleType_EightPlayersEightSides:
 				{
 					// the code was the same for both of these cases in StepNXA.
 					if( pPlayerState->m_PlayerNumber == PLAYER_2 )

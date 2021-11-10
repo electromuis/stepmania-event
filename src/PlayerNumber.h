@@ -5,12 +5,38 @@
 
 #include "EnumHelper.h"
 
+#define DEF_NUM_PLAYERS 8
+#define FOREACH_PlayerNumber_DEF_STR(pre, post) \
+	pre "1" post, \
+	pre "2" post, \
+	pre "3" post, \
+	pre "4" post, \
+	pre "5" post, \
+	pre "6" post, \
+	pre "7" post, \
+	pre "8" post
+
+#define FOREACH_PlayerNumber_DEF(pre, post) \
+	pre##1##post, \
+	pre##2##post, \
+	pre##3##post, \
+	pre##4##post, \
+	pre##5##post, \
+	pre##6##post, \
+	pre##7##post, \
+	pre##8##post
 
 // Player number stuff
 enum PlayerNumber
 {
 	PLAYER_1 = 0,
 	PLAYER_2,
+	PLAYER_3,
+	PLAYER_4,
+	PLAYER_5,
+	PLAYER_6,
+	PLAYER_7,
+	PLAYER_8,
 	NUM_PlayerNumber,	// leave this at the end
 	PlayerNumber_Invalid
 };

@@ -11,6 +11,7 @@
 #include "RageUtil_WorkerThread.h"
 #include "arch/MemoryCard/MemoryCardDriver_Null.h"
 #include "LuaManager.h"
+#include "PlayerNumber.h"
 
 MemoryCardManager*	MEMCARDMAN = nullptr;	// global and accessible from anywhere in our program
 
@@ -54,15 +55,13 @@ Preference<RString>		MemoryCardManager::m_sEditorMemoryCardOsMountPoint( "Editor
 const RString MEM_CARD_MOUNT_POINT[NUM_PLAYERS] =
 {
 	// @ is important; see RageFileManager LoadedDriver::GetPath
-	"/@mc1/",
-	"/@mc2/",
+	FOREACH_PlayerNumber_DEF_STR("/@mc", "/"),
 };
 
 static const RString MEM_CARD_MOUNT_POINT_INTERNAL[NUM_PLAYERS] =
 {
 	// @ is important; see RageFileManager LoadedDriver::GetPath
-	"/@mc1int/",
-	"/@mc2int/",
+	FOREACH_PlayerNumber_DEF_STR("/@mc", "int/"),
 };
 
 // Only access the memory card driver in a timeout-safe thread.

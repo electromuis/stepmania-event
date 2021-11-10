@@ -1128,8 +1128,9 @@ void InputScheme::MenuButtonToGameInputs( GameButton MenuI, PlayerNumber pn, vec
 	{
 		if( pn == PLAYER_INVALID )
 		{
-			GameIout.push_back( GameInput(GameController_1, gb) );
-			GameIout.push_back( GameInput(GameController_2, gb) );
+			FOREACH_PlayerNumber(p) {
+				GameIout.push_back(GameInput(GameController(GameController_1 + p), gb));
+			}
 		}
 		else
 		{

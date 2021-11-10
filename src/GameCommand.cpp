@@ -731,6 +731,9 @@ void GameCommand::ApplySelf( const vector<PlayerNumber> &vpns ) const
 		case StyleType_OnePlayerTwoSides:
 			break;
 		case StyleType_TwoPlayersTwoSides:
+		case StyleType_FourPlayersFourSides:
+		case StyleType_SixPlayersSixSides:
+		case StyleType_EightPlayersEightSides:
 		case StyleType_TwoPlayersSharedSides:
 			{
 				FOREACH_PlayerNumber( p )

@@ -553,6 +553,10 @@ enum StyleType
 {
 	StyleType_OnePlayerOneSide,		/**< Single style */
 	StyleType_TwoPlayersTwoSides,		/**< Versus style */
+	StyleType_FourPlayersFourSides,
+	StyleType_SixPlayersSixSides,
+	StyleType_EightPlayersEightSides,
+
 	StyleType_OnePlayerTwoSides,		/**< Double style */
 	StyleType_TwoPlayersSharedSides,	/**< Routine style */
 	NUM_StyleType,

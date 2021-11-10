@@ -415,6 +415,9 @@ bool DisplayBpms::IsSecret() const
 static const char *StyleTypeNames[] = {
 	"OnePlayerOneSide",
 	"TwoPlayersTwoSides",
+	"FourPlayersFourSides",
+    "SixPlayersSixSides",
+	"EightPlayersEightSides",
 	"OnePlayerTwoSides",
 	"TwoPlayersSharedSides",
 };
