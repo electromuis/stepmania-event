@@ -98,26 +98,7 @@ else()
   endif()
   
 	add_executable("${SM_EXE_NAME}" ${SMDATA_ALL_FILES_SRC}
-                 ${SMDATA_ALL_FILES_HPP})	 
-				 
-	set_target_properties("${SM_EXE_NAME}" PROPERTIES ENABLE_EXPORTS 1)
-	
-	add_custom_command(
-		TARGET "${SM_EXE_NAME}"
-		PRE_LINK
-		
-		COMMAND ${CMAKE_COMMAND}
-			-DSM="${SM_EXE_NAME}"
-			-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE_INIT}"
-			-DPROJECT_BINARY_DIR="${PROJECT_BINARY_DIR}"
-			-DCMAKE_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
-			-P "${CMAKE_SOURCE_DIR}/CMake/CreateExports.cmake"
-			
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		COMMENT " Make exports.def "
-    )
-
-				 
+                 ${SMDATA_ALL_FILES_HPP})
 endif()
 
 set_target_properties("${SM_EXE_NAME}"
@@ -747,6 +728,27 @@ if(NOT WITH_SYSTEM_TOMCRYPT)
 endif()
 
 target_include_directories("${SM_EXE_NAME}" PUBLIC ${SM_INCLUDE_DIRS})
+
+if(WITH_PLUGINS)
+	if(MSVC)
+		set_target_properties("${SM_EXE_NAME}" PROPERTIES ENABLE_EXPORTS 1)
+		set_target_properties("${SM_EXE_NAME}" PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 1)
+	
+		add_custom_command(
+			TARGET "${SM_EXE_NAME}"
+			PRE_LINK
+			COMMAND ${CMAKE_COMMAND}
+				-DSM="${SM_EXE_NAME}"
+				-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE_INIT}"
+				-DPROJECT_BINARY_DIR="${PROJECT_BINARY_DIR}"
+				-DCMAKE_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
+				-P "${CMAKE_SOURCE_DIR}/CMake/FixExports.cmake"
+			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+			COMMENT "Fix def objects.txt"
+		)
+	
+	endif()
+endif()
 
 if(WIN32)
   set(SM_INSTALL_DESTINATION ".")

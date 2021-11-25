@@ -1,97 +1,131 @@
 #include "global.h"
-
-#include "dynalo/dynalo.hpp"
-
-#include <PluginManager.h>
-#include <RageFileManager.h>
-#include <RageLog.h>
-
-
+#include "PluginManager.h"
+#include "RageLog.h"
 
 PluginManager* PLUGINMAN = nullptr;
 
-
-LoadedPlugin::LoadedPlugin(RString libraryPath)
-{
-	loaded = false;
-
-	loadedLibrary = new dynalo::library(libraryPath);
-
-	if (loadedLibrary->get_native_handle() == dynalo::native::invalid_handle()) {
-		throw "Failed loading: " + libraryPath;
-	}
-
-	loadedDetails = loadedLibrary->get_function<PluginDetails>("exports");
-	
-	LOG->Info("Plugin name: " + RString(loadedDetails->pluginName));
-	loaded = Load();
-}
-
-bool LoadedPlugin::Load()
-{
-	pluginBase = loadedDetails->initializeFunc();
-
-	return true;
-}
-
-void LoadedPlugin::Update(float fDeltaTime)
-{
-	if (loaded) {
-		pluginBase->Update(fDeltaTime);
-	}
-}
-
 PluginManager::PluginManager()
 {	
-	LoadAvailiblePlugins();
+	m_pDriver = PluginDriver::Create();
+	m_pDriver->GetAvailablePlugins(plugins);
+
+	{
+		Lua* L = LUA->Get();
+		lua_pushstring(L, "PLUGINMAN");
+		this->PushSelf(L);
+		lua_settable(L, LUA_GLOBALSINDEX);
+		LUA->Release(L);
+	}
+
+	LoadAll();
 }
 
 PluginManager::~PluginManager()
 {
+	UnloadAll();
 
+	for (LoadedPlugin* p : plugins)
+		delete(p);
+
+	delete(m_pDriver);
 }
 
-void PluginManager::LoadAvailiblePlugins()
+void PluginManager::LoadAll()
 {
-	vector<RString> files = vector<RString>();
-
-	LOG->Info("Reading plugins: ");
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-	#define LOAD_WIN32
-#endif
-
-#if defined(LOAD_WIN32)
-	FILEMAN->GetDirListing("Plugins\\*.dll", files, false, true);
-#else
-	FILEMAN->GetDirListing("Plugins\\*.so", files, false, true);
-#endif
-
-	LOG->Info("Count: " + files.size());
-	for (RString file : files)
+	for (LoadedPlugin* p : plugins)
 	{
-		file = FILEMAN->ResolvePath(file);
-
-		// Remove leading / on windows
-#if defined(LOAD_WIN32)
-		file = file.substr(1);
-#endif
-
-		LOG->Info("Attempting to load plugin: " + file);
-
 		try {
-			plugins.push_back(LoadedPlugin(file));
+			p->Load();
 		}
-		catch (...) {
-			LOG->Info("Failed loading: " + file);
+		catch (exception e) {
+			LOG->Info("Failed loading file: %s, exception: %s", p->GetLibraryPath().c_str(), e.what());
+		}
+	}
+}
+
+void PluginManager::UnloadAll()
+{
+	for (LoadedPlugin* p : plugins)
+	{
+		try {
+			p->Unload();
+		}
+		catch (exception e) {
+			LOG->Info("Failed unloading file: %s, exception: %s", p->GetLibraryPath().c_str(), e.what());
 		}
 	}
 }
 
 void PluginManager::Update(float fDeltaTime)
 {
-	for (LoadedPlugin plugin : plugins)
+	for (LoadedPlugin* plugin : plugins)
 	{
-		plugin.Update(fDeltaTime);
+		plugin->Update(fDeltaTime);
 	}
 }
+
+bool PluginManager::DeleteScreen(Screen* screen)
+{
+	for (LoadedPlugin* p : plugins)
+	{
+		if (p->HasScreen(screen->GetName().c_str())) {
+			p->PluginDelete(screen);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void PluginManager::AppFree(void* addr)
+{
+	free(addr);
+}
+
+void PluginManager::AppDelete(void* addr)
+{
+	delete(addr);
+}
+
+void* PluginManager::AppAllocate(size_t size)
+{
+	return malloc(size);
+}
+
+LoadedPlugin* PluginManager::GetPlugin(RString name)
+{
+	std::vector<LoadedPlugin*>::iterator it = std::find_if(plugins.begin(), plugins.end(), [name](LoadedPlugin* p) {
+		return name == p->GetName();
+	});
+
+	return *it;
+}
+
+// lua start
+#include "LuaBinding.h"
+#include "LuaReference.h"
+#include "LuaManager.h"
+
+/** @brief Allow Lua to have access to the PluginManager. */
+class LunaPluginManager : public Luna<PluginManager>
+{
+public:
+	DEFINE_METHOD( GetNumPlugins, GetNumPlugins() )
+	static int GetPlugin(T* p, lua_State* L)
+	{
+		LoadedPlugin* l = p->GetPlugin(SArg(1));
+		if (l)
+			l->PushSelf(L);
+		else
+			lua_pushnil(L);
+		return 1;
+	}
+
+	LunaPluginManager()
+	{
+		ADD_METHOD(GetNumPlugins);
+		ADD_METHOD(GetPlugin);
+	}
+};
+
+LUA_REGISTER_CLASS(PluginManager)

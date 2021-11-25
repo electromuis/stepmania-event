@@ -227,7 +227,7 @@ protected:
 	ThemeMetric1D<RageColor> profile_song_group_colors;
 };
 
-extern SongManager*	SONGMAN;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern SongManager* SONGMAN;	// global and accessible from anywhere in our program
 
 #endif
 

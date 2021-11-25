@@ -365,6 +365,26 @@ source_group("Arch Specific\\\\Arch Hooks"
              ${SMDATA_ARCH_HOOKS_SRC}
              ${SMDATA_ARCH_HOOKS_HPP})
 
+list(APPEND SMDATA_ARCH_PLUGIN_SRC 
+	"arch/Plugin/PluginDriver.cpp"
+	"arch/Plugin/PluginDriver_Null.cpp")
+list(APPEND SMDATA_ARCH_PLUGIN_HPP 
+	"arch/Plugin/PluginDriver.h"
+	"arch/Plugin/PluginDriver_Null.h")
+
+if(WIN32)
+    list(APPEND SMDATA_ARCH_PLUGIN_SRC "arch/Plugin/PluginDriver_Win32.cpp")
+	list(APPEND SMDATA_ARCH_PLUGIN_HPP "arch/Plugin/PluginDriver_Win32.h")
+elseif(LINUX)
+	list(APPEND SMDATA_ARCH_PLUGIN_SRC "arch/Plugin/PluginDriver_Linux.cpp")
+	list(APPEND SMDATA_ARCH_PLUGIN_HPP "arch/Plugin/PluginDriver_Linux.h")
+endif()
+
+source_group("Arch Specific\\\\Plugin"
+             FILES
+             ${SMDATA_ARCH_PLUGIN_SRC}
+             ${SMDATA_ARCH_PLUGIN_HPP})
+
 list(APPEND SMDATA_ALL_ARCH_SRC
             ${SMDATA_ARCH_SRC}
             ${SMDATA_ARCH_DIALOG_SRC}
@@ -376,7 +396,8 @@ list(APPEND SMDATA_ALL_ARCH_SRC
             ${SMDATA_ARCH_MEMORY_SRC}
             ${SMDATA_ARCH_MOVIE_TEXTURE_SRC}
             ${SMDATA_ARCH_SOUND_SRC}
-            ${SMDATA_ARCH_THREADS_SRC})
+            ${SMDATA_ARCH_THREADS_SRC}
+			${SMDATA_ARCH_PLUGIN_SRC})
 list(APPEND SMDATA_ALL_ARCH_HPP
             ${SMDATA_ARCH_HPP}
             ${SMDATA_ARCH_DIALOG_HPP}
@@ -388,4 +409,5 @@ list(APPEND SMDATA_ALL_ARCH_HPP
             ${SMDATA_ARCH_MEMORY_HPP}
             ${SMDATA_ARCH_MOVIE_TEXTURE_HPP}
             ${SMDATA_ARCH_SOUND_HPP}
-            ${SMDATA_ARCH_THREADS_HPP})
+            ${SMDATA_ARCH_THREADS_HPP}
+			${SMDATA_ARCH_PLUGIN_HPP})

@@ -1,6 +1,8 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
+#include <functional>
+
 #include "ActorFrame.h"
 #include "ScreenMessage.h"
 #include "InputFilter.h"
@@ -13,7 +15,7 @@
 
 class InputEventPlus;
 class Screen;
-typedef Screen* (*CreateScreenFn)(const RString& sClassName);
+typedef std::function<Screen* (const RString& sClassName)> CreateScreenFn;
 /**
  * @brief Allow registering the screen for easier access.
  *

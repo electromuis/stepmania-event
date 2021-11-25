@@ -51,7 +51,7 @@
 //			- Jim Cline
 //			- Jeff Kohn
 //			- Todd Heckel
-//			- Ullrich Poll‰hne
+//			- Ullrich Poll√§hne
 //			- Joe Vitaterna
 //			- Joe Woodbury
 //			- Aaron (no last name)
@@ -395,7 +395,6 @@ CStdStr<CT> operator+(PCSTR pA, const  CStdStr<CT>& str)
 	return strRet;
 }
 
-
 /** @brief Our wrapper for std::string. */
 template<typename CT>
 class CStdStr : public std::basic_string<CT>
@@ -417,10 +416,25 @@ class CStdStr : public std::basic_string<CT>
 	
 public:
 
+	bool track = false;
+
 	// CStdStr inline constructors
 	CStdStr()
 	{
+		if (track)
+		{
+			bool f = true;
+		}
 	}
+
+	~CStdStr()
+	{
+		if (track)
+		{
+			bool f = true;
+		}
+	}
+
 
 	CStdStr(const MYTYPE& str) : MYBASE(str)
 	{
@@ -452,25 +466,45 @@ public:
 	// CStdStr inline assignment operators -- the ssasn function now takes care
 	// of fixing  the MSVC assignment bug (see knowledge base article Q172398).
 	MYTYPE& operator=(const MYTYPE& str)
-	{ 
+	{
+		if (track)
+		{
+			bool f = true;
+		}
+
 		ssasn(*this, str); 
 		return *this;
 	}
 
 	MYTYPE& operator=(const std::string& str)
 	{
+		if (track)
+		{
+			bool f = true;
+		}
+
 		ssasn(*this, str);
 		return *this;
 	}
 
 	MYTYPE& operator=(PCSTR pA)
 	{
+		if (track)
+		{
+			bool f = true;
+		}
+
 		ssasn(*this, pA);
 		return *this;
 	}
 
 	MYTYPE& operator=(CT t)
 	{
+		if (track)
+		{
+			bool f = true;
+		}
+
 		Q172398(*this);
 		this->assign(1, t);
 		return *this;
@@ -493,7 +527,7 @@ public:
 			// <nChars> or the NULL terminator, whichever comes first.  Since we
 			// are about to call a less forgiving overload (in which <nChars>
 			// must be a valid length), we must adjust the length here to a safe
-			// value.  Thanks to Ullrich Poll‰hne for catching this bug
+			// value.  Thanks to Ullrich Poll√§hne for catching this bug
 
 			nChars		= min(nChars, str.length() - nStart);
 
@@ -524,7 +558,7 @@ public:
 			// <nChars> or the NULL terminator, whichever comes first.  Since we
 			// are about to call a less forgiving overload (in which <nChars>
 			// must be a valid length), we must adjust the length here to a safe
-			// value. Thanks to Ullrich Poll‰hne for catching this bug
+			// value. Thanks to Ullrich Poll√§hne for catching this bug
 
 			nChars		= min(nChars, str.length() - nStart);
 
@@ -596,24 +630,40 @@ public:
 	// -------------------------------------------------------------------------
 	MYTYPE& operator+=(const MYTYPE& str)
 	{
+		if (track)
+		{
+			bool f = true;
+		}
 		ssadd(*this, str);
 		return *this;
 	}
 
 	MYTYPE& operator+=(const std::string& str)
 	{
+		if (track)
+		{
+			bool f = true;
+		}
 		ssadd(*this, str);
 		return *this; 
 	}
 
 	MYTYPE& operator+=(PCSTR pA)
 	{
+		if (track)
+		{
+			bool f = true;
+		}
 		ssadd(*this, pA);
 		return *this;
 	}
 
 	MYTYPE& operator+=(CT t)
 	{
+		if (track)
+		{
+			bool f = true;
+		}
 		this->append(1, t);
 		return *this;
 	}

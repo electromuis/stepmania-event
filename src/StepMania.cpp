@@ -328,11 +328,11 @@ void ShutdownGame()
 	SAFE_DELETE( TEXTUREMAN );
 	SAFE_DELETE( DISPLAY );
 	Dialog::Shutdown();
+	SAFE_DELETE(PLUGINMAN);
 	SAFE_DELETE( LOG );
 	SAFE_DELETE( FILEMAN );
 	SAFE_DELETE( LUA );
 	SAFE_DELETE( HOOKS );
-	SAFE_DELETE( PLUGINMAN );
 }
 
 static void HandleException( const RString &sError )
@@ -1207,6 +1207,9 @@ int sm_main(int argc, char* argv[])
 	FONT		= new FontManager;
 	SCREENMAN	= new ScreenManager;
 
+	// Load the plugin system including plugin files
+	PLUGINMAN = new PluginManager;
+
 	StepMania::ResetGame();
 
 	/* Now that GAMESTATE is reset, tell SCREENMAN to update the theme (load
@@ -1223,9 +1226,6 @@ int sm_main(int argc, char* argv[])
 
 	if( GetCommandlineArgument("netip") )
 		NSMAN->DisplayStartupStatus();	// If we're using networking show what happened
-
-	// Load the plugin system including plugin files
-	PLUGINMAN = new PluginManager;
 
 	// Run the main loop.
 	GameLoop::RunGameLoop();

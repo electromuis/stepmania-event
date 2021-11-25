@@ -52,7 +52,7 @@ private:
 	float m_fMaxSecondsBack;
 };	
 
-extern InputQueue*	INPUTQUEUE;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern InputQueue*	INPUTQUEUE;	// global and accessible from anywhere in our program
 
 #endif
 

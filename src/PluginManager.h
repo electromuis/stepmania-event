@@ -2,86 +2,10 @@
 #define PLUGIN_MANAGER_H
 
 #include "global.h"
+#include "Screen.h"
+#include "arch/Plugin/PluginDriver.h"
 
-#define DYNALO_DEMANGLE
-#define DYNALO_EXPORT_SYMBOLS
-#include "dynalo/symbol_helper.hpp"
-#include "dynalo/dynalo.hpp"
-using namespace dynalo;
-
-// All the includes we need in out StepmaniaPointer
-
-#include "AnnouncerManager.h"
-#include "arch/ArchHooks/ArchHooks.h"
-#include "LuaManager.h"
-#include "RageLog.h"
-#include "PrefsManager.h"
-#include "MessageManager.h"
-#include "GameState.h"
-#include "GameManager.h"
-#include "SongManager.h"
-#include "Bookkeeper.h"
-
-class PluginManager;
-
-class DYNALO_EXPORT PluginBase;
-DYNALO_EXPORT typedef PluginBase* (*GetPluginFunc)();
-
-struct PluginDetails
-{
-	int apiVersion;
-	const char* fileName;
-	const char* className;
-	const char* pluginName;
-	const char* pluginVersion;
-	GetPluginFunc initializeFunc;
-};
-
-#define PLUGIN_API_VERSION 1
-#define STANDARD_PLUGIN_STUFF PLUGIN_API_VERSION, __FILE__
-
-#define REGISTER_PLUGIN(classType, pluginName, pluginVersion)                  \
-extern "C" {																   \
-    DYNALO_EXPORT PluginBase* getPlugin()									   \
-    {                                                                          \
-        static classType singleton;                                            \
-        return &singleton;                                                     \
-    }                                                                          \
-    DYNALO_EXPORT PluginDetails exports = {								       \
-        STANDARD_PLUGIN_STUFF,                                                 \
-        #classType,                                                            \
-        pluginName,                                                            \
-        pluginVersion,                                                         \
-        getPlugin,                                                             \
-    };                                                                         \
-}
-
-class PluginBase {
-public:
-	PluginBase() {};
-
-	virtual void Update(float fDeltaTime) = 0;
-};
-
-class LoadedPlugin  {
-public:
-	LoadedPlugin(RString libraryPath);
-	
-	bool Load();
-
-	bool IsLoaded()
-	{
-		return loaded;
-	}
-
-	void Update(float fDeltaTime);
-
-private:
-	bool loaded = false;
-	library* loadedLibrary = nullptr;
-	PluginDetails* loadedDetails = nullptr;
-	PluginBase* pluginBase = nullptr;
-};
+#define APP_PTR(type, ...) new(PLUGINMAN->AppAllocate(sizeof(type))) type(##__VA_ARGS__)
 
 class PluginManager
 {
@@ -89,14 +13,30 @@ public:
 	PluginManager();
 	~PluginManager();
 
+	void UnloadAll();
+	void LoadAll();
+
 	void Update(float fDeltaTime);
 
-private:
-	void LoadAvailiblePlugins();
+	bool DeleteScreen(Screen* screen);
+	void* AppAllocate(size_t space);
 
-	vector<LoadedPlugin> plugins;
+	void AppFree(void* addr);
+	void AppDelete(void* addr);
+	void PluginFree(void* addr);
+	void PluginDelete(void* addr);
+
+	int GetNumPlugins() { return plugins.size(); }
+	LoadedPlugin* GetPlugin(RString name);
+
+	// Lua
+	void PushSelf(lua_State* L);
+
+private:
+	PluginDriver* m_pDriver = nullptr;
+	vector<LoadedPlugin*> plugins;
 };
 
-extern PluginManager* PLUGINMAN;
+GLOBALS_IMPORT_PREFIX extern PluginManager* PLUGINMAN;
 
 #endif

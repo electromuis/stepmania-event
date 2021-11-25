@@ -7,6 +7,8 @@
 #include "LoadingWindow/LoadingWindow_Win32.h"
 #include "LowLevelWindow/LowLevelWindow_Win32.h"
 #include "MemoryCard/MemoryCardDriverThreaded_Windows.h"
+#include "Plugin/PluginDriver_Win32.h"
+
 #define DEFAULT_INPUT_DRIVER_LIST "DirectInput,Pump,Para"
 #define DEFAULT_MOVIE_DRIVER_LIST "FFMpeg,DShow,Null"
 #define DEFAULT_SOUND_DRIVER_LIST "WaveOut,DirectSound-sw,WDMKS,Null"
@@ -25,6 +27,7 @@
 #elif defined(UNIX)
 #include "ArchHooks/ArchHooks_Unix.h"
 #include "LowLevelWindow/LowLevelWindow_X11.h"
+#include "Plugin/PluginDriver_Linux.h"
 
 #if defined(LINUX)
 #include "MemoryCard/MemoryCardDriverThreaded_Linux.h"
@@ -55,6 +58,7 @@
 #include "LoadingWindow/LoadingWindow_Null.h"
 #include "MemoryCard/MemoryCardDriver_Null.h"
 #include "MemoryCard/MemoryCardDriverThreaded_Folder.h"
+#include "Plugin/PluginDriver_Null.h"
 
 #endif
 

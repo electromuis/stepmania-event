@@ -214,18 +214,18 @@ struct TapNote
 	bool operator!=( const TapNote &other ) const { return !operator==( other ); }
 };
 
-extern TapNote TAP_EMPTY;			// '0'
-extern TapNote TAP_ORIGINAL_TAP;		// '1'
-extern TapNote TAP_ORIGINAL_HOLD_HEAD;		// '2'
-extern TapNote TAP_ORIGINAL_ROLL_HEAD;		// '4'
-extern TapNote TAP_ORIGINAL_MINE;		// 'M'
-extern TapNote TAP_ORIGINAL_LIFT;		// 'L'
-extern TapNote TAP_ORIGINAL_ATTACK;		// 'A'
-extern TapNote TAP_ORIGINAL_AUTO_KEYSOUND;	// 'K'
-extern TapNote TAP_ORIGINAL_FAKE;		// 'F'
-//extern TapNote TAP_ORIGINAL_MINE_HEAD;	// 'N' (tentative, we'll see when iDance gets ripped.)
-extern TapNote TAP_ADDITION_TAP;
-extern TapNote TAP_ADDITION_MINE;
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_EMPTY;			// '0'
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_ORIGINAL_TAP;		// '1'
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_ORIGINAL_HOLD_HEAD;		// '2'
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_ORIGINAL_ROLL_HEAD;		// '4'
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_ORIGINAL_MINE;		// 'M'
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_ORIGINAL_LIFT;		// 'L'
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_ORIGINAL_ATTACK;		// 'A'
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_ORIGINAL_AUTO_KEYSOUND;	// 'K'
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_ORIGINAL_FAKE;		// 'F'
+//GLOBALS_IMPORT_PREFIX extern TapNote TAP_ORIGINAL_MINE_HEAD;	// 'N' (tentative, we'll see when iDance gets ripped.)
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_ADDITION_TAP;
+GLOBALS_IMPORT_PREFIX extern TapNote TAP_ADDITION_MINE;
 
 /**
  * @brief The number of tracks allowed.

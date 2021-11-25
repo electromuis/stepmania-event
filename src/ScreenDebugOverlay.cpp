@@ -30,6 +30,7 @@
 #include "ScreenSyncOverlay.h"
 #include "ThemeMetric.h"
 #include "XmlToLua.h"
+#include "PluginManager.h"
 
 static bool g_bIsDisplayed = false;
 static bool g_bIsSlow = false;
@@ -577,6 +578,8 @@ static LocalizedString TOGGLE_ERRORS( "ScreenDebugOverlay", "Toggle Errors" );
 static LocalizedString SHOW_RECENT_ERRORS("ScreenDebugOverlay", "Show Recent Errors");
 static LocalizedString CLEAR_ERRORS( "ScreenDebugOverlay", "Clear Errors" );
 static LocalizedString CONVERT_XML( "ScreenDebugOverlay", "Convert XML" );
+static LocalizedString PLUGINS_LOAD( "ScreenDebugOverlay", "Load all plugins" );
+static LocalizedString PLUGINS_UNLOAD( "ScreenDebugOverlay", "Unload all plugins" );
 static LocalizedString RELOAD_PREFS( "ScreenDebugOverlay", "Reload Prefs" );
 static LocalizedString RELOAD_THEME_AND_TEXTURES( "ScreenDebugOverlay", "Reload Theme and Textures" );
 static LocalizedString WRITE_PROFILES	( "ScreenDebugOverlay", "Write Profiles" );
@@ -1159,6 +1162,33 @@ class DebugLineConvertXML : public IDebugLine
 	}
 };
 
+class DebugLinePluginsLoad : public IDebugLine
+{
+	virtual RString GetDisplayTitle() { return PLUGINS_LOAD.GetValue(); }
+	virtual RString GetDisplayValue() { return RString(); }
+	virtual bool IsEnabled() { return true; }
+	virtual RString GetPageName() const { return "Theme"; }
+	virtual void DoAndLog(RString& sMessageOut)
+	{
+		PLUGINMAN->LoadAll();
+		IDebugLine::DoAndLog(sMessageOut);
+	}
+};
+
+class DebugLinePluginsUnload : public IDebugLine
+{
+	virtual RString GetDisplayTitle() { return PLUGINS_UNLOAD.GetValue(); }
+	virtual RString GetDisplayValue() { return RString(); }
+	virtual bool IsEnabled() { return true; }
+	virtual RString GetPageName() const { return "Theme"; }
+	virtual void DoAndLog(RString& sMessageOut)
+	{
+		PLUGINMAN->UnloadAll();
+		IDebugLine::DoAndLog(sMessageOut);
+	}
+};
+
+
 class DebugLineWriteProfiles : public IDebugLine
 {
 	virtual RString GetDisplayTitle() { return WRITE_PROFILES.GetValue(); }
@@ -1359,6 +1389,8 @@ DECLARE_ONE( DebugLineToggleErrors );
 DECLARE_ONE( DebugLineShowRecentErrors );
 DECLARE_ONE( DebugLineClearErrors );
 DECLARE_ONE( DebugLineConvertXML );
+DECLARE_ONE( DebugLinePluginsLoad );
+DECLARE_ONE( DebugLinePluginsUnload );
 DECLARE_ONE( DebugLineWriteProfiles );
 DECLARE_ONE( DebugLineWritePreferences );
 DECLARE_ONE(DebugLineReloadPreferences);

@@ -360,7 +360,7 @@ protected:
  * pointer anyway). */
 extern bool			g_bAutoRestart;
 
-extern PrefsManager*	PREFSMAN;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern PrefsManager*	PREFSMAN;	// global and accessible from anywhere in our program
 
 #endif
 

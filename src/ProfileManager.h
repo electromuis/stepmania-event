@@ -109,7 +109,7 @@ public:
 
 	static Preference<bool> m_bProfileStepEdits;
 	static Preference<bool> m_bProfileCourseEdits;
-	static Preference1D<RString> m_sDefaultLocalProfileID;
+	GLOBALS_IMPORT_PREFIX static Preference1D<RString> m_sDefaultLocalProfileID;
 
 private:
 	ProfileLoadResult LoadProfile( PlayerNumber pn, RString sProfileDir, bool bIsMemCard );
@@ -133,7 +133,7 @@ private:
 	Profile *m_pMachineProfile;
 };
 
-extern ProfileManager*	PROFILEMAN;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern ProfileManager*	PROFILEMAN;	// global and accessible from anywhere in our program
 
 #endif
 

@@ -5,22 +5,24 @@
 #include "PluginManager.h"
 #include "MessageManager.h"
 
-class PluginTest;
+#define PLUGIN_NAME "HelloWorld Plugin"
+
+class HelloWorldPlugin;
 
 class PluginMessageSubscriber : public MessageSubscriber {
 public:
-	PluginMessageSubscriber(PluginTest* plugin);
+	PluginMessageSubscriber(HelloWorldPlugin* plugin);
 	~PluginMessageSubscriber();
 
 	void HandleMessage(const Message& msg);
 private:
-	PluginTest* plugin;
+	HelloWorldPlugin* plugin;
 };
 
-class PluginTest : public PluginBase {
+class HelloWorldPlugin : public PluginBase {
 public:
-	PluginTest();
-	~PluginTest();
+	HelloWorldPlugin(std::string libraryPath);
+	~HelloWorldPlugin();
 
 	void Update(float fDeltaTime);
 

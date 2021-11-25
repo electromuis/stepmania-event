@@ -32,8 +32,8 @@ public:
 	virtual void BeginScreen();
 	virtual bool Input( const InputEventPlus &input );
 
-	static PromptAnswer s_LastAnswer;
-	static bool s_bCancelledLast;
+	GLOBALS_IMPORT_PREFIX static PromptAnswer s_LastAnswer;
+	GLOBALS_IMPORT_PREFIX static bool s_bCancelledLast;
 
 	// Lua
 	//virtual void PushSelf( lua_State *L );

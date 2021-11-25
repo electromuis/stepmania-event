@@ -184,8 +184,8 @@ protected:
 public:
 	ScreenMiniMenu(): m_SMSendOnOK(), m_SMSendOnCancel(), m_vMenuRows() {}
 	
-	static bool s_bCancelled;
-	static int s_iLastRowCode;
+	GLOBALS_IMPORT_PREFIX static bool s_bCancelled;
+	GLOBALS_IMPORT_PREFIX static int s_iLastRowCode;
 	static vector<int>	s_viLastAnswers;
 };
 
