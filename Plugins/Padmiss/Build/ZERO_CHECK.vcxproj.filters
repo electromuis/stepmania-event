@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\dev\stepmania\Plugins\Padmiss\Build\CMakeFiles\4263eb0879d26124834d427db513443d\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{6459AC82-8D7D-38F2-948D-186C3DF8545D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

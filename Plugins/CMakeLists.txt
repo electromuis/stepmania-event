@@ -1,3 +1,6 @@
+string(TOLOWER ${CMAKE_BUILD_TYPE_INIT} BUILT_TYPE_LOWER)
+set(LibStepmaniaPath, "${SM_LIBS}/StepMania-${BUILT_TYPE_LOWER}.lib")
+
 MACRO(SUBDIRLIST result curdir)
   FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
   SET(dirlist "")
