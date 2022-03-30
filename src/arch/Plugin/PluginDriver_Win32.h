@@ -6,16 +6,6 @@
 class LoadedPluginWin32 : public LoadedPlugin {
 public:
 	LoadedPluginWin32(RString libraryPath);
-
-	virtual bool Load();
-	virtual bool Unload();
-	virtual bool IsLoaded();
-	virtual PluginBase* GetPlugin();
-private:
-	bool loaded = false;
-	library* loadedLibrary = nullptr;
-	PluginDetails* loadedDetails = nullptr;
-	PluginBase* pluginBase = nullptr;
 };
 
 class PluginDriver_Win32 : public PluginDriver

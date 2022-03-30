@@ -21,6 +21,8 @@ namespace SpecialFiles
 	 * interference with the normal keymaps system. -Kyz */
 	extern const RString EDIT_MODE_KEYMAPS_PATH;
 	extern const RString PREFERENCES_INI_PATH;
+	/** @brief The directory that contains the plugins. */
+	extern const RString PLUGINS_DIR;
 	/** @brief The directory that contains the themes. */
 	extern const RString THEMES_DIR;
 	/** @brief The directory that contains the different languages. */

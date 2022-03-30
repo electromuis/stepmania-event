@@ -117,6 +117,7 @@ protected:
 	bool GetPathInfoToAndFallback( PathInfo &out, ElementCategory category, const RString &sMetricsGroup, const RString &sFile );
 	bool GetPathInfoToRaw( PathInfo &out, const RString &sThemeName, ElementCategory category, const RString &sMetricsGroup, const RString &sFile );
 	static RString GetThemeDirFromName( const RString &sThemeName );
+	static RString GetPluginDirFromName( const RString &sPluginName );
 	RString GetElementDir( const RString &sThemeName );
 	static RString GetMetricsIniPath( const RString &sThemeName );
 	static void GetLanguagesForTheme( const RString &sThemeName, vector<RString>& asLanguagesOut );
@@ -129,7 +130,7 @@ protected:
 	bool m_bPseudoLocalize;
 };
 
-extern ThemeManager*	THEME;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern ThemeManager*	THEME;	// global and accessible from anywhere in our program
 
 #endif
 

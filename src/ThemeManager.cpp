@@ -28,6 +28,8 @@
 #include "XmlFileUtil.h"
 #include <deque>
 
+#include "PluginManager.h"
+
 ThemeManager*	THEME = nullptr;	// global object accessible from anywhere in the program
 
 static const RString THEME_INFO_INI = "ThemeInfo.ini";
@@ -281,6 +283,8 @@ bool ThemeManager::DoesLanguageExist( const RString &sLanguage )
 	return false;
 }
 
+
+
 void ThemeManager::LoadThemeMetrics( const RString &sThemeName_, const RString &sLanguage_ )
 {
 	if( g_pLoadedThemeData == nullptr )
@@ -296,6 +300,24 @@ void ThemeManager::LoadThemeMetrics( const RString &sThemeName_, const RString &
 
 	m_sCurThemeName = sThemeName;
 	m_sCurLanguage = sLanguage;
+
+	if (PLUGINMAN && PLUGINMAN->GetNumPlugins() > 0)
+	{
+		for (int p = 0; p < PLUGINMAN->GetNumPlugins(); p++)
+		{
+			auto plugin = PLUGINMAN->GetPlugin(p);
+			if (!plugin)
+				continue;
+
+			IniFile iniMetrics;
+			IniFile iniStrings;
+			iniMetrics.ReadFile(GetPluginDirFromName(plugin->GetName()) + SpecialFiles::METRICS_FILE);
+			iniStrings.ReadFile(GetPluginDirFromName(plugin->GetName()) + SpecialFiles::LANGUAGES_SUBDIR + "en.ini");
+
+			XmlFileUtil::MergeIniUnder(&iniMetrics, &g_pLoadedThemeData->iniMetrics);
+			XmlFileUtil::MergeIniUnder(&iniStrings, &g_pLoadedThemeData->iniStrings);
+		}
+	}
 
 	bool bLoadedBase = false;
 	for(;;)
@@ -564,6 +586,11 @@ void ThemeManager::UpdateLuaGlobals()
 RString ThemeManager::GetThemeDirFromName( const RString &sThemeName )
 {
 	return SpecialFiles::THEMES_DIR + sThemeName + "/";
+}
+
+RString ThemeManager::GetPluginDirFromName(const RString& sPluginName)
+{
+	return SpecialFiles::PLUGINS_DIR + sPluginName + "/";
 }
 
 struct CompareLanguageTag

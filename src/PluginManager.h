@@ -7,6 +7,13 @@
 
 #define APP_PTR(type, ...) new(PLUGINMAN->AppAllocate(sizeof(type))) type(##__VA_ARGS__)
 
+#define DEFINE_SCREEN_CLASS( className ) \
+	static Screen* Create##className( const RString &sName ) { LuaThreadVariable var( "LoadingScreen", sName ); Screen *pRet = new className; pRet->SetName( sName ); Screen::InitScreen( pRet ); return pRet; } \
+	static std::unique_ptr<RegisterScreenClass> register_##className;
+
+#define LOAD_SCREEN_CLASS( className ) \
+	register_##className = std::make_unique<RegisterScreenClass>(#className, Create##className);
+
 class PluginManager
 {
 public:
@@ -27,6 +34,7 @@ public:
 	void PluginDelete(void* addr);
 
 	int GetNumPlugins() { return plugins.size(); }
+	LoadedPlugin* GetPlugin(int index);
 	LoadedPlugin* GetPlugin(RString name);
 
 	// Lua

@@ -1080,6 +1080,9 @@ int sm_main(int argc, char* argv[])
 
 	AdjustForChangedSystemCapabilities();
 
+	// Load the plugin system including plugin files
+	PLUGINMAN = new PluginManager;
+
 	GAMEMAN		= new GameManager;
 	THEME		= new ThemeManager;
 	ANNOUNCER	= new AnnouncerManager;
@@ -1207,8 +1210,7 @@ int sm_main(int argc, char* argv[])
 	FONT		= new FontManager;
 	SCREENMAN	= new ScreenManager;
 
-	// Load the plugin system including plugin files
-	PLUGINMAN = new PluginManager;
+	PLUGINMAN->LoadAll();
 
 	StepMania::ResetGame();
 

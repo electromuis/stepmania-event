@@ -6,51 +6,7 @@
 LoadedPluginWin32::LoadedPluginWin32(RString libraryPath)
 	:LoadedPlugin(libraryPath)
 {
-
-}
-
-bool LoadedPluginWin32::Load()
-{
-	if (loaded)
-		return false;
-
-	loadedLibrary = new dynalo::library(libraryPath);
-
-	if (loadedLibrary->get_native_handle() == dynalo::native::invalid_handle())
-		throw "Lib invalid";
-
-	loadedDetails = loadedLibrary->get_function<PluginDetails>("exports");
-	pluginBase = loadedDetails->initializeFunc(libraryPath);
-	pluginName = loadedDetails->pluginName;
-
-	loaded = true;
-	return loaded;
-}
-
-bool LoadedPluginWin32::Unload()
-{
-	if (!loaded)
-		return false;
-
-	//delete(loadedDetails);
-	//delete(pluginBase);
-	delete(loadedLibrary);
-
-	loaded = false;
-	return true;
-}
-
-bool LoadedPluginWin32::IsLoaded()
-{
-	return loaded;
-}
-
-PluginBase* LoadedPluginWin32::GetPlugin()
-{
-	if (!loaded)
-		return nullptr;
-
-	return pluginBase;
+	
 }
 
 void PluginDriver_Win32::GetAvailablePlugins(std::vector<LoadedPlugin*>& out)
@@ -68,7 +24,13 @@ void PluginDriver_Win32::GetAvailablePlugins(std::vector<LoadedPlugin*>& out)
 			out.push_back(lp);
 		}
 		catch (exception e) {
-			LOG->Info("Failed loading plugin file: %s, exception: %s", file.c_str(), e.what());
+			LOG->Info("Failed loading plugin (Lib): %s, exception: %s", file.c_str(), e.what());
+		}
+		catch (string e) {
+			LOG->Info("Failed loading plugin (Lib): %s, exception: %s", file.c_str(), e.c_str());
+		}
+		catch (...) {
+			LOG->Info("Failed loading plugin (Plug): %s", file.c_str());
 		}
 	}
 }

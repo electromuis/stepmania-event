@@ -367,9 +367,12 @@ source_group("Arch Specific\\\\Arch Hooks"
 
 list(APPEND SMDATA_ARCH_PLUGIN_SRC 
 	"arch/Plugin/PluginDriver.cpp"
+	"arch/Plugin/LoadedPlugin.cpp"
 	"arch/Plugin/PluginDriver_Null.cpp")
 list(APPEND SMDATA_ARCH_PLUGIN_HPP 
 	"arch/Plugin/PluginDriver.h"
+	"arch/Plugin/PluginBase.h"
+	"arch/Plugin/LoadedPlugin.h"
 	"arch/Plugin/PluginDriver_Null.h")
 
 if(WIN32)
