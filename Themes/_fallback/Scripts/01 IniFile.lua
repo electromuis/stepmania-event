@@ -80,7 +80,7 @@ IniFile =
 			--ignore comments.
 			if not str:find("^%s*#") then
 				-- is this a section?
-				local sec = str:match( "%[(.+)%]" )
+				local sec = str:match( "^%[(.+)%]" )
 
 				-- if so, set focus there; otherwise, try to
 				-- read a key/value pair (ignore blank lines)
@@ -107,7 +107,7 @@ IniFile =
 		local file = RageFileUtil.CreateRageFile()
 
 		if not file:Open(file_path, RageFile.WRITE) then
-			Warn( string.format("WriteFile(%s): %s",file_path.file:GetError()) )
+			Warn( string.format("WriteFile(%s): %s",file_path,file:GetError()) )
 			file:destroy()
 			return false
 		end
