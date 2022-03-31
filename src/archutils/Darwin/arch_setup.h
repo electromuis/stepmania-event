@@ -35,7 +35,6 @@ extern "C" int sm_main( int argc, char *argv[] );
 #define ArchSwap16(n) OSSwapInt16((n))
 #define HAVE_BYTE_SWAPS
 
-// Unix doesn't need to import global variables
 #define GLOBALS_IMPORT_PREFIX
 
 #endif

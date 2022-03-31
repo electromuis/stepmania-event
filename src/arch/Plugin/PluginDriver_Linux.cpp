@@ -1,3 +1,4 @@
+#include "global.h"
 #include "RageFileManager.h"
 #include "PluginDriver_Linux.h"
 #include "RageLog.h"
@@ -8,7 +9,7 @@ LoadedPluginLinux::LoadedPluginLinux(RString libraryPath)
 
 }
 
-void LoadedPluginLinux::GetAvailablePlugins(std::vector<LoadedPlugin*>& out)
+void PluginDriver_Linux::GetAvailablePlugins(std::vector<LoadedPlugin*>& out)
 {
 	vector<RString> files = vector<RString>();
 	FILEMAN->GetDirListing("Plugins\\*.so", files, false, true);

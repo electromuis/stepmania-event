@@ -1,10 +1,12 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.16)
 
-add_compile_options(
-	$<$<CONFIG:>:/MT> #---------|
-	$<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
-	$<$<CONFIG:Release>:/MT> #--|
-)
+IF(WIN32)
+	add_compile_options(
+		$<$<CONFIG:>:/MT> #---------|
+		$<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+		$<$<CONFIG:Release>:/MT> #--|
+	)
+ENDIF()
 
 get_directory_property(hasParent PARENT_DIRECTORY)
 if(hasParent)

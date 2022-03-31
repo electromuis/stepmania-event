@@ -21,7 +21,7 @@
 #undef MACHINE
 #endif
 
-#define PLUGIN__API_EXPORT
+#define GLOBALS_IMPORT_PREFIX
 
 #include "archutils/Common/gcc_byte_swaps.h"
 #endif
