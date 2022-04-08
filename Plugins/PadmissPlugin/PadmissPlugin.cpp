@@ -1,8 +1,6 @@
 #pragma once
 
-#include <stdio.h>
-#include "json/writer.h"
-#include "json/reader.h"
+#include "json/json.h"
 
 #include "global.h"
 
@@ -12,7 +10,6 @@
 #include "ScreenPadmiss.h"
 #include "NotesWriterPadmiss.h"
 
-//#include "ScreenOptionsManageProfilesPM.h"
 #include "NotesWriterSM.h"
 #include "RageFileDriverMemory.h"
 
@@ -41,10 +38,7 @@
 #define WS_PL_IMPORT
 #include "WebSocketPlugin.h"
 
-const RString GROUP_ALL = "---Group All---";
-
-
-REGISTER_PLUGIN(PadmissPlugin, PLUGIN_NAME, "0.0.1")
+REGISTER_PLUGIN(PadmissPlugin, "0.0.1")
 
 Screen* screen = nullptr;
 ProfileState PadmissPlugin::profileStates[NUM_PLAYERS] = {
@@ -54,7 +48,7 @@ ProfileState PadmissPlugin::profileStates[NUM_PLAYERS] = {
 
 DEFINE_SCREEN_CLASS(ScreenPadmiss)
 
-PadmissPlugin::PadmissPlugin(std::string libraryPath)
+PadmissPlugin::PadmissPlugin()
 	:subscriber(this)
 {
 	PADMISS_CLIENT.Initialize("https://api.padmiss.com");
@@ -432,7 +426,7 @@ bool PadmissPlugin::DownloadProfile(RString username)
 
 class ScreenListner : public Actor {
 public:
-	ScreenListner(PluginMessageSubscriber* messageSubscriber)
+	ScreenListner(PadmissMessageSubscriber* messageSubscriber)
 		:subscriber(messageSubscriber)
 	{
 		SetName("ScreenListener");
@@ -447,10 +441,10 @@ public:
 		LOG->Info("ScreenListener: %s", msg.GetName().c_str());
 	}
 private:
-	PluginMessageSubscriber* subscriber;
+	PadmissMessageSubscriber* subscriber;
 };
 
-PluginMessageSubscriber::PluginMessageSubscriber(PadmissPlugin* plugin)
+PadmissMessageSubscriber::PadmissMessageSubscriber(PadmissPlugin* plugin)
 	:plugin(plugin)
 {
 	//SubscribeToMessage("ScreenChanged");
@@ -459,12 +453,12 @@ PluginMessageSubscriber::PluginMessageSubscriber(PadmissPlugin* plugin)
 	//SubscribeToMessage("ColumnJudgment");
 }
 
-PluginMessageSubscriber::~PluginMessageSubscriber()
+PadmissMessageSubscriber::~PadmissMessageSubscriber()
 {
 	UnsubscribeAll();
 }
 
-void PluginMessageSubscriber::InputEvent(DeviceInput di, GameInput gi, int col)
+void PadmissMessageSubscriber::InputEvent(DeviceInput di, GameInput gi, int col)
 {
 	lastInputEvents[gi.controller].push_back({
 		GAMESTATE->m_Position.m_fSongBeat,
@@ -473,7 +467,7 @@ void PluginMessageSubscriber::InputEvent(DeviceInput di, GameInput gi, int col)
 	});
 }
 
-void PluginMessageSubscriber::HandleMessage(const Message& msg)
+void PadmissMessageSubscriber::HandleMessage(const Message& msg)
 {
 	Screen* screen = SCREENMAN->GetTopScreen();
 	if (screen == nullptr)

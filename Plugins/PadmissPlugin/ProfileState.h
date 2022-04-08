@@ -16,7 +16,6 @@ public:
 	void SignOut();
 
 	void Init();
-	void SetupThread();
 	static int StartThread(void* p);
 	void ThreadFunc();
 	bool ScanningAllowed();
@@ -25,8 +24,8 @@ public:
 	static bool InstallProfile(Json::Value data, RString& profileId);
 	static void SetPadmissId(Profile* profile, string padmissId);
 
-	static RString ProfileState::PadmissId(RString profileId);
-	static RString ProfileState::PadmissId(Profile* profile);
+	static RString PadmissId(RString profileId);
+	static RString PadmissId(Profile* profile);
 
 protected:
 	int playerNumber;

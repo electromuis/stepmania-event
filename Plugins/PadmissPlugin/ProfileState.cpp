@@ -127,12 +127,6 @@ int ProfileState::StartThread(void* p)
 	return 0;
 }
 
-void ProfileState::SetupThread()
-{
-	if (!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST))
-		LOG->Warn(werr_ssprintf(GetLastError(), "Failed to set ProfileState thread priority"));
-}
-
 void ProfileState::ThreadFunc()
 {
 	unique_ptr<PMReader> reader;

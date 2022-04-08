@@ -8,12 +8,14 @@
 #include "Steps.h"
 #include "StageStats.h"
 
-#include "json/value.h"
 #include <mutex>
 
 class GrooveStatsPlugin;
 namespace curlpp {
 	class Easy;
+}
+namespace Json {
+	class Value;
 }
 
 struct SharedRequestData
@@ -36,7 +38,7 @@ public:
 	bool SendGet(SharedRequestData req, Json::Value* responseData = nullptr);
 	string GetBaseUrl() { return baseUrl; }
 
-	bool GrooveStatsClient::HandleRequest(Json::Value& input, Json::Value& output);
+	bool HandleRequest(Json::Value& input, Json::Value& output);
 	static const int GSProtocol;
 private:
 	bool initialized = false;

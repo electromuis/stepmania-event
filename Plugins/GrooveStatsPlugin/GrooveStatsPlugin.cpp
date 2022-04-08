@@ -1,9 +1,5 @@
 #pragma once
 
-#include <stdio.h>
-#include "json/writer.h"
-#include "json/reader.h"
-
 #include "global.h"
 #include "JsonUtil.h"
 
@@ -22,9 +18,9 @@
 #include "Player.h"
 #include "PlayerNumber.h"
 
-REGISTER_PLUGIN(GrooveStatsPlugin, PLUGIN_NAME, "0.0.1")
+REGISTER_PLUGIN(GrooveStatsPlugin, "0.0.1")
 
-GrooveStatsPlugin::GrooveStatsPlugin(std::string libraryPath)
+GrooveStatsPlugin::GrooveStatsPlugin()
 	:subscriber(this)
 {
 	GROOVESTATS_CLIENT.Initialize("https://api.groovestats.com");
@@ -68,7 +64,7 @@ void GrooveStatsPlugin::Update(float fDeltaTime)
 
 class ScreenListner : public Actor {
 public:
-	ScreenListner(PluginMessageSubscriber* messageSubscriber)
+	ScreenListner(GrooveStatsMessageSubscriber* messageSubscriber)
 		:subscriber(messageSubscriber)
 	{
 		SetName("ScreenListener");
@@ -83,10 +79,10 @@ public:
 		LOG->Info("ScreenListener: %s", msg.GetName().c_str());
 	}
 private:
-	PluginMessageSubscriber* subscriber;
+	GrooveStatsMessageSubscriber* subscriber;
 };
 
-PluginMessageSubscriber::PluginMessageSubscriber(GrooveStatsPlugin* plugin)
+GrooveStatsMessageSubscriber::GrooveStatsMessageSubscriber(GrooveStatsPlugin* plugin)
 	:plugin(plugin)
 {
 	SubscribeToMessage("PingLauncher");
@@ -98,12 +94,12 @@ PluginMessageSubscriber::PluginMessageSubscriber(GrooveStatsPlugin* plugin)
 	//SubscribeToMessage("ColumnJudgment");
 }
 
-PluginMessageSubscriber::~PluginMessageSubscriber()
+GrooveStatsMessageSubscriber::~GrooveStatsMessageSubscriber()
 {
 	UnsubscribeAll();
 }
 
-void PluginMessageSubscriber::HandleMessage(const Message& msg)
+void GrooveStatsMessageSubscriber::HandleMessage(const Message& msg)
 {
 	if (msg.GetName() == "PingLauncher")
 	{

@@ -10,15 +10,14 @@
 #include "Actor.h"
 
 #include <curl/curl.h>
-#include "json/value.h"
 
 class GrooveStatsPlugin;
 class GrooveStatsClient;
 
-class PluginMessageSubscriber : public MessageSubscriber {
+class GrooveStatsMessageSubscriber : public MessageSubscriber {
 public:
-	PluginMessageSubscriber(GrooveStatsPlugin* plugin);
-	~PluginMessageSubscriber();
+	GrooveStatsMessageSubscriber(GrooveStatsPlugin* plugin);
+	~GrooveStatsMessageSubscriber();
 
 	void HandleMessage(const Message& msg);
 	void OnStatsUpdate();
@@ -31,12 +30,12 @@ private:
 
 class GrooveStatsPlugin : public PluginBase {
 public:
-	GrooveStatsPlugin(std::string libraryPath);
+	GrooveStatsPlugin();
 	~GrooveStatsPlugin();
 
-	virtual std::vector<PluginRegType>* GrooveStatsPlugin::GetLuaFunctions();
+	virtual std::vector<PluginRegType>* GetLuaFunctions();
 
 	void Update(float fDeltaTime);
 private:
-	PluginMessageSubscriber subscriber;
+	GrooveStatsMessageSubscriber subscriber;
 };

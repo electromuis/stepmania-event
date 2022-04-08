@@ -1,7 +1,7 @@
 set(PLUGIN_NAME "PadmissPlugin")
 REGISTER_PLUGIN(${CMAKE_CURRENT_SOURCE_DIR} ${PLUGIN_NAME})
 
-target_sources(${PLUGIN_NAME} PUBLIC
+target_sources(${PLUGIN_NAME} PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/ScreenPadmiss.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/ScreenPadmiss.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/NotesWriterPadmiss.cpp"
@@ -14,19 +14,21 @@ target_sources(${PLUGIN_NAME} PUBLIC
 	"${CMAKE_CURRENT_SOURCE_DIR}/ProfileState.h"
 )
 
+
+FIND_PACKAGE("LibCurl" REQUIRED)
+FIND_PACKAGE("CurlPP" REQUIRED)
+FIND_PACKAGE("LibUsb" REQUIRED)
+
 target_include_directories(${PLUGIN_NAME} PUBLIC
-	"${CURL_INCLUDE_DIR}"
-	"${CURLPP_INCLUDE_DIR}"
-	
-	"${CMAKE_CURRENT_SOURCE_DIR}/lib/libusb/include/libusb-1.0"
-	"${CMAKE_CURRENT_SOURCE_DIR}/../WebSocket"
+	"${PLUGINS_DIR}/WebSocketPlugin"
 )
 
 target_link_libraries(${PLUGIN_NAME}
-	WebsocketPlugin
+	tomcrypt
+	tommath
+	WebSocketPlugin
 	
-	"${CURL_LIBRARY}"
-	"${CURLPP_LIBRARY}"
-	
-	"${CMAKE_CURRENT_SOURCE_DIR}/lib/libusb/lib/libusb-1.0.lib"
+	libcurl
+	libcurlpp
+	libusb
 )

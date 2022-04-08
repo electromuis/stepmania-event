@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "config.hpp"
 #include "global.h"
 #include "PluginManager.h"
@@ -13,8 +15,8 @@
 #    else
 #        define WS_PL_EXP __declspec(dllimport)
 #    endif
-#elif
-#    define LIBRARY_API
+#else
+#	define WS_PL_EXP
 #endif
 
 struct SocketRequest
@@ -34,10 +36,10 @@ typedef std::function<bool(SocketRequest* req)> SocketFunction;
 class WebSocketPlugin;
 
 #ifndef WS_PL_IMPORT
-class PluginMessageSubscriber : public MessageSubscriber {
+class WebSocketMessageSubscriber : public MessageSubscriber {
 public:
-	PluginMessageSubscriber(WebSocketPlugin* plugin);
-	~PluginMessageSubscriber();
+	WebSocketMessageSubscriber(WebSocketPlugin* plugin);
+	~WebSocketMessageSubscriber();
 
 	void HandleMessage(const Message& msg);
 private:
@@ -47,7 +49,7 @@ private:
 
 class WebSocketPlugin : public PluginBase {
 public:
-	WebSocketPlugin(std::string libraryPath);
+	WebSocketPlugin();
 	~WebSocketPlugin();
 
 	WS_PL_EXP void RegisterFunction(RString name, SocketFunction function);
@@ -58,6 +60,6 @@ private:
 	std::string libraryPath;
 	RString lastScreen = "";
 #ifndef WS_PL_IMPORT
-	PluginMessageSubscriber subscriber;
+	WebSocketMessageSubscriber subscriber;
 #endif
 };

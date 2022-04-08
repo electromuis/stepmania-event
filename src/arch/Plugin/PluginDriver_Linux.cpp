@@ -3,6 +3,8 @@
 #include "PluginDriver_Linux.h"
 #include "RageLog.h"
 
+#include <iostream>
+
 LoadedPluginLinux::LoadedPluginLinux(RString libraryPath)
 	:LoadedPlugin(libraryPath)
 {
@@ -11,6 +13,8 @@ LoadedPluginLinux::LoadedPluginLinux(RString libraryPath)
 
 void PluginDriver_Linux::GetAvailablePlugins(std::vector<LoadedPlugin*>& out)
 {
+	PluginDriver::GetAvailablePlugins(out);
+	
 	vector<RString> files = vector<RString>();
 	FILEMAN->GetDirListing("Plugins\\*.so", files, false, true);
 
@@ -23,7 +27,16 @@ void PluginDriver_Linux::GetAvailablePlugins(std::vector<LoadedPlugin*>& out)
 			out.push_back(lp);
 		}
 		catch (exception e) {
-			LOG->Info("Failed loading plugin file: %s, exception: %s", file.c_str(), e.what());
+			cout << "E1" << e.what() << endl;
+			LOG->Trace("Failed loading plugin (Scan): %s, exception: %s", file.c_str(), e.what());
+		}
+		catch (string e) {
+			cout << "E2" << e << endl;
+			LOG->Trace("Failed loading plugin (Scan): %s, exception: %s", file.c_str(), e.c_str());
+		}
+		catch (...) {
+			cout << "E3" << endl;
+			LOG->Trace("Failed loading plugin (Scan): %s", file.c_str());
 		}
 	}
 }

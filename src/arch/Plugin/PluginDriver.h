@@ -2,6 +2,7 @@
 #define PluginDriver_H
 
 #include <vector>
+#include <memory>
 
 #define DYNALO_DEMANGLE
 #define DYNALO_EXPORT_SYMBOLS
@@ -9,12 +10,10 @@
 #include "dynalo/dynalo.hpp"
 using namespace dynalo;
 
-#include "global.h"
-#include "LuaManager.h"
 #include "LoadedPlugin.h"
 
 class DYNALO_EXPORT PluginBase;
-DYNALO_EXPORT typedef PluginBase* (*GetPluginFunc)(std::string libraryPath);
+DYNALO_EXPORT typedef PluginBase* (*GetPluginFunc)();
 
 struct PluginDetails
 {
@@ -29,20 +28,35 @@ struct PluginDetails
 #define PLUGIN_API_VERSION 1
 #define STANDARD_PLUGIN_STUFF PLUGIN_API_VERSION, __FILE__
 
-#define REGISTER_PLUGIN(classType, pluginName, pluginVersion)                  \
-extern "C" {																   \
-    DYNALO_EXPORT PluginBase* getPlugin(std::string libraryPath)			   \
-    {                                                                          \
-        static classType singleton(libraryPath);                               \
-        return &singleton;                                                     \
-    }                                                                          \
-    DYNALO_EXPORT PluginDetails exports = {								       \
-        STANDARD_PLUGIN_STUFF,                                                 \
-        #classType,                                                            \
-        pluginName,                                                            \
-        pluginVersion,                                                         \
-        getPlugin,                                                             \
-    };                                                                         \
+#ifdef WITH_PLUGINS_EMBEDDED
+#define REGISTER_DETAILS(classType, pluginVersion)						\
+DYNALO_EXPORT extern PluginDetails classType##_Details = {				\
+	PLUGIN_API_VERSION,													\
+	__FILE__,															\
+	#classType,                                                         \
+	PLUGIN_NAME,                                                        \
+	pluginVersion,                                                      \
+	getPlugin_##classType												\
+};
+#else
+#define REGISTER_DETAILS(classType, pluginVersion)						\
+DYNALO_EXPORT PluginDetails exports = {									\
+	PLUGIN_API_VERSION,													\
+	__FILE__,															\
+	#classType,                                                         \
+	PLUGIN_NAME,                                                        \
+	pluginVersion,                                                      \
+	getPlugin_##classType												\
+};     
+#endif
+
+#define REGISTER_PLUGIN(classType, pluginVersion)											\
+extern "C" {																				\
+    DYNALO_EXPORT PluginBase* getPlugin_##classType()										\
+    {																						\
+        return new classType();																\
+    }																						\
+    REGISTER_DETAILS(classType, pluginVersion)												\
 }
 
 class PluginDriver

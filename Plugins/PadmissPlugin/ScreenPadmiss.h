@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstring>
 #include "ScreenOptions.h"
 
 class ScreenPadmiss : public ScreenOptions

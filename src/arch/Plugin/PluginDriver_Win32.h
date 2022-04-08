@@ -3,7 +3,7 @@
 
 #include "PluginDriver.h"
 
-class LoadedPluginWin32 : public LoadedPlugin {
+class LoadedPluginWin32 : public LoadedPluginLibrary {
 public:
 	LoadedPluginWin32(RString libraryPath);
 };

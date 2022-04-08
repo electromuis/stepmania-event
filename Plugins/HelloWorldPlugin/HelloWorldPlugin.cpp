@@ -5,9 +5,9 @@
 
 #include "RageLog.h"
 
-REGISTER_PLUGIN(HelloWorldPlugin, PLUGIN_NAME, "0.0.1")
+REGISTER_PLUGIN(HelloWorldPlugin, "0.0.1")
 
-HelloWorldPlugin::HelloWorldPlugin(std::string libraryPath)
+HelloWorldPlugin::HelloWorldPlugin()
 	:subscriber(this)
 {	
 	LOG->Info(PLUGIN_NAME" loaded");
@@ -28,23 +28,18 @@ void HelloWorldPlugin::Update(float fDeltaTime)
 
 }
 
-PluginMessageSubscriber::PluginMessageSubscriber(HelloWorldPlugin* plugin)
+HelloWorldMessageSubscriber::HelloWorldMessageSubscriber(HelloWorldPlugin* plugin)
 	:plugin(plugin)
 {
-	RString test;
-	RString test2 = "3";
-	RString* text = APP_PTR(RString);
-	text->assign("Step");
-	SubscribeToMessage(*text);
-	PLUGINMAN->AppDelete(text);
+	SubscribeToMessage("Step");
 }
 
-PluginMessageSubscriber::~PluginMessageSubscriber()
+HelloWorldMessageSubscriber::~HelloWorldMessageSubscriber()
 {
 	UnsubscribeAll();
 }
 
-void PluginMessageSubscriber::HandleMessage(const Message& msg)
+void HelloWorldMessageSubscriber::HandleMessage(const Message& msg)
 {
 	plugin->Stepped();
 }

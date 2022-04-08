@@ -9,10 +9,13 @@
 #include "StageStats.h"
 
 #include <curl/curl.h>
-#include "json/value.h"
 #include <mutex>
 
 class PadmissPlugin;
+
+namespace Json {
+	class Value;
+};
 
 class PadmissClient {
 public:

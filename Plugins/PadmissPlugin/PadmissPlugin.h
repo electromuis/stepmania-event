@@ -8,11 +8,13 @@
 #include "PlayerNumber.h"
 #include "NoteData.h"
 #include "Actor.h"
+#include "RageInputDevice.h"
+#include "GameInput.h"
+
 #include "PadmissClient.h"
 #include "ProfileState.h"
 
 #include <curl/curl.h>
-#include "json/value.h"
 
 #define PLUGIN_NAME "PadmissPlugin"
 
@@ -31,10 +33,10 @@ struct PlayerInputEvent
 	bool released;
 };
 
-class PluginMessageSubscriber : public MessageSubscriber {
+class PadmissMessageSubscriber : public MessageSubscriber {
 public:
-	PluginMessageSubscriber(PadmissPlugin* plugin);
-	~PluginMessageSubscriber();
+	PadmissMessageSubscriber(PadmissPlugin* plugin);
+	~PadmissMessageSubscriber();
 
 	void HandleMessage(const Message& msg);
 	void OnStatsUpdate();
@@ -50,7 +52,7 @@ private:
 
 class PadmissPlugin : public PluginBase {
 public:
-	PadmissPlugin(std::string libraryPath);
+	PadmissPlugin();
 	~PadmissPlugin();
 
 	bool HasScreen(const char* sName);
@@ -61,7 +63,7 @@ public:
 	bool IsLoggedIn() { return PADMISS_CLIENT.IsLoggedIn(); };
 	bool DownloadProfile(RString username);
 
-	virtual std::vector<PluginRegType>* PadmissPlugin::GetLuaFunctions();
+	virtual std::vector<PluginRegType>* GetLuaFunctions();
 
 	void Update(float fDeltaTime);
 	void StatsUpdateV1(StageStats* pSS, PlayerNumber pn);
@@ -69,7 +71,7 @@ public:
 	bool IsWorking();
 	void SetTrackInputs(bool trackInputs);
 private:
-	PluginMessageSubscriber subscriber;
+	PadmissMessageSubscriber subscriber;
 	map<int, string> chartMap;
 	bool trackInputs = false;
 	bool lastInputStatus[NUM_GameController][MAX_NOTE_TRACKS] = { false };

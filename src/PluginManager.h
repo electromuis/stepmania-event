@@ -2,7 +2,6 @@
 #define PLUGIN_MANAGER_H
 
 #include "global.h"
-#include "Screen.h"
 #include "arch/Plugin/PluginDriver.h"
 
 #define APP_PTR(type, ...) new(PLUGINMAN->AppAllocate(sizeof(type))) type(##__VA_ARGS__)
@@ -25,7 +24,6 @@ public:
 
 	void Update(float fDeltaTime);
 
-	bool DeleteScreen(Screen* screen);
 	void* AppAllocate(size_t space);
 
 	void AppFree(void* addr);

@@ -1,4 +1,6 @@
 #include "Reader.h"
+#include <cstring>
+#include "libusb.h"
 
 using namespace std;
 

@@ -54,10 +54,10 @@ if(NOT APPLE)
 endif()
 
 if(MSVC OR APPLE)
-  set(SM_NAME_RELEASE "StepMania")
-  set(SM_NAME_DEBUG "StepMania-debug")
-  set(SM_NAME_MINSIZEREL "StepMania-min-size")
-  set(SM_NAME_RELWITHDEBINFO "StepMania-release-symbols")
+  set(SM_NAME_RELEASE "StepMania" CACHE STRING "")
+  set(SM_NAME_DEBUG "StepMania-debug" CACHE STRING "")
+  set(SM_NAME_MINSIZEREL "StepMania-min-size" CACHE STRING "")
+  set(SM_NAME_RELWITHDEBINFO "StepMania-release-symbols" CACHE STRING "")
 else()
   set(SM_NAME_RELEASE "stepmania")
   set(SM_NAME_DEBUG "stepmania-debug")
@@ -731,10 +731,12 @@ endif()
 
 target_include_directories("${SM_EXE_NAME}" PUBLIC ${SM_INCLUDE_DIRS})
 
-if(WITH_PLUGINS)
+if(WITH_PLUGINS AND NOT WITH_PLUGINS_EMBEDDED)
 	if(MSVC)
-		set_target_properties("${SM_EXE_NAME}" PROPERTIES ENABLE_EXPORTS 1)
-		set_target_properties("${SM_EXE_NAME}" PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 1)
+		set_target_properties( "${SM_EXE_NAME}" PROPERTIES 
+			ENABLE_EXPORTS 1
+			WINDOWS_EXPORT_ALL_SYMBOLS 1
+		)
 	
 		add_custom_command(
 			TARGET "${SM_EXE_NAME}"

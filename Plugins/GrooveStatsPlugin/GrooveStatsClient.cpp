@@ -5,8 +5,7 @@
 #include <stdio.h>
 #include "global.h"
 
-#include "json/writer.h"
-#include "json/reader.h"
+#include "json/json.h"
 
 #include "curlpp/cURLpp.hpp"
 #include "curlpp/Easy.hpp"

@@ -7,10 +7,10 @@
 
 class HelloWorldPlugin;
 
-class PluginMessageSubscriber : public MessageSubscriber {
+class HelloWorldMessageSubscriber : public MessageSubscriber {
 public:
-	PluginMessageSubscriber(HelloWorldPlugin* plugin);
-	~PluginMessageSubscriber();
+	HelloWorldMessageSubscriber(HelloWorldPlugin* plugin);
+	~HelloWorldMessageSubscriber();
 
 	void HandleMessage(const Message& msg);
 private:
@@ -19,12 +19,12 @@ private:
 
 class HelloWorldPlugin : public PluginBase {
 public:
-	HelloWorldPlugin(std::string libraryPath);
+	HelloWorldPlugin();
 	~HelloWorldPlugin();
 
 	void Update(float fDeltaTime);
 
 	void Stepped();
 private:
-	PluginMessageSubscriber subscriber;
+	HelloWorldMessageSubscriber subscriber;
 };

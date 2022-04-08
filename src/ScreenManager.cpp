@@ -406,9 +406,7 @@ ScreenMessage ScreenManager::PopTopScreenInternal( bool bSendLoseFocus )
 		if( ls.m_bDeleteWhenDone )
 		{
 			BeforeDeleteScreen();
-			if (!PLUGINMAN->DeleteScreen(ls.m_pScreen)) {
-				SAFE_DELETE(ls.m_pScreen);
-			}
+			SAFE_DELETE(ls.m_pScreen);
 			AfterDeleteScreen();
 		}
 	}

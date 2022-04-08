@@ -4,13 +4,15 @@
 #include "RageLog.h"
 
 LoadedPluginWin32::LoadedPluginWin32(RString libraryPath)
-	:LoadedPlugin(libraryPath)
+	:LoadedPluginLibrary(libraryPath)
 {
 	
 }
 
 void PluginDriver_Win32::GetAvailablePlugins(std::vector<LoadedPlugin*>& out)
 {
+	PluginDriver::GetAvailablePlugins(out);
+
 	vector<RString> files = vector<RString>();
 	FILEMAN->GetDirListing("Plugins\\*.dll", files, false, true);
 

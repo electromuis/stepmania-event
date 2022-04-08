@@ -64,6 +64,7 @@ option(WITH_SYSTEM_PCRE "Build with system PCRE" OFF)
 option(WITH_SYSTEM_ZLIB "Build against system zlib" OFF)
 
 option(WITH_PLUGINS "Build LibStepmania and compile plugins" OFF)
+option(WITH_PLUGINS_EMBEDDED "Compile plugins into the binary" OFF)
 
 option(WITH_SDL "Build with SDL" OFF)
 

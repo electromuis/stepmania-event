@@ -23,8 +23,8 @@ PluginManager::~PluginManager()
 {
 	UnloadAll();
 
-	for (LoadedPlugin* p : plugins)
-		delete(p);
+	//for (LoadedPlugin* p : plugins)
+		//delete(p);
 
 	delete(m_pDriver);
 }
@@ -40,13 +40,13 @@ void PluginManager::LoadAll()
 			bool f = true;
 		}
 		catch (exception e) {
-			LOG->Trace("Failed loading plugin (Lib): %s, exception: %s", p->GetLibraryPath().c_str(), e.what());
+			LOG->Trace("Failed loading plugin (Lib) exception: %s", e.what());
 		}
 		catch (string e) {
-			LOG->Trace("Failed loading plugin (Lib): %s, exception: %s", p->GetLibraryPath().c_str(), e.c_str());
+			LOG->Trace("Failed loading plugin (Lib) exception: %s", e.c_str());
 		}
 		catch (...) {
-			LOG->Trace("Failed loading plugin (Lib): %s", p->GetLibraryPath().c_str());
+			LOG->Trace("Failed loading plugin (Lib)");
 		}
 	}
 
@@ -61,13 +61,13 @@ void PluginManager::LoadAll()
 			bool f = true;
 		}
 		catch (exception e) {
-			LOG->Info("Failed loading plugin (Trace): %s, exception: %s", p->GetLibraryPath().c_str(), e.what());
+			LOG->Info("Failed loading plugin (Plugin) exception: %s", e.what());
 		}
 		catch (string e) {
-			LOG->Info("Failed loading plugin (Trace): %s, exception: %s", p->GetLibraryPath().c_str(), e.c_str());
+			LOG->Info("Failed loading plugin (Plugin) exception: %s", e.c_str());
 		}
 		catch (...) {
-			LOG->Info("Failed loading plugin (Trace): %s", p->GetLibraryPath().c_str());
+			LOG->Info("Failed loading plugin (Plugin)");
 		}
 	}
 }
@@ -80,10 +80,10 @@ void PluginManager::UnloadAll()
 			p->Unload();
 		}
 		catch (exception e) {
-			LOG->Info("Failed unloading file: %s, exception: %s", p->GetLibraryPath().c_str(), e.what());
+			LOG->Info("Failed unloading plugin exception: %s", e.what());
 		}
 		catch (...) {
-			LOG->Info("Failed loading plugin (Plug): %s", p->GetLibraryPath().c_str());
+			LOG->Info("Failed unloading plugin");
 		}
 	}
 }
@@ -94,19 +94,6 @@ void PluginManager::Update(float fDeltaTime)
 	{
 		plugin->Update(fDeltaTime);
 	}
-}
-
-bool PluginManager::DeleteScreen(Screen* screen)
-{
-	for (LoadedPlugin* p : plugins)
-	{
-		if (p->HasScreen(screen->GetName().c_str())) {
-			p->PluginDelete(screen);
-			return true;
-		}
-	}
-
-	return false;
 }
 
 void PluginManager::AppFree(void* addr)

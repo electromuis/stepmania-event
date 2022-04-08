@@ -1,9 +1,8 @@
 #pragma once
 
-#include <stdio.h>
-#include "libusb.h"
+#include <string>
 
-#include <mutex>
+struct libusb_device_handle;
 
 class PMReader
 {

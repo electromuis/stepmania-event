@@ -3,7 +3,7 @@
 
 #include "PluginDriver.h"
 
-class LoadedPluginLinux : public LoadedPlugin {
+class LoadedPluginLinux : public LoadedPluginLibrary {
 public:
 	LoadedPluginLinux(RString libraryPath);
 };

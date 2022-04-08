@@ -1,14 +1,61 @@
 #include "global.h"
-#include "StepMania.h"
+#include "ScreenOptionsManageProfiles.h"
 
-int main(int argc, char* argv[]) {
-	return sm_main(argc, argv);
+REGISTER_SCREEN_CLASS( ScreenOptionsPlugins );
+
+void ScreenOptionsPlugins::Init()
+{
+	ScreenOptions::Init();
+
+	SetNavigation( NAV_THREE_KEY_MENU );
+	SetInputMode( INPUTMODE_SHARE_CURSOR );
+}
+
+void ScreenOptionsPlugins::BeginScreen()
+{
+	vector<OptionRowHandler*> OptionRowHandlers;
+	ScreenOptions::BeginScreen();
+}
+
+void ScreenOptionsManageProfiles::HandleScreenMessage( const ScreenMessage SM )
+{
+	if( SM == SM_LoseFocus )
+	{
+		this->PlayCommand( "ScreenLoseFocus" );
+	}
+	else if( SM == SM_GainFocus )
+	{
+		this->PlayCommand( "ScreenGainFocus" );
+	}
+
+	ScreenOptions::HandleScreenMessage( SM );
+}
+
+void ScreenOptionsManageProfiles::ProcessMenuStart( const InputEventPlus & )
+{
+	if( IsTransitioning() )
+		return;
+
+	int iCurRow = m_iCurrentRow[GAMESTATE->GetMasterPlayerNumber()];
+	OptionRow &row = *m_pRows[iCurRow];
+	
+	
+}
+
+void ScreenOptionsManageProfiles::ImportOptions( int /* iRow */, const vector<PlayerNumber> & /* vpns */ )
+{
+
+}
+
+void ScreenOptionsManageProfiles::ExportOptions( int /* iRow */, const vector<PlayerNumber> & /* vpns */ )
+{
+
 }
 
 /*
- * (c) 2014 Jason Felds
+ * (c) 2002-2004 Chris Danford
  * All rights reserved.
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -18,7 +65,7 @@ int main(int argc, char* argv[]) {
  * copyright notice(s) and this permission notice appear in all copies of
  * the Software and that both the above copyright notice(s) and this
  * permission notice appear in supporting documentation.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF

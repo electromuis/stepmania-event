@@ -3,54 +3,12 @@
 #include "PluginBase.h"
 #include "PluginDriver.h"
 
-LoadedPlugin::LoadedPlugin(std::string libraryPath)
-	:libraryPath(libraryPath)
+// LoadedPlugin
+
+LoadedPlugin::LoadedPlugin()
 {
 	Load(PluginLoadPhase_Library);
 	Unload();
-}
-
-bool LoadedPlugin::Load(PluginLoadPhase phase)
-{
-	if(IsLoaded(phase))
-		return true;
-
-	if(!loadedLibrary)
-		loadedLibrary = new dynalo::library(libraryPath);
-
-	if (loadedLibrary->get_native_handle() == dynalo::native::invalid_handle())
-		throw "Lib invalid";
-	
-	loadedDetails = loadedLibrary->get_function<PluginDetails>("exports");
-	pluginName = loadedDetails->pluginName;
-	
-	if(phase == PluginLoadPhase_Library)
-		return true;
-
-	pluginBase = loadedDetails->initializeFunc(libraryPath);
-
-	return true;
-}
-
-bool LoadedPlugin::Unload()
-{
-	delete(loadedLibrary);
-	loadedDetails = nullptr;
-	pluginBase = nullptr;
-	loadedLibrary = nullptr;
-
-	return true;
-}
-
-bool LoadedPlugin::IsLoaded(PluginLoadPhase phase)
-{
-	if(phase == PluginLoadPhase_Library)
-		return loadedLibrary;
-	
-	if(phase == PluginLoadPhase_Plugin)
-		return pluginBase;
-	
-	return false;
 }
 
 PluginBase* LoadedPlugin::GetPlugin()
@@ -86,24 +44,105 @@ void LoadedPlugin::PluginFree(void* ptr)
 	p->PluginFree(ptr);
 }
 
-void LoadedPlugin::PluginDelete(void* ptr)
-{
-	if (!IsLoaded())
-		return;
+// LoadedPluginLibrary
 
-	PluginBase* p = GetPlugin();
-	ASSERT_M(p, "Not really loaded");
-	p->PluginDelete(ptr);
+LoadedPluginLibrary::LoadedPluginLibrary(std::string libraryPath)
+	:libraryPath(libraryPath), LoadedPlugin()
+{
+
 }
 
-bool LoadedPlugin::HasScreen(const char* name)
+bool LoadedPluginLibrary::Load(PluginLoadPhase phase)
 {
-	if (!IsLoaded())
-		return false;
+	if (IsLoaded(phase))
+		return true;
 
-	PluginBase* p = GetPlugin();
-	ASSERT_M(p, "Not really loaded");
-	return p->HasScreen(name);
+	if (!loadedLibrary)
+		loadedLibrary = new dynalo::library(libraryPath);
+
+	if (loadedLibrary->get_native_handle() == dynalo::native::invalid_handle())
+		throw "Lib invalid";
+
+	loadedDetails = loadedLibrary->get_function<PluginDetails>("exports");
+	pluginName = loadedDetails->pluginName;
+
+	if (phase == PluginLoadPhase_Library)
+		return true;
+
+	pluginBase = loadedDetails->initializeFunc();
+
+	return true;
+}
+
+bool LoadedPluginLibrary::Unload()
+{
+	delete(pluginBase);
+	delete(loadedLibrary);
+	loadedDetails = nullptr;
+	pluginBase = nullptr;
+	loadedLibrary = nullptr;
+
+	return true;
+}
+
+bool LoadedPluginLibrary::IsLoaded(PluginLoadPhase phase)
+{
+	if (phase == PluginLoadPhase_Library)
+		return loadedLibrary;
+
+	if (phase == PluginLoadPhase_Plugin)
+		return pluginBase;
+
+	return false;
+}
+
+// LoadedPluginEmbedded
+
+std::vector<LoadedPluginEmbedded*> LoadedPluginEmbedded::list;
+
+LoadedPluginEmbedded::LoadedPluginEmbedded(PluginDetails& details)
+	:loadedDetails(details), LoadedPlugin()
+{
+	list.push_back(this);
+}
+
+std::vector<LoadedPluginEmbedded*> LoadedPluginEmbedded::GetList()
+{
+	return list;
+}
+
+bool LoadedPluginEmbedded::Load(PluginLoadPhase phase)
+{
+	if (IsLoaded(phase))
+		return true;
+
+	pluginName = loadedDetails.pluginName;
+
+	if (phase == PluginLoadPhase_Library)
+		return true;
+
+	pluginBase = loadedDetails.initializeFunc();
+
+	return true;
+}
+
+bool LoadedPluginEmbedded::Unload()
+{
+	delete(pluginBase);
+	pluginBase = nullptr;
+
+	return true;
+}
+
+bool LoadedPluginEmbedded::IsLoaded(PluginLoadPhase phase)
+{
+	if (phase == PluginLoadPhase_Library)
+		return true;
+
+	if (phase == PluginLoadPhase_Plugin)
+		return pluginBase;
+
+	return false;
 }
 
 // lua start

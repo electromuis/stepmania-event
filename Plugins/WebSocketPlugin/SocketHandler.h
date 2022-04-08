@@ -1,7 +1,8 @@
 #pragma once
 
-#include "WebsocketPlugin.h"
 
+
+#include "WebSocketPlugin.h"
 #define ASIO_STANDALONE
 #define _WEBSOCKETPP_CPP11_TYPE_TRAITS_
 

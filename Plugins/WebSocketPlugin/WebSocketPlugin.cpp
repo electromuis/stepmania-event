@@ -5,21 +5,21 @@
 using namespace std;
 
 #include "global.h"
-#include "WebsocketPlugin.h"
+#include "WebSocketPlugin.h"
 #include "SocketHandler.h"
 
 #include "RageLog.h"
 #include "ScreenManager.h"
+#include "Screen.h"
 
-#define PLUGIN_NAME "WebsocketPlugin"
-REGISTER_PLUGIN(WebSocketPlugin, PLUGIN_NAME, "0.0.1")
+REGISTER_PLUGIN(WebSocketPlugin, "0.0.1")
 
 AutoScreenMessage(SM_SongChanged);
 
 unique_ptr<WebSocketHandler> handler;
 
-WebSocketPlugin::WebSocketPlugin(std::string libraryPath)
-	:libraryPath(libraryPath), subscriber(this)
+WebSocketPlugin::WebSocketPlugin()
+	:libraryPath(""), subscriber(this)
 {
 	handler = make_unique<WebSocketHandler>(this);
 	LOG->Info(PLUGIN_NAME" loaded");
@@ -91,18 +91,18 @@ void SocketRequest::SetResponseField(RString key, RString value)
 	response[key] = value;
 }
 
-PluginMessageSubscriber::PluginMessageSubscriber(WebSocketPlugin* plugin)
+WebSocketMessageSubscriber::WebSocketMessageSubscriber(WebSocketPlugin* plugin)
 	:plugin(plugin)
 {
 	SubscribeToMessage("DoneLoadingNextSong");
 }
 
-PluginMessageSubscriber::~PluginMessageSubscriber()
+WebSocketMessageSubscriber::~WebSocketMessageSubscriber()
 {
 	UnsubscribeAll();
 }
 
-void PluginMessageSubscriber::HandleMessage(const Message& msg)
+void WebSocketMessageSubscriber::HandleMessage(const Message& msg)
 {
 	if (handler)
 	{

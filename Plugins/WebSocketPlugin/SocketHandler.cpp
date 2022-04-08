@@ -1,8 +1,6 @@
 #include "SocketHandler.h"
 
 #include "JsonUtil.h"
-#include "json/writer.h"
-#include "json/reader.h"
 #include "RageLog.h"
 #include "LuaManager.h"
 #include "Song.h"
@@ -21,7 +19,6 @@
 #include <fstream>
 #include <thread>
 
-#define PLUGIN_NAME "WebsocketPlugin"
 #define UDP_KEY "SM5WS-"
 
 using websocketpp::lib::placeholders::_1;
@@ -75,7 +72,7 @@ WebSocketHandler::WebSocketHandler(WebSocketPlugin* plugin)
 
 	RegisterFunction("Broadcast", [me](SocketRequest* req) {
 		// Cab found
-		
+
 		return true;
 	});
 
@@ -114,18 +111,18 @@ WebSocketHandler::WebSocketHandler(WebSocketPlugin* plugin)
 WebSocketHandler::~WebSocketHandler()
 {
 	stopRequested = true;
-	LOG->Trace("WebSocket :: Shutting down WebSocketHandler threads ...");
+	//LOG->Trace("WebSocket :: Shutting down WebSocketHandler threads ...");
 
 	if (m_wsThread.IsCreated())
 	{
 		m_wsThread.Wait();
- 		LOG->Trace("WebSocket :: WebSocketHandler WS thread shut down.");
+ 		//LOG->Trace("WebSocket :: WebSocketHandler WS thread shut down.");
 	}
 
 	if (m_udpThread.IsCreated())
 	{
 		m_udpThread.Wait();
-		LOG->Trace("WebSocket :: WebSocketHandler UDP thread shut down.");
+		//LOG->Trace("WebSocket :: WebSocketHandler UDP thread shut down.");
 	}
 }
 
@@ -150,11 +147,11 @@ void WebSocketHandler::WSThreadFunc()
 	else {
 		LOG->Trace("WebSocket :: DocRoot not found: %s", docRoot.c_str());
 	}
-	
+
 	m_server.init_asio();
 	m_server.listen(8081);
 	m_server.start_accept();
-	
+
 	LOG->Trace("WebSocket :: WebSocketHandler listening");
 
 	while (!stopRequested)
@@ -213,7 +210,7 @@ bool WebSocketHandler::SetupUDP()
 		char broadcast = '1';
 		if (setsockopt(this->udpSocket, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast)) < 0)
 		{
-			closesocket(this->udpSocket);
+			//closesocket(this->udpSocket);
 			this->udpSocket = -1;
 			return false;
 		}
@@ -225,14 +222,14 @@ bool WebSocketHandler::SetupUDP()
 			(const char*)&iTimeout,
 			sizeof(iTimeout)) < 0)
 		{
-			closesocket(this->udpSocket);
+			//closesocket(this->udpSocket);
 			this->udpSocket = -1;
 			return false;
 		}
 
 		if (::bind(this->udpSocket, (sockaddr*)&Recv_addr, sizeof(Recv_addr)) < 0)
 		{
-			closesocket(this->udpSocket);
+			//closesocket(this->udpSocket);
 			this->udpSocket = -1;
 			return false;
 		}
@@ -250,18 +247,21 @@ bool WebSocketHandler::ReadUDPBroadcast()
 	socklen_t addrlen = sizeof Recv_addr;
 	ssize_t received;
 	struct sockaddr_in Sender_addr;
-	
+
 	if (recvfrom(this->udpSocket, buffer, 2048, 0, (struct sockaddr*)&Sender_addr, &addrlen) < 0)
 		return false;
 
 	struct sockaddr_in localAddr;
 	inet_pton(AF_INET, localIp.c_str(), &(localAddr.sin_addr));
 
+	return false;
+	/*
 	if (Sender_addr.sin_addr.S_un.S_addr == localAddr.sin_addr.S_un.S_addr)
 	{
 		// Local packet
 		return false;
 	}
+	*/
 
 	string data = buffer;
 	if (data.substr(0, strlen(UDP_KEY)) != UDP_KEY)
@@ -291,7 +291,7 @@ bool WebSocketHandler::SendUDPBroadcast(Json::Value message)
 
 	const char* content = udpMessage.c_str();
 	if (sendto(this->udpSocket, content, udpMessage.size(), 0, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-		closesocket(this->udpSocket);
+		//closesocket(this->udpSocket);
 		this->udpSocket = -1;
 		return false;
 	}
@@ -369,11 +369,11 @@ bool SocketRequest::HandleRequest(string requestString)
 
 		if (!reader.parse(requestString, request)) {
 			string err = reader.getFormatedErrorMessages();
-			throw std::exception(err.c_str());
+			throw std::runtime_error(err.c_str());
 		}
 
 		if (!request["action"].isString() || functions.count(request["action"].asString()) == 0)
-			throw std::exception("Message action missing/invalid");
+			throw std::runtime_error("Message action missing/invalid");
 
 		response["success"] = functions.at(request["action"].asString())(this);
 	}
@@ -385,13 +385,15 @@ bool SocketRequest::HandleRequest(string requestString)
 
 		return false;
 	}
+
+	return true;
 }
 
 void WebSocketHandler::on_message(connection_hdl hdl, ws_server::message_ptr msg)
 {
 	SocketRequest req;
 	req.HandleRequest(msg->get_payload());
-	
+
 	Json::FastWriter writer;
 	msg->set_payload(writer.write(req.response));
 	m_server.send(hdl, msg);

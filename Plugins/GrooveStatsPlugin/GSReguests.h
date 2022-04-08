@@ -1,8 +1,5 @@
 #pragma once
 
-#include "json/writer.h"
-#include "json/reader.h"
-
 #define READ_REQUIRED_FIELD(field, type) \
 	if (!input.isMember(#field) || !input[#field]. is ## type ()) \
 		return false; \

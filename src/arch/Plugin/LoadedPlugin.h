@@ -19,23 +19,15 @@ struct lua_State;
 
 class LoadedPlugin {
 public:
-	LoadedPlugin(std::string libraryPath);
 	virtual ~LoadedPlugin();
 
-	virtual bool Load(PluginLoadPhase phase = PluginLoadPhase_Plugin);
-	virtual bool Unload();
-	virtual bool IsLoaded(PluginLoadPhase phase = PluginLoadPhase_Plugin);
+	virtual bool Load(PluginLoadPhase phase = PluginLoadPhase_Plugin) { return false; };
+	virtual bool Unload() { return false; };
+	virtual bool IsLoaded(PluginLoadPhase phase = PluginLoadPhase_Plugin) = 0;
 	virtual PluginBase* GetPlugin();
 
 	void Update(float fDeltaTime);
 	void PluginFree(void* ptr);
-	void PluginDelete(void* ptr);
-	bool HasScreen(const char* sName);
-
-	std::string GetLibraryPath()
-	{
-		return libraryPath;
-	}
 
 	std::string GetName()
 	{
@@ -46,10 +38,41 @@ public:
 	void PushSelf(lua_State* L);
 
 protected:
+	LoadedPlugin();
+	std::string pluginName;
+	PluginBase* pluginBase = nullptr;
+};
+
+class LoadedPluginLibrary : public LoadedPlugin {
+public:
+	LoadedPluginLibrary(std::string libraryPath);
+
+	virtual bool Load(PluginLoadPhase phase);
+	virtual bool Unload();
+	virtual bool IsLoaded(PluginLoadPhase phase);
+
+	std::string GetLibraryPath()
+	{
+		return libraryPath;
+	}
+
+protected:
 	library* loadedLibrary = nullptr;
 	PluginDetails* loadedDetails = nullptr;
-	PluginBase* pluginBase = nullptr;
 
 	std::string libraryPath;
 	std::string pluginName;
+};
+
+class LoadedPluginEmbedded : public LoadedPlugin {
+public:
+	LoadedPluginEmbedded(PluginDetails& details);
+
+	virtual bool Load(PluginLoadPhase phase);
+	virtual bool Unload();
+	virtual bool IsLoaded(PluginLoadPhase phase);
+	static std::vector<LoadedPluginEmbedded*> GetList();
+protected:
+	PluginDetails& loadedDetails;
+	static std::vector<LoadedPluginEmbedded*> list;
 };
