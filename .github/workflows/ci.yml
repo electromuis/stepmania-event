@@ -25,6 +25,10 @@ jobs:
           libxrandr-dev
           libxtst-dev
           nasm
+          libasio-dev
+          libwebsocketpp-dev
+          libcurl4-openssl-dev
+          libusb-1.0-0-dev
       - name: Configure
         run: cmake -B build
             -DWITH_PLUGINS=ON
@@ -59,6 +63,10 @@ jobs:
           libxrandr-dev
           libxtst-dev
           ninja-build
+          libasio-dev
+          libwebsocketpp-dev
+          libcurl4-openssl-dev
+          libusb-1.0-0-dev
       - name: Configure
         run: cmake -G Ninja -B build
           -DWITH_SYSTEM_FFMPEG=ON
