@@ -6,7 +6,7 @@
 #include <iostream>
 
 LoadedPluginLinux::LoadedPluginLinux(RString libraryPath)
-	:LoadedPlugin(libraryPath)
+	:LoadedPluginLibrary(libraryPath)
 {
 
 }
