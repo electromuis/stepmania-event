@@ -16,7 +16,7 @@ IF(WIN32)
 	# Cmake will complain if the folder doesnt exist yet
 	file(MAKE_DIRECTORY "${EXT_PATH}/include")
 	set_target_properties (libusb PROPERTIES
-		INTERFACE_INCLUDE_DIRECTORIES "${EXT_PATH}/include/libusb-1.0"
+		INTERFACE_INCLUDE_DIRECTORIES "${EXT_PATH}/include"
 		
 		IMPORTED_LOCATION_DEBUG "${EXT_PATH}/VS2019/MS64/Debug/lib/libusb-1.0.lib"
 		IMPORTED_LOCATION_RELWITHDEBINFO "${EXT_PATH}/VS2019/MS64/Debug/lib/libusb-1.0.lib"
@@ -28,5 +28,6 @@ IF(WIN32)
 	
 ELSE()
 	find_package(PkgConfig REQUIRED)
-	pkg_check_modules(LIBUSB REQUIRED libusb-1.0)
+	pkg_check_modules(libusb REQUIRED IMPORTED_TARGET GLOBAL libusb-1.0)
+	add_library(libusb ALIAS PkgConfig::libusb)
 ENDIF()

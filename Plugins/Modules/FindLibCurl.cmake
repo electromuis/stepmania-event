@@ -19,12 +19,12 @@ IF(WIN32)
 		  BINARY_DIR "${EXT_PATH}/build"
 		)
 		
-		add_library (libcurl STATIC IMPORTED GLOBAL)
-		add_dependencies(libcurl Curl)
+		add_library (CURL::libcurl STATIC IMPORTED GLOBAL)
+		add_dependencies(CURL::libcurl Curl)
 
 		# Cmake will complain if the folder doesnt exist yet
 		file(MAKE_DIRECTORY "${EXT_PATH}/src/include")
-		set_target_properties (libcurl PROPERTIES
+		set_target_properties (CURL::libcurl PROPERTIES
 			INTERFACE_INCLUDE_DIRECTORIES "${EXT_PATH}/src/include"
 		)
 		
@@ -36,7 +36,7 @@ IF(WIN32)
 				SET(LIB_POSTFIX "-d")
 			ENDIF()
 			
-			set_target_properties (libcurl PROPERTIES
+			set_target_properties (CURL::libcurl PROPERTIES
 				IMPORTED_LOCATION_${RELEASE_TYPE_UPPER}
 				"${EXT_PATH}/build/lib/${RELEASE_TYPE}/libcurl${LIB_POSTFIX}_imp.lib"
 			)
@@ -48,12 +48,4 @@ IF(WIN32)
 	ENDIF()
 ELSE()
 	FIND_PACKAGE("CURL" REQUIRED)
-	
-	IF(NOT libcurl)
-		add_library (libcurl STATIC IMPORTED GLOBAL)
-		set_target_properties (libcurl PROPERTIES
-			INTERFACE_INCLUDE_DIRECTORIES "${CURL_INCLUDE_DIR}"
-			IMPORTED_LOCATION "${CURL_LIBRARY}"
-		)
-	ENDIF()
 ENDIF()

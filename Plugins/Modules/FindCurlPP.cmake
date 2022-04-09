@@ -39,13 +39,9 @@ IF(WIN32)
 	ENDIF()
 ELSE()
 	find_package(PkgConfig REQUIRED)
-	pkg_check_modules(CURLPP REQUIRED curlpp)
-	
-	IF(NOT libcurlpp)
-		add_library (libcurlpp STATIC IMPORTED GLOBAL)
-		set_target_properties (libcurlpp PROPERTIES
-			INTERFACE_INCLUDE_DIRECTORIES "${CURLPP_INCLUDE_DIR}"
-			IMPORTED_LOCATION "${CURLPP_LIBRARY}"
-		)
-	ENDIF()
+	pkg_check_modules(curlpp REQUIRED IMPORTED_TARGET GLOBAL curlpp)
+	set_target_properties (PkgConfig::curlpp PROPERTIES
+		INTERFACE_INCLUDE_DIRECTORIES ""
+	)
+	add_library(libcurlpp ALIAS PkgConfig::curlpp)
 ENDIF()

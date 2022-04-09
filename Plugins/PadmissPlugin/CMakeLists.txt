@@ -28,7 +28,7 @@ target_link_libraries(${PLUGIN_NAME}
 	tommath
 	WebSocketPlugin
 	
-	libcurl
+	CURL::libcurl
 	libcurlpp
 	libusb
 )

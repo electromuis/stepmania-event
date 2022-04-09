@@ -1,6 +1,6 @@
 #include "Reader.h"
 #include <cstring>
-#include "libusb.h"
+#include "libusb-1.0/libusb.h"
 
 using namespace std;
 
@@ -87,7 +87,7 @@ string PMReader::Read()
 				}
 
 				return ret;
-			}	
+			}
 			else
 				buffer[charCount] = '1' + charByte - 0x1e;
 

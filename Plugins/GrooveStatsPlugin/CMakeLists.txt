@@ -11,6 +11,6 @@ target_sources(${PLUGIN_NAME} PRIVATE
 )
 
 target_link_libraries(${PLUGIN_NAME}
-	libcurl
+	CURL::libcurl
 	libcurlpp
 )
