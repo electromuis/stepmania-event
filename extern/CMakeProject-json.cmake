@@ -16,6 +16,7 @@ else()
   set_property(TARGET "jsoncpp" PROPERTY CXX_STANDARD 11)
   set_property(TARGET "jsoncpp" PROPERTY CXX_STANDARD_REQUIRED ON)
   set_property(TARGET "jsoncpp" PROPERTY CXX_EXTENSIONS OFF)
+  target_compile_options("jsoncpp" PRIVATE "-fPIC")
 
   disable_project_warnings("jsoncpp")
 

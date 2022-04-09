@@ -1,40 +1,75 @@
 #include "Reader.h"
 #include <cstring>
 #include "libusb-1.0/libusb.h"
+#include <iostream>
 
 using namespace std;
 
+#define CHECK_ERROR_RET(statement)                          \
+    {                                                       \
+        int e = statement;                                  \
+        if(e != 0) {                                        \
+            cout << "USB Err (" << to_string(__LINE__ ) << "): " << to_string(e) << endl;    \
+            return false;                                   \
+        }                                                   \
+    }
+
 PMReader::PMReader()
 {
-
+    int e = libusb_init(&ctx);
+    if(e < 0) {
+        cout << "USB Err: " << to_string(e) << endl;
+        return;
+    }
+    else {
+        libusb_set_debug(ctx, 3);
+    }
 }
 
 bool PMReader::IsConnected()
 {
 	if (!device)
 	{
-		int r;
+        libusb_device **devs;
+        ssize_t cnt = libusb_get_device_list(ctx, &devs);
 
-		r = libusb_init(NULL);
-		if (r < 0)
-			return false;
+        if(cnt == 0)
+            return false;
 
-		libusb_device** list;
-		ssize_t cnt = libusb_get_device_list(NULL, &list);
+        for(size_t i=0; i<cnt; ++i)
+        {
+            libusb_device *c_device = devs[i];
+            libusb_device_descriptor c_desc;
 
-		for (r = 0; r < cnt; r++) {
-			libusb_device* device = list[r];
-		}
+            {
+                int e = libusb_get_device_descriptor(c_device, &c_desc);
+                if(e != 0) {
+                    cout << "USB Err: " << to_string(e) << endl;
+                    break;
+                }
+            }
 
-		libusb_free_device_list(list, 1);
+            printf("Vendor:Device = %04x:%04x\n", c_desc.idVendor, c_desc.idProduct);
 
-		device = libusb_open_device_with_vid_pid(NULL, (uint16_t)0x08ff, (uint16_t)0x0009);
+            if(c_desc.idVendor == 0x08ff && c_desc.idProduct == 0x0009)
+            {
+                device = c_device;
+                break;
+            }
+        }
+
+        libusb_free_device_list(devs, 1);
+
 		if (!device)
 			return false;
 
-		r = libusb_claim_interface(device, 0);
-		if (r < 0)
-			return false;
+        CHECK_ERROR_RET(libusb_open(device, &device_handle))
+
+#ifndef _WIN32
+        CHECK_ERROR_RET(libusb_set_auto_detach_kernel_driver(device_handle, 1))
+#endif
+
+		CHECK_ERROR_RET(libusb_claim_interface(device_handle, 0))
 	}
 
 	return true;
@@ -42,10 +77,9 @@ bool PMReader::IsConnected()
 
 PMReader::~PMReader()
 {
-	libusb_release_interface(device, 0);
-	libusb_close(device);
-
-	libusb_exit(NULL);
+	libusb_release_interface(device_handle, 0);
+	libusb_close(device_handle);
+	libusb_exit(ctx);
 }
 
 string PMReader::Read()
@@ -53,13 +87,30 @@ string PMReader::Read()
 	if (!IsConnected())
 		return "";
 
-	unsigned char data[200];
+	unsigned char data[200] = "";
 	int actual_length;
 	int r;
 
-	r = libusb_interrupt_transfer(device, 0x81, data, 200, &actual_length, 1500);
+	r = libusb_interrupt_transfer(device_handle, 0x81, data, 200, &actual_length, 1500);
 
-	if (r == 0 || actual_length > 0)
+	if(r < 0 && r != LIBUSB_ERROR_TIMEOUT)
+	{
+        cout << "USB Err (" << to_string(__LINE__ ) << "): " << to_string(r) << endl;
+
+        if(r == LIBUSB_ERROR_NO_DEVICE)
+        {
+            // Release device variable, which will make it try to reconnect
+            libusb_release_interface(device_handle, 0);
+            libusb_close(device_handle);
+            device = nullptr;
+            device_handle = nullptr;
+        }
+
+        return "";
+	}
+
+
+	if (actual_length > 0)
 	{
 		for (int i = 0; i < actual_length; i += 8 * 2)
 		{

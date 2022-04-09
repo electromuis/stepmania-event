@@ -52,12 +52,12 @@ PadmissPlugin::PadmissPlugin()
 	:subscriber(this)
 {
 	PADMISS_CLIENT.Initialize("https://api.padmiss.com");
-	
-	//FOREACH_PlayerNumber(pn)
-		//profileStates[pn].Init();
-	
+
+	FOREACH_PlayerNumber(pn)
+		profileStates[pn].Init();
+
 	LOAD_SCREEN_CLASS(ScreenPadmiss);
-	
+
 	/*
 	auto songs = SONGMAN->GetAllSongs();
 	for (Song* song : songs)
@@ -81,7 +81,7 @@ PadmissPlugin::PadmissPlugin()
 	}
 	*/
 
-	
+
 	LOG->Info(PLUGIN_NAME" loaded");
 }
 
@@ -106,13 +106,11 @@ void PadmissPlugin::PluginFree(void* p)
 
 void PadmissPlugin::PluginDelete(void* p)
 {
-	
+
 }
 
 void PadmissPlugin::Update(float fDeltaTime)
 {
-	return;
-
 	if (!loaded)
 	{
 		auto ws = PLUGINMAN->GetPlugin("WebsocketPlugin");
@@ -135,9 +133,9 @@ void PadmissPlugin::Update(float fDeltaTime)
 						return false;
 
 					me->profileStates[pn].SignIn(req->request["playerId"].asString());
-				
+
 //					req->SetResponseField("message", 123);
-					
+
 
 					return true;
 				});
@@ -266,11 +264,11 @@ void PadmissPlugin::StatsUpdateV1(StageStats* pSS, PlayerNumber pn)
 
 	request["minesHit"] = playerStats->m_iTapNoteScores[TapNoteScore::TNS_HitMine];
 	request["minesAvoided"] = playerStats->m_iTapNoteScores[TapNoteScore::TNS_AvoidMine];
-	request["minesTotal"] = playerStats->m_radarPossible[RadarCategory_Mines];	
+	request["minesTotal"] = playerStats->m_radarPossible[RadarCategory_Mines];
 
 	request["hands"] = playerStats->m_radarActual[RadarCategory_Hands];
 	request["handsTotal"] = playerStats->m_radarPossible[RadarCategory_Hands];
-	
+
 	request["cabSide"] = "Left";
 	request["speedMod"]["type"] = "Multiplier";
 	request["speedMod"]["value"] = 1;
@@ -289,7 +287,7 @@ void PadmissPlugin::StatsUpdateV1(StageStats* pSS, PlayerNumber pn)
 	request["timingWindows"]["rollTimingWindow"] = Player::GetWindowSeconds(TimingWindow::TW_Roll);
 
 	/*
-	request["inputEvents"] = 
+	request["inputEvents"] =
 	request["noteScoresWithBeats"]
 
 	request["modsTurn"]
@@ -351,7 +349,7 @@ void PadmissPlugin::StatsUpdateV2(StageStats* pSS, const NoteData& noteData, con
 
 		for (int t = 0; t < noteData.GetNumTracks(); t++)
 		{
-			
+
 			TapNote tapNote = noteData.GetTapNote(t, row);
 			if (tapNote.type == TapNoteType_Empty)
 				continue;
@@ -400,7 +398,7 @@ bool PadmissPlugin::DownloadProfile(RString username)
 
 	if (!data["Players"]["nodes"])
 		return false;
-	
+
 
 	RString profileId;
 	if (!PROFILEMAN->CreateLocalProfile(username, profileId))
@@ -432,7 +430,7 @@ public:
 		SetName("ScreenListener");
 		LOG->Info("ScreenListener here");
 
-		
+
 	}
 
 	void HandleMessage(const Message& msg)
@@ -481,7 +479,7 @@ void PadmissMessageSubscriber::HandleMessage(const Message& msg)
 		{
 			PlayerInfo* pi = screenGameplay->GetPlayerInfo(pn);
 			lastNoteData[pn] = pi->m_NoteData;
-		}	
+		}
 	}
 
 	if (msg.GetName() == "ScreenChanged")
@@ -495,7 +493,7 @@ void PadmissMessageSubscriber::HandleMessage(const Message& msg)
 				plugin->StatsUpdateV2(&STATSMAN->m_CurStageStats, lastNoteData[pn], lastInputEvents[pn], pn);
 			}
 		}
-		
+
 		if (screenName.find("Gameplay") != std::string::npos) {
 			if (screenListner != nullptr)
 				delete screenListner;

@@ -21,6 +21,12 @@
 
 #define UDP_KEY "SM5WS-"
 
+#ifdef _WIN32
+#define CLOSE_UDP() closesocket(this->udpSocket); this->udpSocket = -1;
+#else
+#define CLOSE_UDP() ::close(this->udpSocket); this->udpSocket = -1;
+#endif
+
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 
@@ -75,29 +81,6 @@ WebSocketHandler::WebSocketHandler(WebSocketPlugin* plugin)
 
 		return true;
 	});
-
-	/*
-	RegisterFunction("Test", [me](auto& req, auto& res) {
-		RString newId;
-
-		PROFILEMAN->UnloadProfile(PLAYER_1);
-
-		PROFILEMAN->CreateLocalProfile("tmp1", newId);
-		PROFILEMAN->m_sDefaultLocalProfileID[PLAYER_1].Set(newId);
-		Profile* profile = PROFILEMAN->GetLocalProfile(newId);
-
-
-		PROFILEMAN->LoadLocalProfileFromMachine(PLAYER_1);
-		GAMESTATE->LoadCurrentSettingsFromProfile(PLAYER_1);
-		SCREENMAN->ReloadOverlayScreensAfterInputFinishes();
-
-		RString sScreenName = SCREENMAN->GetScreen(0)->GetName();
-		//SCREENMAN->PopAllScreens();
-		SCREENMAN->SetNewScreen(sScreenName);
-
-		return true;
-		});
-		*/
 
 	localIp = "192.168.2.29";
 
@@ -203,15 +186,14 @@ bool WebSocketHandler::SetupUDP()
 		this->udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
 		if (this->udpSocket < 0)
 		{
-			this->udpSocket = -1;
+			CLOSE_UDP();
 			return false;
 		}
 
 		char broadcast = '1';
 		if (setsockopt(this->udpSocket, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast)) < 0)
 		{
-			//closesocket(this->udpSocket);
-			this->udpSocket = -1;
+			CLOSE_UDP();
 			return false;
 		}
 
@@ -222,15 +204,13 @@ bool WebSocketHandler::SetupUDP()
 			(const char*)&iTimeout,
 			sizeof(iTimeout)) < 0)
 		{
-			//closesocket(this->udpSocket);
-			this->udpSocket = -1;
+			CLOSE_UDP();
 			return false;
 		}
 
 		if (::bind(this->udpSocket, (sockaddr*)&Recv_addr, sizeof(Recv_addr)) < 0)
 		{
-			//closesocket(this->udpSocket);
-			this->udpSocket = -1;
+			CLOSE_UDP();
 			return false;
 		}
 	}
@@ -291,8 +271,7 @@ bool WebSocketHandler::SendUDPBroadcast(Json::Value message)
 
 	const char* content = udpMessage.c_str();
 	if (sendto(this->udpSocket, content, udpMessage.size(), 0, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-		//closesocket(this->udpSocket);
-		this->udpSocket = -1;
+		CLOSE_UDP();
 		return false;
 	}
 

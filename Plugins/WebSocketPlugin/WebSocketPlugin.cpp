@@ -33,7 +33,7 @@ WebSocketPlugin::~WebSocketPlugin()
 
 void WebSocketPlugin::RegisterFunction(RString name, SocketFunction function)
 {
-	handler->RegisterFunction(name, function);
+	//handler->RegisterFunction(name, function);
 }
 
 RString WebSocketPlugin::GetDocRoot()
