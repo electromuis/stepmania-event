@@ -216,10 +216,6 @@ inline std::string normalize_path(std::string path) {
         path.erase(path.begin() + static_cast<std::string::difference_type>(off));
     }
 	
-	std::for_each(path.begin(), path.end(), [](char & c){
-		c = ::tolower(c);
-	});
-	
     return path;
 }
 

@@ -61,15 +61,32 @@ bool LoadedPluginLibrary::Load(PluginLoadPhase phase)
 		loadedLibrary = new dynalo::library(libraryPath);
 
 	if (loadedLibrary->get_native_handle() == dynalo::native::invalid_handle())
-		throw "Lib invalid";
+	{
+		hasError = true;
+		return false;
+	}
 
-	loadedDetails = loadedLibrary->get_function<PluginDetails>("exports");
-	pluginName = loadedDetails->pluginName;
+	try {
+		loadedDetails = loadedLibrary->get_function<PluginDetails>("exports");
+		pluginName = loadedDetails->pluginName;
+		pluginVersion = loadedDetails->pluginVersion;
+		pluginAuthor = loadedDetails->pluginAuthor;
+	}
+	catch (...) {
+		hasError = true;
+		return false;
+	}
 
 	if (phase == PluginLoadPhase_Library)
 		return true;
 
-	pluginBase = loadedDetails->initializeFunc();
+	try {
+		pluginBase = loadedDetails->initializeFunc();
+	}
+	catch (...) {
+		hasError = true;
+		return false;
+	}
 
 	return true;
 }
@@ -117,6 +134,8 @@ bool LoadedPluginEmbedded::Load(PluginLoadPhase phase)
 		return true;
 
 	pluginName = loadedDetails.pluginName;
+	pluginVersion = loadedDetails.pluginVersion;
+	pluginAuthor = loadedDetails.pluginAuthor;
 
 	if (phase == PluginLoadPhase_Library)
 		return true;
@@ -159,9 +178,30 @@ public:
 		return 1;
 	}
 
+	static int GetVersion(T* p, lua_State* L)
+	{
+		lua_pushstring(L, p->GetVersion().c_str());
+		return 1;
+	}
+
+	static int GetAuthor(T* p, lua_State* L)
+	{
+		lua_pushstring(L, p->GetAuthor().c_str());
+		return 1;
+	}
+
+	static int IsLoaded(T* p, lua_State* L)
+	{
+		lua_pushboolean(L, p->IsLoaded());
+		return 1;
+	}
+
 	LunaLoadedPlugin()
 	{
 		ADD_METHOD(GetName);
+		ADD_METHOD(GetVersion);
+		ADD_METHOD(GetAuthor);
+		ADD_METHOD(IsLoaded);
 	}
 };
 

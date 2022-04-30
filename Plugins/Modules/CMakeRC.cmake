@@ -528,6 +528,7 @@ function(_cmrc_register_dirs name dirpath)
     else()
         _cm_encode_fpath(parent_sym "${parent}")
     endif()
+	string(TOLOWER ${dirpath} dirpath)
     get_filename_component(leaf "${dirpath}" NAME)
     set_property(
         TARGET "${name}"
@@ -602,7 +603,10 @@ function(cmrc_add_resources name)
             "extern const char* const ${sym}_begin\;"
             "extern const char* const ${sym}_end\;"
             )
-        get_filename_component(leaf "${relpath}" NAME)
+        
+		string(TOLOWER ${relpath} relpath)
+		get_filename_component(leaf "${relpath}" NAME)
+		
         set_property(
             TARGET ${name}
             APPEND PROPERTY CMRC_MAKE_FILES

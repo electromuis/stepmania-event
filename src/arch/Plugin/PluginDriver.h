@@ -22,6 +22,7 @@ struct PluginDetails
 	const char* className;
 	const char* pluginName;
 	const char* pluginVersion;
+	const char* pluginAuthor;
 	GetPluginFunc initializeFunc;
 };
 
@@ -29,34 +30,36 @@ struct PluginDetails
 #define STANDARD_PLUGIN_STUFF PLUGIN_API_VERSION, __FILE__
 
 #ifdef WITH_PLUGINS_EMBEDDED
-#define REGISTER_DETAILS(classType, pluginVersion)						\
-DYNALO_EXPORT extern PluginDetails classType##_Details = {				\
+#define REGISTER_DETAILS(classType, pluginVersion, pluginAuthor)		\
+DYNALO_EXPORT PluginDetails classType##_Details = {						\
 	PLUGIN_API_VERSION,													\
 	__FILE__,															\
 	#classType,                                                         \
 	PLUGIN_NAME,                                                        \
 	pluginVersion,                                                      \
+	pluginAuthor,														\
 	getPlugin_##classType												\
 };
 #else
-#define REGISTER_DETAILS(classType, pluginVersion)						\
+#define REGISTER_DETAILS(classType, pluginVersion, pluginAuthor)		\
 DYNALO_EXPORT PluginDetails exports = {									\
 	PLUGIN_API_VERSION,													\
 	__FILE__,															\
 	#classType,                                                         \
 	PLUGIN_NAME,                                                        \
 	pluginVersion,                                                      \
+	pluginAuthor,														\
 	getPlugin_##classType												\
 };     
 #endif
 
-#define REGISTER_PLUGIN(classType, pluginVersion)											\
+#define REGISTER_PLUGIN(classType, pluginVersion, pluginAuthor)								\
 extern "C" {																				\
     DYNALO_EXPORT PluginBase* getPlugin_##classType()										\
     {																						\
         return new classType();																\
     }																						\
-    REGISTER_DETAILS(classType, pluginVersion)												\
+    REGISTER_DETAILS(classType, pluginVersion, pluginAuthor)								\
 }
 
 class PluginDriver

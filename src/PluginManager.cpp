@@ -116,7 +116,7 @@ void* PluginManager::AppAllocate(size_t size)
 
 LoadedPlugin* PluginManager::GetPlugin(int index)
 {
-	if (index >= 0 && index < (plugins.size() - 1))
+	if (index >= 0 && index < plugins.size())
 		return plugins.at(index);
 
 	return nullptr;

@@ -18,7 +18,7 @@
 #include "Player.h"
 #include "PlayerNumber.h"
 
-REGISTER_PLUGIN(GrooveStatsPlugin, "0.0.1")
+REGISTER_PLUGIN(GrooveStatsPlugin, "0.0.1", "Electromuis")
 
 GrooveStatsPlugin::GrooveStatsPlugin()
 	:subscriber(this)

@@ -56,11 +56,7 @@ public:
 	PadmissPlugin();
 	~PadmissPlugin();
 
-	void UnpackResources(cmrc::embedded_filesystem fs, string parent);
-	bool HasScreen(const char* sName);
-	void PluginFreeScreen(void* p);
 	void PluginFree(void* p);
-	void PluginDelete(void* p);
 	bool Login(RString username, RString password) { return PADMISS_CLIENT.Login(username, password); };
 	bool IsLoggedIn() { return PADMISS_CLIENT.IsLoggedIn(); };
 	bool DownloadProfile(RString username);
@@ -79,6 +75,5 @@ private:
 	bool trackInputs = false;
 	bool lastInputStatus[NUM_GameController][MAX_NOTE_TRACKS] = { false };
 	bool loaded = false;
-	static ProfileState profileStates[NUM_PLAYERS];
-	RageFileDriverCmrc fs;
+	ProfileState profileStates[NUM_PLAYERS];
 };

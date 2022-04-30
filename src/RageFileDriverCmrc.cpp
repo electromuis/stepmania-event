@@ -8,6 +8,7 @@
 #include "RageUtil_FileDB.h"
 #include "RageFile.h"
 #include "RageLog.h"
+#include "RageUtil.h"
 
 using namespace cmrc;
 
@@ -21,13 +22,26 @@ RageFileObjCmrc::RageFileObjCmrc(cmrc::file file)
 
 int RageFileObjCmrc::ReadInternal(void* pBuffer, size_t iBytes)
 {
-	memcpy(pBuffer, file.begin(), iBytes);
-	return 0;
+	filePosition = min(filePosition, GetFileSize());
+	iBytes = min(iBytes, (size_t)GetFileSize() - filePosition);
+	if (iBytes == 0)
+		return 0;
+
+	memcpy(pBuffer, file.begin() + filePosition, iBytes);
+	filePosition += iBytes;
+
+	return iBytes;
 }
 
 int RageFileObjCmrc::GetFileSize() const
 {
 	return file.size();
+}
+
+int RageFileObjCmrc::SeekInternal(int offset)
+{
+	filePosition = clamp(offset, 0, GetFileSize());
+	return filePosition;
 }
 
 // RageFileDriverCmrc
@@ -48,6 +62,12 @@ RageFileBasic* RageFileDriverCmrc::Open(const RString& sPath, int mode, int& err
 	}
 
 	RString resourcePath = "resources" + sPath;
+
+	// All resource names are stored in lowercase
+	std::for_each(resourcePath.begin(), resourcePath.end(), [](char& c) {
+		c = ::tolower(c);
+	});
+
 	if (!fs.exists(resourcePath) || fs.is_directory(resourcePath))
 	{
 		err = ENOENT;

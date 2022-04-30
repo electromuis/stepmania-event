@@ -24,6 +24,8 @@ IF(WIN32)
 	)
 	
 	add_library(websocketpp::websocketpp INTERFACE IMPORTED)
+	add_dependencies(websocketpp::websocketpp Websocketpp)
+	
 	set_target_properties(websocketpp::websocketpp PROPERTIES 
 		INTERFACE_INCLUDE_DIRECTORIES "${EXT_PATH}/src;${EXT_PATH}/asio/asio/include"
 	)

@@ -117,13 +117,23 @@ MACRO(REGISTER_PLUGIN SOURCE_DIR PLUGIN_NAME)
 		ENDIF()
 		
 		TARGET_LINK_LIBRARIES(${PLUGIN_NAME} ${SMDATA_LINK_LIB})
+		if (TARGET ${SM_EXE_NAME})
+			add_dependencies(${PLUGIN_NAME} ${SM_EXE_NAME})
+		ENDIF()
 	ENDIF()
 		
 	IF(WITH_PLUGINS_EMBEDDED)
 		SET(PLUGIN_HOOK_FILE "${CMAKE_CURRENT_BINARY_DIR}/generated/Embedded${PLUGIN_NAME}.cpp")
 		CONFIGURE_FILE("${PLUGINS_DIR}/Embed.in.cpp" ${PLUGIN_HOOK_FILE})
+		target_sources(${SM_EXE_NAME} PRIVATE ${PLUGIN_HOOK_FILE})
 		
-		target_sources(StepMania PRIVATE ${PLUGIN_HOOK_FILE})
+		IF(EXISTS "${SOURCE_DIR}/resources")
+			FILE(GLOB_RECURSE resources "${SOURCE_DIR}/resources/*.*")
+			cmrc_add_resource_library("${PLUGIN_NAME}Resources" ${resources})
+			target_link_libraries(${SM_EXE_NAME} "${PLUGIN_NAME}Resources")
+			set_property(TARGET "${PLUGIN_NAME}Resources" PROPERTY FOLDER "Plugins")
+		ENDIF()
+		
 		target_link_libraries(${SM_EXE_NAME} ${PLUGIN_NAME})
 	ENDIF()
 	

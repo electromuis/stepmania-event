@@ -28,6 +28,7 @@ list(APPEND SMDATA_SCREEN_OPTION_SRC
             "ScreenOptionsMaster.cpp"
             "ScreenOptionsMasterPrefs.cpp"
             "ScreenOptionsMemoryCard.cpp"
+            "ScreenOptionsPlugins.cpp"
             "ScreenOptionsToggleSongs.cpp")
 list(APPEND SMDATA_SCREEN_OPTION_HPP
             "ScreenOptions.h"
@@ -41,6 +42,7 @@ list(APPEND SMDATA_SCREEN_OPTION_HPP
             "ScreenOptionsMaster.h"
             "ScreenOptionsMasterPrefs.h"
             "ScreenOptionsMemoryCard.h"
+            "ScreenOptionsPlugins.h"
             "ScreenOptionsToggleSongs.h")
 
 source_group("Screens\\\\Options"

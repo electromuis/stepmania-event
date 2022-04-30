@@ -4,21 +4,18 @@
 #include "ScreenOptions.h"
 #include "ScreenMiniMenu.h"
 
-class Course;
-
 class ScreenOptionsPlugins : public ScreenOptions
 {
 public:
 	void Init();
 	virtual void BeginScreen();
-
-	virtual void HandleScreenMessage( const ScreenMessage SM );
+	
 
 protected:
 	virtual void ImportOptions( int iRow, const vector<PlayerNumber> &vpns );
 	virtual void ExportOptions( int iRow, const vector<PlayerNumber> &vpns );
-	
-	virtual void AfterChangeRow( PlayerNumber pn );
+
+	virtual void AfterChangeValueOrRow(PlayerNumber pn);
 	virtual void ProcessMenuStart( const InputEventPlus &input );
 };
 

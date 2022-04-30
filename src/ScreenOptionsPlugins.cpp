@@ -1,5 +1,8 @@
 #include "global.h"
-#include "ScreenOptionsManageProfiles.h"
+#include "ScreenOptionsPlugins.h"
+#include "PluginManager.h"
+#include "OptionRowHandler.h"
+#include "GameState.h"
 
 REGISTER_SCREEN_CLASS( ScreenOptionsPlugins );
 
@@ -14,42 +17,87 @@ void ScreenOptionsPlugins::Init()
 void ScreenOptionsPlugins::BeginScreen()
 {
 	vector<OptionRowHandler*> OptionRowHandlers;
+
+	for (int p = 0; p < PLUGINMAN->GetNumPlugins(); p++)
+	{
+		auto plugin = PLUGINMAN->GetPlugin(p);
+		if (!plugin)
+			continue;
+
+		OptionRowHandler* pHand = nullptr;
+		
+		RString metric = ssprintf("Line%s", plugin->GetName().c_str());
+		if (THEME->HasMetric(m_sName, metric))
+		{
+			RString sRowCommands = THEME->GetMetric(m_sName, metric);
+			Commands cmds;
+			ParseCommands(sRowCommands, cmds, false);
+			pHand = OptionRowHandlerUtil::Make(cmds);
+		}
+		else
+		{
+			pHand = OptionRowHandlerUtil::MakeNull();
+		}
+
+		
+
+		OptionRowDefinition& def = pHand->m_Def;
+		def.m_layoutType = LAYOUT_SHOW_ALL_IN_ROW;
+
+		if(plugin->IsLoaded())
+			def.m_vsChoices.push_back("Loaded");
+		else
+			def.m_vsChoices.push_back("Not loaded");
+
+		if(plugin->HasError())
+			def.m_vsChoices.push_back("Loading failed");
+
+		def.m_bAllowThemeTitle = false;
+		def.m_bAllowThemeItems = false;
+		def.m_bAllowExplanation = false;
+		def.m_sName = plugin->GetName();
+
+		OptionRowHandlers.push_back(pHand);
+	}
+
+	ScreenOptions::InitMenu(OptionRowHandlers);
 	ScreenOptions::BeginScreen();
 }
 
-void ScreenOptionsManageProfiles::HandleScreenMessage( const ScreenMessage SM )
+void ScreenOptionsPlugins::ProcessMenuStart( const InputEventPlus& e )
 {
-	if( SM == SM_LoseFocus )
-	{
-		this->PlayCommand( "ScreenLoseFocus" );
-	}
-	else if( SM == SM_GainFocus )
-	{
-		this->PlayCommand( "ScreenGainFocus" );
-	}
-
-	ScreenOptions::HandleScreenMessage( SM );
+	ScreenOptions::ProcessMenuStart(e);
 }
 
-void ScreenOptionsManageProfiles::ProcessMenuStart( const InputEventPlus & )
+void ScreenOptionsPlugins::ImportOptions( int /* iRow */, const vector<PlayerNumber> & /* vpns */ )
 {
-	if( IsTransitioning() )
-		return;
+
+}
+
+void ScreenOptionsPlugins::ExportOptions( int /* iRow */, const vector<PlayerNumber> & /* vpns */ )
+{
+
+}
+
+void ScreenOptionsPlugins::AfterChangeValueOrRow(PlayerNumber pn)
+{
+	ScreenOptions::AfterChangeValueOrRow(pn);
 
 	int iCurRow = m_iCurrentRow[GAMESTATE->GetMasterPlayerNumber()];
-	OptionRow &row = *m_pRows[iCurRow];
-	
-	
-}
+	if (iCurRow >= PLUGINMAN->GetNumPlugins())
+		return;
 
-void ScreenOptionsManageProfiles::ImportOptions( int /* iRow */, const vector<PlayerNumber> & /* vpns */ )
-{
+	auto plugin = PLUGINMAN->GetPlugin(iCurRow);
+	if (!plugin)
+		return;
 
-}
+	RString text = "Name: " + plugin->GetName() + "\n";
+	text.append("Version: " + plugin->GetVersion() + "\n");
+	text.append("Author: " + plugin->GetAuthor());
 
-void ScreenOptionsManageProfiles::ExportOptions( int /* iRow */, const vector<PlayerNumber> & /* vpns */ )
-{
-
+	m_textExplanationTogether.FinishTweening();
+	ON_COMMAND(m_textExplanationTogether);
+	m_textExplanationTogether.SetText(text);
 }
 
 /*

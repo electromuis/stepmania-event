@@ -19,6 +19,7 @@ IF(WIN32)
 		  SOURCE_DIR "${EXT_PATH}/src"
 		  BINARY_DIR "${EXT_PATH}/build"
 		)
+		add_dependencies(CurlPP CURL::libcurl)
 		
 		add_library (libcurlpp STATIC IMPORTED GLOBAL)
 		add_dependencies(libcurlpp CurlPP)

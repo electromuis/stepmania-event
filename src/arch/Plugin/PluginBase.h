@@ -14,6 +14,7 @@ struct PluginRegType
 class PluginBase {
 public:
 	PluginBase() {};
+	virtual ~PluginBase() {};
 
 	virtual void Update(float fDeltaTime) = 0;
 	virtual void PluginFree(void* p) { free(p); };

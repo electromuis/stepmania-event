@@ -1,7 +1,7 @@
 #pragma once
 
 #include "json/json.h"
-#include <cmrc/cmrc.hpp>
+#include <cmrc.hpp>
 CMRC_DECLARE(PadmissPluginResources);
 
 #include "global.h"
@@ -41,18 +41,16 @@ CMRC_DECLARE(PadmissPluginResources);
 
 #include "WebSocketPlugin.h"
 
-REGISTER_PLUGIN(PadmissPlugin, "0.0.1")
-
-ProfileState PadmissPlugin::profileStates[NUM_PLAYERS] = {
-	ProfileState(0),
-	ProfileState(1)
-};
+REGISTER_PLUGIN(PadmissPlugin, "0.0.1", "Electromuis")
 
 DEFINE_SCREEN_CLASS(ScreenPadmiss)
 
 PadmissPlugin::PadmissPlugin()
 	:subscriber(this),
-	fs(cmrc::PadmissPluginResources::get_filesystem())
+	profileStates{
+		ProfileState(0),
+		ProfileState(1)
+	}
 {
 	PADMISS_CLIENT.Initialize("https://api.padmiss.com");
 
@@ -64,7 +62,7 @@ PadmissPlugin::PadmissPlugin()
 	string path = "/Plugins/";
 	path.append(PLUGIN_NAME);
 
-	FILEMAN->Mount(&fs, path);
+	FILEMAN->Mount(new RageFileDriverCmrc(cmrc::PadmissPluginResources::get_filesystem()), path);
 
 	/*
 	auto songs = SONGMAN->GetAllSongs();
@@ -95,71 +93,16 @@ PadmissPlugin::PadmissPlugin()
 
 PadmissPlugin::~PadmissPlugin()
 {
+	string path = "/Plugins/";
+	path.append(PLUGIN_NAME);
+
+	FILEMAN->Unmount("", "", path);
 	LOG->Info(PLUGIN_NAME" unloaded");
-}
-
-/*7u
-void PadmissPlugin::UnpackResources(cmrc::embedded_filesystem fs, string parent)
-{
-	cmrc::directory_iterator iterator = fs.iterate_directory(parent);
-
-	for (auto& r : iterator)
-	{
-		if (r.is_file())
-		{
-			string path = "Cache/Plugins/";
-			path.append(PLUGIN_NAME);
-			path.append("/");
-
-			if (parent != "resources")
-			{
-				path.append(parent.substr(strlen("resources/")));
-				path.append("/");
-			}
-			
-			path.append(r.filename());
-
-			RageFile rFile;
-			if (!rFile.Open(path, RageFile::WRITE))
-			{
-				LOG->Warn("Writing '%s' failed: %s", path.c_str(), rFile.GetError().c_str());
-				continue;
-			}
-
-			auto eFile = fs.open(parent + "/" + r.filename());
-			if (!rFile.Write(eFile.begin(), eFile.size()))
-			{
-				bool f = true;
-			}
-
-
-		}
-
-		if (r.is_directory()) {
-			this->UnpackResources(fs, parent + "/" + r.filename());
-		}
-	}
-}
-
-*/
-
-bool PadmissPlugin::HasScreen(const char* sName)
-{
-	if (strcmp(sName, "ScreenPadmiss") == 0) {
-		return true;
-	}
-
-	return false;
 }
 
 void PadmissPlugin::PluginFree(void* p)
 {
 	free(p);
-}
-
-void PadmissPlugin::PluginDelete(void* p)
-{
-
 }
 
 bool PadmissPlugin::HookSocket()

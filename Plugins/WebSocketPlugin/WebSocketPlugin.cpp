@@ -12,7 +12,7 @@ using namespace std;
 #include "ScreenManager.h"
 #include "Screen.h"
 
-REGISTER_PLUGIN(WebSocketPlugin, "0.0.1")
+REGISTER_PLUGIN(WebSocketPlugin, "0.0.1", "Electromuis")
 
 AutoScreenMessage(SM_SongChanged);
 

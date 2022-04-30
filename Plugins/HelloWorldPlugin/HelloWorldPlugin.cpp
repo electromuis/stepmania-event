@@ -5,7 +5,7 @@
 
 #include "RageLog.h"
 
-REGISTER_PLUGIN(HelloWorldPlugin, "0.0.1")
+REGISTER_PLUGIN(HelloWorldPlugin, "0.0.1", "Electromuis")
 
 HelloWorldPlugin::HelloWorldPlugin()
 	:subscriber(this)

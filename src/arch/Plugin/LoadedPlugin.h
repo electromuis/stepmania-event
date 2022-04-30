@@ -47,10 +47,10 @@ public:
 	void Update(float fDeltaTime);
 	void PluginFree(void* ptr);
 
-	std::string GetName()
-	{
-		return pluginName;
-	}
+	std::string GetName() { return pluginName; }
+	std::string GetVersion() { return pluginVersion; }
+	std::string GetAuthor() { return pluginAuthor; }
+	bool HasError() { return hasError; }
 
 	// Lua
 	void PushSelf(lua_State* L);
@@ -58,7 +58,10 @@ public:
 protected:
 	LoadedPlugin();
 	std::string pluginName;
+	std::string pluginVersion;
+	std::string pluginAuthor;
 	PluginBase* pluginBase = nullptr;
+	bool hasError = false;
 };
 
 class LoadedPluginLibrary : public LoadedPlugin {

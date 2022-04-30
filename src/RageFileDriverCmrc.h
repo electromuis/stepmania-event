@@ -13,10 +13,12 @@ public:
 
 	int ReadInternal(void* pBuffer, size_t iBytes);
 	int WriteInternal(const void* pBuffer, size_t iBytes) { return -1; }
+	int SeekInternal(int offset);
 
 	int GetFileSize() const;
 
 private:
+	int filePosition = 0;
 	cmrc::file file;
 };
 
