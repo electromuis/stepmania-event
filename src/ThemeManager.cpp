@@ -306,7 +306,7 @@ void ThemeManager::LoadThemeMetrics( const RString &sThemeName_, const RString &
 		for (int p = 0; p < PLUGINMAN->GetNumPlugins(); p++)
 		{
 			auto plugin = PLUGINMAN->GetPlugin(p);
-			if (!plugin)
+			if (!plugin || !plugin->IsLoaded())
 				continue;
 
 			IniFile iniMetrics;

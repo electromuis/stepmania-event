@@ -2,6 +2,7 @@
 #include "PluginManager.h"
 #include "RageLog.h"
 #include "PrefsManager.h"
+#include "ThemeManager.h"
 
 PluginManager* PLUGINMAN = nullptr;
 
@@ -70,6 +71,8 @@ void PluginManager::LoadAll()
 			LOG->Info("Failed loading plugin (Plugin)");
 		}
 	}
+
+	THEME->ReloadMetrics();
 }
 
 void PluginManager::UnloadAll()

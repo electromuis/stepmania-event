@@ -1,6 +1,8 @@
 #pragma once
 
 #include "json/json.h"
+#include <cmrc/cmrc.hpp>
+CMRC_DECLARE(PadmissPluginResources);
 
 #include "global.h"
 
@@ -11,7 +13,9 @@
 #include "NotesWriterPadmiss.h"
 
 #include "NotesWriterSM.h"
+#include "RageFileDriverCmrc.h"
 #include "RageFileDriverMemory.h"
+#include "RageFileManager.h"
 
 #include "GameState.h"
 #include "StatsManager.h"
@@ -35,12 +39,10 @@
 #include "Song.h"
 #include "NoteTypes.h"
 
-#define WS_PL_IMPORT
 #include "WebSocketPlugin.h"
 
 REGISTER_PLUGIN(PadmissPlugin, "0.0.1")
 
-Screen* screen = nullptr;
 ProfileState PadmissPlugin::profileStates[NUM_PLAYERS] = {
 	ProfileState(0),
 	ProfileState(1)
@@ -49,7 +51,8 @@ ProfileState PadmissPlugin::profileStates[NUM_PLAYERS] = {
 DEFINE_SCREEN_CLASS(ScreenPadmiss)
 
 PadmissPlugin::PadmissPlugin()
-	:subscriber(this)
+	:subscriber(this),
+	fs(cmrc::PadmissPluginResources::get_filesystem())
 {
 	PADMISS_CLIENT.Initialize("https://api.padmiss.com");
 
@@ -57,6 +60,11 @@ PadmissPlugin::PadmissPlugin()
 		profileStates[pn].Init();
 
 	LOAD_SCREEN_CLASS(ScreenPadmiss);
+
+	string path = "/Plugins/";
+	path.append(PLUGIN_NAME);
+
+	FILEMAN->Mount(&fs, path);
 
 	/*
 	auto songs = SONGMAN->GetAllSongs();
@@ -90,6 +98,51 @@ PadmissPlugin::~PadmissPlugin()
 	LOG->Info(PLUGIN_NAME" unloaded");
 }
 
+/*7u
+void PadmissPlugin::UnpackResources(cmrc::embedded_filesystem fs, string parent)
+{
+	cmrc::directory_iterator iterator = fs.iterate_directory(parent);
+
+	for (auto& r : iterator)
+	{
+		if (r.is_file())
+		{
+			string path = "Cache/Plugins/";
+			path.append(PLUGIN_NAME);
+			path.append("/");
+
+			if (parent != "resources")
+			{
+				path.append(parent.substr(strlen("resources/")));
+				path.append("/");
+			}
+			
+			path.append(r.filename());
+
+			RageFile rFile;
+			if (!rFile.Open(path, RageFile::WRITE))
+			{
+				LOG->Warn("Writing '%s' failed: %s", path.c_str(), rFile.GetError().c_str());
+				continue;
+			}
+
+			auto eFile = fs.open(parent + "/" + r.filename());
+			if (!rFile.Write(eFile.begin(), eFile.size()))
+			{
+				bool f = true;
+			}
+
+
+		}
+
+		if (r.is_directory()) {
+			this->UnpackResources(fs, parent + "/" + r.filename());
+		}
+	}
+}
+
+*/
+
 bool PadmissPlugin::HasScreen(const char* sName)
 {
 	if (strcmp(sName, "ScreenPadmiss") == 0) {
@@ -109,54 +162,62 @@ void PadmissPlugin::PluginDelete(void* p)
 
 }
 
+bool PadmissPlugin::HookSocket()
+{
+	auto ws = PLUGINMAN->GetPlugin("WebSocketPlugin");
+	if (!ws)
+		return false;
+
+	auto fPtr = ws->GetSymbol<RegisterFunctionFunc>("RegisterFunction");
+
+	bool ret = false;
+	auto me = this;
+
+	ret = fPtr(ws->GetPlugin(), "Login", [me](SocketRequest* req) {
+		if (!req->request.isMember("playerNumber") || !req->request["playerNumber"].isInt())
+			return false;
+
+		if (!req->request.isMember("playerId") || !req->request["playerId"].isString())
+			return false;
+
+		int pn = req->request["playerNumber"].asInt();
+		if (pn < 0 || pn >= NUM_PLAYERS)
+			return false;
+
+		me->profileStates[pn].SignIn(req->request["playerId"].asString());
+
+		return true;
+	});
+
+	if (!ret)
+		return false;
+
+	ret = fPtr(ws->GetPlugin(), "Logout", [me](SocketRequest* req) {
+		if (!req->request.isMember("playerNumber") || !req->request["playerNumber"].isInt())
+			return false;
+
+		int pn = req->request["playerNumber"].asInt();
+		if (pn < 0 || pn >= NUM_PLAYERS)
+			return false;
+
+		me->profileStates[pn].SignOut();
+
+		return true;
+		});
+
+	if (!ret)
+		return false;
+
+	return true;
+}
+
 void PadmissPlugin::Update(float fDeltaTime)
 {
 	if (!loaded)
 	{
-		auto ws = PLUGINMAN->GetPlugin("WebsocketPlugin");
-		if (ws)
-		{
-			WebSocketPlugin* wsp = (WebSocketPlugin*)ws->GetPlugin();
-			if (wsp)
-			{
-				auto me = this;
+		this->HookSocket();
 
-				wsp->RegisterFunction("Login", [me](SocketRequest* req) {
-					if (!req->request.isMember("playerNumber") || !req->request["playerNumber"].isInt())
-						return false;
-
-					if (!req->request.isMember("playerId") || !req->request["playerId"].isString())
-						return false;
-
-					int pn = req->request["playerNumber"].asInt();
-					if (pn < 0 || pn >= NUM_PLAYERS)
-						return false;
-
-					me->profileStates[pn].SignIn(req->request["playerId"].asString());
-
-//					req->SetResponseField("message", 123);
-
-
-					return true;
-				});
-
-				wsp->RegisterFunction("Logout", [me](SocketRequest* req) {
-					if (!req->request.isMember("playerNumber") || !req->request["playerNumber"].isInt())
-						return false;
-
-					int pn = req->request["playerNumber"].asInt();
-					if (pn < 0 || pn >= NUM_PLAYERS)
-						return false;
-
-					me->profileStates[pn].SignOut();
-
-					return true;
-				});
-
-
-				loaded = true;
-			}
-		}
+		loaded = true;
 	}
 
 	if (trackInputs) {

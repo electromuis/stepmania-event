@@ -10,6 +10,7 @@
 #include "Actor.h"
 #include "RageInputDevice.h"
 #include "GameInput.h"
+#include "RageFileDriverCmrc.h"
 
 #include "PadmissClient.h"
 #include "ProfileState.h"
@@ -55,6 +56,7 @@ public:
 	PadmissPlugin();
 	~PadmissPlugin();
 
+	void UnpackResources(cmrc::embedded_filesystem fs, string parent);
 	bool HasScreen(const char* sName);
 	void PluginFreeScreen(void* p);
 	void PluginFree(void* p);
@@ -71,10 +73,12 @@ public:
 	bool IsWorking();
 	void SetTrackInputs(bool trackInputs);
 private:
+	bool HookSocket();
 	PadmissMessageSubscriber subscriber;
 	map<int, string> chartMap;
 	bool trackInputs = false;
 	bool lastInputStatus[NUM_GameController][MAX_NOTE_TRACKS] = { false };
 	bool loaded = false;
 	static ProfileState profileStates[NUM_PLAYERS];
+	RageFileDriverCmrc fs;
 };

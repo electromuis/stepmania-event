@@ -9,16 +9,6 @@
 #include "RageThreads.h"
 #include "JsonUtil.h"
 
-#ifdef _WIN32
-#    ifdef WS_PL_IMPORT
-#        define WS_PL_EXP __declspec(dllexport)
-#    else
-#        define WS_PL_EXP __declspec(dllimport)
-#    endif
-#else
-#	define WS_PL_EXP
-#endif
-
 struct SocketRequest
 {
 	Json::Value request;
@@ -26,16 +16,15 @@ struct SocketRequest
 
 	bool HandleRequest(std::string requestString);
 
-	WS_PL_EXP void SetResponseField(RString key, bool value);
-	WS_PL_EXP void SetResponseField(RString key, int value);
-	WS_PL_EXP void SetResponseField(RString key, RString value);
+	void SetResponseField(RString key, bool value);
+	void SetResponseField(RString key, int value);
+	void SetResponseField(RString key, RString value);
 };
 
 typedef std::function<bool(SocketRequest* req)> SocketFunction;
 
 class WebSocketPlugin;
 
-#ifndef WS_PL_IMPORT
 class WebSocketMessageSubscriber : public MessageSubscriber {
 public:
 	WebSocketMessageSubscriber(WebSocketPlugin* plugin);
@@ -45,21 +34,22 @@ public:
 private:
 	WebSocketPlugin* plugin;
 };
-#endif
 
 class WebSocketPlugin : public PluginBase {
 public:
 	WebSocketPlugin();
 	~WebSocketPlugin();
 
-	WS_PL_EXP void RegisterFunction(RString name, SocketFunction function);
+	void RegisterFunctionInternal(RString name, SocketFunction function);
 	void Update(float fDeltaTime);
+	void* GetSymbol(const char* name);
 
 	RString GetDocRoot();
 private:
 	std::string libraryPath;
 	RString lastScreen = "";
-#ifndef WS_PL_IMPORT
 	WebSocketMessageSubscriber subscriber;
-#endif
 };
+
+typedef bool(*RegisterFunctionFunc)(PluginBase* plugin, RString name, SocketFunction function);
+bool RegisterFunction(PluginBase* plugin, RString name, SocketFunction function);

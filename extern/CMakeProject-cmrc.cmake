@@ -1,0 +1,1 @@
+set(CMRC_DIR "${SM_EXTERN_DIR}/cmrc" PARENT_SCOPE)

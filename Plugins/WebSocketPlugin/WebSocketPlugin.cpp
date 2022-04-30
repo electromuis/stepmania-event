@@ -31,9 +31,27 @@ WebSocketPlugin::~WebSocketPlugin()
 	LOG->Info(PLUGIN_NAME" unloaded");
 }
 
-void WebSocketPlugin::RegisterFunction(RString name, SocketFunction function)
+void WebSocketPlugin::RegisterFunctionInternal(RString name, SocketFunction function)
 {
-	//handler->RegisterFunction(name, function);
+	handler->RegisterFunction(name, function);
+}
+
+bool RegisterFunction(PluginBase* p, RString name, SocketFunction function)
+{
+	WebSocketPlugin* plugin = dynamic_cast<WebSocketPlugin*>(p);
+	if (!plugin)
+		return false;
+
+	plugin->RegisterFunctionInternal(name, function);
+	return true;
+}
+
+void* WebSocketPlugin::GetSymbol(const char* name)
+{
+	if (strcmp(name, "RegisterFunction") == 0)
+		return RegisterFunction;
+
+	return nullptr;
 }
 
 RString WebSocketPlugin::GetDocRoot()

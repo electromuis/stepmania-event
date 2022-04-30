@@ -24,6 +24,7 @@ SET(PLUGINS_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 SET(LOADED_PLUGINS "")
 SET(TARGET_DEP_HOOKS "")
 SET(TARGET_NAME "")
+include("Modules/CMakeRC.cmake")
 
 MACRO(REGISTER_PLUGIN SOURCE_DIR PLUGIN_NAME)
 	SET(LOADED_PLUGINS ${LOADED_PLUGINS} "${PLUGIN_NAME}" PARENT_SCOPE)
@@ -72,7 +73,10 @@ MACRO(REGISTER_PLUGIN SOURCE_DIR PLUGIN_NAME)
 		"${SM_BASE}/src/generated"
 		"${SM_BASE}/extern/dynalo/include"
 		"${SM_BASE}/extern/jsoncpp"
+		"${SM_BASE}/extern/cmrc"
 	)
+	
+	
 	
 	IF(NOT WITH_PLUGINS_EMBEDDED)
 	
@@ -80,6 +84,13 @@ MACRO(REGISTER_PLUGIN SOURCE_DIR PLUGIN_NAME)
 			"jsoncpp"
 			"lua-5.1"
 		)
+		
+		IF(EXISTS "${SOURCE_DIR}/resources")
+			FILE(GLOB_RECURSE resources "${SOURCE_DIR}/resources/*.*")
+			cmrc_add_resource_library("${PLUGIN_NAME}Resources" ${resources})
+			list(APPEND SMDATA_LINK_LIB "${PLUGIN_NAME}Resources")
+			set_property(TARGET "${PLUGIN_NAME}Resources" PROPERTY FOLDER "Plugins")
+		ENDIF()
 		
 		IF(WIN32)
 			list(APPEND SMDATA_LINK_LIB "setupapi")

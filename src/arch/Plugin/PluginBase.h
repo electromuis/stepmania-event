@@ -19,5 +19,6 @@ public:
 	virtual void PluginFree(void* p) { free(p); };
 	virtual void PluginDelete(void* p) { delete(p); };
 	virtual bool HasScreen(const char* sName) { return false; };
+	virtual void* GetSymbol(const char* name) { return nullptr; };
 	virtual std::vector<PluginRegType>* GetLuaFunctions() { return nullptr; };
 };

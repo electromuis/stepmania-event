@@ -58,7 +58,7 @@ bool PMReader::IsConnected()
             }
         }
 
-        libusb_free_device_list(devs, 1);
+        //libusb_free_device_list(devs, 1);
 
 		if (!device)
 			return false;

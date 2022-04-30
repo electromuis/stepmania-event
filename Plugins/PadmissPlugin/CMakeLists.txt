@@ -26,7 +26,7 @@ target_include_directories(${PLUGIN_NAME} PUBLIC
 target_link_libraries(${PLUGIN_NAME}
 	tomcrypt
 	tommath
-	WebSocketPlugin
+	# WebSocketPlugin
 	
 	CURL::libcurl
 	libcurlpp

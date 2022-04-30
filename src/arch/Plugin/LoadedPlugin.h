@@ -26,6 +26,24 @@ public:
 	virtual bool IsLoaded(PluginLoadPhase phase = PluginLoadPhase_Plugin) = 0;
 	virtual PluginBase* GetPlugin();
 
+	template <typename FunctionSignature>
+	inline
+	FunctionSignature GetSymbol(const char* name)
+	{
+		if (!Load(PluginLoadPhase_Plugin))
+			return nullptr;
+
+		auto p = GetPlugin();
+		if (!p)
+			return nullptr;
+
+		void* sym = p->GetSymbol(name);
+		if (sym == nullptr)
+			return nullptr;
+
+		return reinterpret_cast<FunctionSignature>(sym);
+	};
+
 	void Update(float fDeltaTime);
 	void PluginFree(void* ptr);
 
@@ -61,7 +79,6 @@ protected:
 	PluginDetails* loadedDetails = nullptr;
 
 	std::string libraryPath;
-	std::string pluginName;
 };
 
 class LoadedPluginEmbedded : public LoadedPlugin {
