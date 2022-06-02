@@ -481,7 +481,7 @@ void ActorUtil::LoadAllCommandsFromName( Actor& actor, const RString &sMetricsGr
 	{
 		spoofName = matches[0] + "P1";
 		THEME->GetMetricsThatBeginWith(sMetricsGroup, spoofName, vsValueNames);
-		LOG->Info("Spoofed actor commands <" + sName + "> to P1");
+		// LOG->Info("Spoofed actor commands <" + sName + "> to P1");
 	}
 
 	for (RString const & sv : vsValueNames)

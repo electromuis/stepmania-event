@@ -43,10 +43,13 @@ function PlayFieldWidth()
 	return _screen.w / GetNumPlayers()
 end
 
-function GetPlayerPlayfieldX(player)
+function GetPlayerPlayfieldX(playerString)
+	local playerNumberReverse = PlayerNumber:Reverse()
+	local playerNumer = playerNumberReverse[playerString]
+	
 	local fieldWidth = PlayFieldWidth()
 	
-	return fieldWidth * player + (fieldWidth / 2)
+	return fieldWidth * playerNumer + (fieldWidth / 2)
 end
 
 function GetPlayerMetric(p1value, group, metric, player)

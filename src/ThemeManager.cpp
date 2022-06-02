@@ -845,7 +845,7 @@ try_element_again:
 
 			if (GetPathInfoToAndFallback(out, category, sMetricsGroup, spoofElementName))	// we found something
 			{
-				LOG->Info("Spoofed missing element <" + sMetricsGroup + " " + sElement + "> to P1");
+				// LOG->Info("Spoofed missing element <" + sMetricsGroup + " " + sElement + "> to P1");
 
 				Cache[sFileName] = out;
 				return true;
@@ -1066,7 +1066,7 @@ RString ThemeManager::GetMetricRaw( const IniFile &ini, const RString &sMetricsG
 				LuaHelpers::RunExpression(L, "GetPlayerMetric", sName);
 
 				if (lua_type(L, -1) == LUA_TFUNCTION) {
-					LOG->Info("Redirect player metric <" + metricName + "> to GetPlayerMetric");
+					// LOG->Info("Redirect player metric <" + metricName + "> to GetPlayerMetric");
 
 					lua_pushstring(L, p1Value);
 					lua_pushstring(L, groupName);
