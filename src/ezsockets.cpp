@@ -174,8 +174,9 @@ bool EzSockets::create(EzSockets_Proto Protocol, int Type)
 
 	data->sock = socket(AF_INET, Type, realproto);
 	if (data->sock > SOCKET_NONE) {
-		struct timeval tv = { 5, 0 };
-		setsockopt(data->sock, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof(struct timeval));
+		int timeout = 1000;
+		int sz = sizeof(timeout);
+		setsockopt(data->sock, SOL_SOCKET, SO_RCVTIMEO, (const char *)&timeout, sz);
 	}
 	lastCode = data->sock;
 	return data->sock > SOCKET_NONE;	// Socket must be Greater than 0
@@ -550,14 +551,18 @@ int EzSockets::pUpdateRead()
 {
 	char tempData[1024];
 	int bytes = pReadData(tempData);
+	int sockErr = 0;
 
 	if (bytes > 0)
 		inBuffer.append(tempData, bytes);
 	else if (bytes <= 0)
+	{
 		/* To get her I think CanRead was called at least once.
-		So if length equals 0 and can read says there is data than 
+		So if length equals 0 and can read says there is data than
 		the socket was closed.*/
+		sockErr = WSAGetLastError();
 		state = skERROR;
+	}
 	return bytes;
 }
 

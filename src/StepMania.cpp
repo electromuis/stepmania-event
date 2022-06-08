@@ -64,6 +64,7 @@
 #include "NetworkSyncManager.h"
 #include "MessageManager.h"
 #include "StatsManager.h"
+#include "PluginManager.h"
 #include "GameLoop.h"
 #include "SpecialFiles.h"
 #include "Profile.h"
@@ -327,6 +328,7 @@ void ShutdownGame()
 	SAFE_DELETE( TEXTUREMAN );
 	SAFE_DELETE( DISPLAY );
 	Dialog::Shutdown();
+	SAFE_DELETE(PLUGINMAN);
 	SAFE_DELETE( LOG );
 	SAFE_DELETE( FILEMAN );
 	SAFE_DELETE( LUA );
@@ -1078,6 +1080,9 @@ int sm_main(int argc, char* argv[])
 
 	AdjustForChangedSystemCapabilities();
 
+	// Load the plugin system including plugin files
+	PLUGINMAN = new PluginManager;
+
 	GAMEMAN		= new GameManager;
 	THEME		= new ThemeManager;
 	ANNOUNCER	= new AnnouncerManager;
@@ -1204,6 +1209,8 @@ int sm_main(int argc, char* argv[])
 	// These things depend on the TextureManager, so do them after!
 	FONT		= new FontManager;
 	SCREENMAN	= new ScreenManager;
+
+	PLUGINMAN->LoadAll();
 
 	StepMania::ResetGame();
 

@@ -1,6 +1,6 @@
 #include "global.h"
 #include "NotesLoaderJson.h"
-#include "json/value.h"
+#include "json/json.h"
 #include "TimingData.h"
 #include "RageUtil.h"
 #include "JsonUtil.h"
@@ -214,7 +214,7 @@ static void Deserialize( Song &out, const Json::Value &root )
 		JsonUtil::DeserializeVectorObjects( vBgc, Deserialize, root["ForegroundChanges"] );
 	}
 
-	JsonUtil::DeserializeArrayValuesIntoVector( out.m_vsKeysoundFile, root["KeySounds"] );
+	out.m_vsKeysoundFile = JsonUtil::DeserializeArrayStrings(root["KeySounds"]);
 
 	{
 		vector<Steps*> vpSteps;

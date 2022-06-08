@@ -21,6 +21,8 @@
 #undef MACHINE
 #endif
 
+#define GLOBALS_IMPORT_PREFIX
+
 #include "archutils/Common/gcc_byte_swaps.h"
 #endif
 

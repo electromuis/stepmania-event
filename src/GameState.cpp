@@ -246,7 +246,7 @@ void GameState::ApplyCmdline()
 	RString sPlayer;
 	for( int i = 0; GetCommandlineArgument( "player", &sPlayer, i ); ++i )
 	{
-		int pn = std::stoi( sPlayer )-1;
+		int pn = StringToInt( sPlayer )-1;
 		if( !IsAnInt( sPlayer ) || pn < 0 || pn >= NUM_PLAYERS )
 			RageException::Throw( "Invalid argument \"--player=%s\".", sPlayer.c_str() );
 
@@ -1927,6 +1927,12 @@ bool GameState::CurrentOptionsDisqualifyPlayer( PlayerNumber pn )
 		return false;
 
 	const PlayerOptions &po = m_pPlayerState[pn]->m_PlayerOptions.GetPreferred();
+	const SongOptions &so = m_SongOptions.GetPreferred();
+
+	// Playing a song/course at a slower music rate should disqualify score. -x0rbl
+	if (so.m_fMusicRate < 1.0) {
+		return true;
+	}
 
 	// Check the stored player options for disqualify.  Don't disqualify because
 	// of mods that were forced.

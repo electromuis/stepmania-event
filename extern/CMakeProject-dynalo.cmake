@@ -1,0 +1,2 @@
+set(DYNALO_DIR "${SM_EXTERN_DIR}/dynalo")
+set(DYNALO_INCLUDE_DIRS "${DYNALO_DIR}/include" PARENT_SCOPE)

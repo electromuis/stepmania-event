@@ -179,13 +179,29 @@ RString ArchHooks::GetPreferredLanguage()
 {
 	RString locale;
 
-	if(getenv("LANG"))
+	if (getenv("LANG"))
 	{
 		locale = getenv("LANG");
-		locale = locale.substr(0,2);
+		RString region = locale.substr(3, 2);
+		locale = locale.substr(0, 2);
+
+		if (locale == "zh")
+		{
+			if (region == "CN" || region == "SG")
+			{
+				locale = "zh-Hans";
+			}
+			else if (region == "HK" || region == "TW")
+			{
+				locale = "zh-Hant";
+			}
+		}
 	}
 	else
+	{
+		LOG->Warn("Unable to determine system language. Using English.");
 		locale = "en";
+	}
 
 	return locale;
 }
@@ -370,16 +386,6 @@ RString ArchHooks_Unix::GetClipboard()
 static LocalizedString COULDNT_FIND_SONGS( "ArchHooks_Unix", "Couldn't find 'Songs'" );
 void ArchHooks::MountInitialFilesystems( const RString &sDirOfExecutable )
 {
-#if defined(UNIX)
-	/* Mount the root filesystem, so we can read files in /proc, /etc, and so on.
-	 * This is /rootfs, not /root, to avoid confusion with root's home directory. */
-	FILEMAN->Mount( "dir", "/", "/rootfs" );
-
-	/* Mount /proc, so Alsa9Buf::GetSoundCardDebugInfo() and others can access it.
-	 * (Deprecated; use rootfs.) */
-	FILEMAN->Mount( "dir", "/proc", "/proc" );
-#endif
-
 	RString Root;
 	struct stat st;
 	if( !stat(sDirOfExecutable + "/Packages", &st) && st.st_mode&S_IFDIR )

@@ -1,6 +1,7 @@
 #ifndef INPUT_MAPPER_H
 #define INPUT_MAPPER_H
 
+#include "global.h"
 #include "RageInputDevice.h"
 #include "GameInput.h"
 #include "PlayerNumber.h"
@@ -207,7 +208,7 @@ private:
 	InputMapper& operator=(const InputMapper& rhs);
 };
 
-extern InputMapper*	INPUTMAPPER;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern InputMapper*	INPUTMAPPER;	// global and accessible from anywhere in our program
 
 #endif
 

@@ -185,7 +185,7 @@ else()
     list(APPEND SMDATA_ARCH_LOADING_HPP
                 "arch/LoadingWindow/LoadingWindow_MacOSX.h")
   elseif(LINUX)
-    if(GTK2_FOUND)
+    if(GTK3_FOUND)
       list(APPEND SMDATA_ARCH_LOADING_SRC
                   "arch/LoadingWindow/LoadingWindow_Gtk.cpp")
       list(APPEND SMDATA_ARCH_LOADING_HPP
@@ -206,6 +206,7 @@ list(APPEND SMDATA_ARCH_LIGHTS_HPP "arch/Lights/LightsDriver.h"
 
 list(APPEND SMDATA_ARCH_LIGHTS_SRC "arch/Lights/LightsDriver_SextetStream.cpp")
 list(APPEND SMDATA_ARCH_LIGHTS_HPP "arch/Lights/LightsDriver_SextetStream.h")
+list(APPEND SMDATA_ARCH_LIGHTS_HPP "arch/Lights/SextetUtils.h")
 
 # TODO: Confirm if Apple can use the export.
 if(NOT APPLE)
@@ -214,10 +215,12 @@ if(NOT APPLE)
 
   if(WIN32)
     list(APPEND SMDATA_ARCH_LIGHTS_SRC
+                "arch/Lights/LightsDriver_Win32Serial.cpp"
                 "arch/Lights/LightsDriver_Win32Parallel.cpp"
                 "arch/Lights/LightsDriver_PacDrive.cpp")
     list(APPEND SMDATA_ARCH_LIGHTS_HPP
                 "arch/Lights/LightsDriver_Win32Parallel.h"
+                "arch/Lights/LightsDriver_Win32Serial.h"
                 "arch/Lights/LightsDriver_PacDrive.cpp")
     if(WITH_MINIMAID)
       list(APPEND SMDATA_ARCH_LIGHTS_SRC
@@ -227,16 +230,23 @@ if(NOT APPLE)
     endif()
   else() # Unix/Linux TODO: Linux HAVE_PARALLEL_PORT
     if(LINUX)
+      list(APPEND SMDATA_LINK_LIB "udev")
       list(APPEND SMDATA_ARCH_LIGHTS_SRC
+                  "arch/Lights/LightsDriver_Linux_Leds.cpp"
                   "arch/Lights/LightsDriver_Linux_PIUIO.cpp"
                   "arch/Lights/LightsDriver_Linux_PIUIO_Leds.cpp"
-                  "arch/Lights/LightsDriver_LinuxWeedTech.cpp"
-                  "arch/Lights/LightsDriver_LinuxParallel.cpp")
+                  "arch/Lights/LightsDriver_Linux_PIUIOBTN_Leds.cpp"
+                  "arch/Lights/LightsDriver_Linux_ITGIO.cpp"
+                  "arch/Lights/LightsDriver_Linux_stac.cpp"
+                  "arch/Lights/LightsDriver_LinuxWeedTech.cpp")
       list(APPEND SMDATA_ARCH_LIGHTS_HPP
+                  "arch/Lights/LightsDriver_Linux_Leds.h"
                   "arch/Lights/LightsDriver_Linux_PIUIO.h"
                   "arch/Lights/LightsDriver_Linux_PIUIO_Leds.h"
-                  "arch/Lights/LightsDriver_LinuxWeedTech.h"
-                  "arch/Lights/LightsDriver_LinuxParallel.h")
+                  "arch/Lights/LightsDriver_Linux_PIUIOBTN_Leds.h"
+                  "arch/Lights/LightsDriver_Linux_ITGIO.h"
+                  "arch/Lights/LightsDriver_Linux_stac.h"
+                  "arch/Lights/LightsDriver_LinuxWeedTech.h")
       if(WITH_PARALLEL_PORT)
         list(APPEND SMDATA_ARCH_LIGHTS_SRC
                     "arch/Lights/LightsDriver_LinuxParallel.cpp")
@@ -363,6 +373,29 @@ source_group("Arch Specific\\\\Arch Hooks"
              ${SMDATA_ARCH_HOOKS_SRC}
              ${SMDATA_ARCH_HOOKS_HPP})
 
+list(APPEND SMDATA_ARCH_PLUGIN_SRC 
+	"arch/Plugin/PluginDriver.cpp"
+	"arch/Plugin/LoadedPlugin.cpp"
+	"arch/Plugin/PluginDriver_Null.cpp")
+list(APPEND SMDATA_ARCH_PLUGIN_HPP 
+	"arch/Plugin/PluginDriver.h"
+	"arch/Plugin/PluginBase.h"
+	"arch/Plugin/LoadedPlugin.h"
+	"arch/Plugin/PluginDriver_Null.h")
+
+if(WIN32)
+    list(APPEND SMDATA_ARCH_PLUGIN_SRC "arch/Plugin/PluginDriver_Win32.cpp")
+	list(APPEND SMDATA_ARCH_PLUGIN_HPP "arch/Plugin/PluginDriver_Win32.h")
+elseif(LINUX)
+	list(APPEND SMDATA_ARCH_PLUGIN_SRC "arch/Plugin/PluginDriver_Linux.cpp")
+	list(APPEND SMDATA_ARCH_PLUGIN_HPP "arch/Plugin/PluginDriver_Linux.h")
+endif()
+
+source_group("Arch Specific\\\\Plugin"
+             FILES
+             ${SMDATA_ARCH_PLUGIN_SRC}
+             ${SMDATA_ARCH_PLUGIN_HPP})
+
 list(APPEND SMDATA_ALL_ARCH_SRC
             ${SMDATA_ARCH_SRC}
             ${SMDATA_ARCH_DIALOG_SRC}
@@ -374,7 +407,8 @@ list(APPEND SMDATA_ALL_ARCH_SRC
             ${SMDATA_ARCH_MEMORY_SRC}
             ${SMDATA_ARCH_MOVIE_TEXTURE_SRC}
             ${SMDATA_ARCH_SOUND_SRC}
-            ${SMDATA_ARCH_THREADS_SRC})
+            ${SMDATA_ARCH_THREADS_SRC}
+			${SMDATA_ARCH_PLUGIN_SRC})
 list(APPEND SMDATA_ALL_ARCH_HPP
             ${SMDATA_ARCH_HPP}
             ${SMDATA_ARCH_DIALOG_HPP}
@@ -386,4 +420,5 @@ list(APPEND SMDATA_ALL_ARCH_HPP
             ${SMDATA_ARCH_MEMORY_HPP}
             ${SMDATA_ARCH_MOVIE_TEXTURE_HPP}
             ${SMDATA_ARCH_SOUND_HPP}
-            ${SMDATA_ARCH_THREADS_HPP})
+            ${SMDATA_ARCH_THREADS_HPP}
+			${SMDATA_ARCH_PLUGIN_HPP})

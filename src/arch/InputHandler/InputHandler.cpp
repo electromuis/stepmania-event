@@ -6,6 +6,7 @@
 #include "LocalizedString.h"
 #include "arch/arch_default.h"
 #include "InputHandler_MonkeyKeyboard.h"
+//#include "InputHandler_NSEvent.hpp"
 
 
 void InputHandler::UpdateTimer()
@@ -127,6 +128,9 @@ RString InputHandler::GetDeviceSpecificInputString( const DeviceInput &di )
 
 	if( di.device == DEVICE_KEYBOARD )
 	{
+		if( di.button >= KEY_KP_C0 && di.button <= KEY_KP_ENTER )
+			return DeviceButtonToString( di.button );
+
 		wchar_t c = DeviceButtonToChar( di.button, false );
 		if( c && c != L' ' ) // Don't show "Key  " for space.
 			return InputDeviceToString( di.device ) + " " + Capitalize( WStringToRString(wstring()+c) );
@@ -192,6 +196,7 @@ void InputHandler::Create( const RString &drivers_, vector<InputHandler *> &Add 
 
 	// Always add
 	Add.push_back( new InputHandler_MonkeyKeyboard );
+//    Add.push_back( new InputHandler_NSEvent );
 }
 
 

@@ -9,6 +9,8 @@
 #include "LuaManager.h"
 #include <float.h>
 
+#include <json/json.h>
+
 #include <numeric>
 #include <ctime>
 #include <sstream>
@@ -218,18 +220,18 @@ bool IsHexVal( const RString &s )
 		return false;
 
 	for( size_t i=0; i < s.size(); ++i )
-		if( !(s[i] >= '0' && s[i] <= '9') && 
+		if( !(s[i] >= '0' && s[i] <= '9') &&
 			!(toupper(s[i]) >= 'A' && toupper(s[i]) <= 'F'))
 			return false;
 
 	return true;
 }
 
-RString BinaryToHex( const void *pData_, int iNumBytes )
+RString BinaryToHex( const void *pData_, size_t iNumBytes )
 {
 	const unsigned char *pData = (const unsigned char *) pData_;
 	RString s;
-	for( int i=0; i<iNumBytes; i++ )
+	for( size_t i=0; i<iNumBytes; i++ )
 	{
 		unsigned val = pData[i];
 		s += ssprintf( "%02x", val );
@@ -276,8 +278,8 @@ float HHMMSSToSeconds( const RString &sHHMMSS )
 		arrayBits.insert(arrayBits.begin(), "0" );	// pad missing bits
 
 	float fSeconds = 0;
-	fSeconds += std::stoi( arrayBits[0] ) * 60 * 60;
-	fSeconds += std::stoi( arrayBits[1] ) * 60;
+	fSeconds += StringToInt( arrayBits[0] ) * 60 * 60;
+	fSeconds += StringToInt( arrayBits[1] ) * 60;
 	fSeconds += StringToFloat( arrayBits[2] );
 
 	return fSeconds;
@@ -339,7 +341,7 @@ RString PrettyPercent( float fNumerator, float fDenominator)
 	return ssprintf("%0.2f%%",fNumerator/fDenominator*100);
 }
 
-RString Commify( int iNum ) 
+RString Commify( int iNum )
 {
 	RString sNum = ssprintf("%d",iNum);
 	return Commify( sNum );
@@ -494,7 +496,7 @@ RString vssprintf( const char *szFormat, va_list argList )
 			/* OK */
 			sStr.assign(buf, used);
 		}
-		
+
 		delete [] buf;
 		if (used != -1)
 		{
@@ -547,7 +549,6 @@ RString ConvertI64FormatString( const RString &sStr ) { return sStr; }
 #endif
 
 /* ISO-639-1 codes: http://www.loc.gov/standards/iso639-2/php/code_list.php
- * native forms: http://people.w3.org/rishida/names/languages.html
  * We don't use 3-letter codes, so we don't bother supporting them. */
 static const LanguageInfo g_langs[] =
 {
@@ -688,7 +689,8 @@ static const LanguageInfo g_langs[] =
 	{"xh", "Xhosa"},
 	{"yi", "Yiddish"},
 	{"yo", "Yoruba"},
-	{"zh", "Chinese"},
+	{"zh-Hans", "Chinese (Simplified)"},
+	{"zh-Hant", "Chinese (Traditional)"},
 	{"zu", "Zulu"},
 };
 
@@ -956,9 +958,9 @@ void splitpath( const RString &sPath, RString &sDir, RString &sFilename, RString
 	vector<RString> asMatches;
 
 	/*
-	 * One level of escapes for the regex, one for C. Ew. 
+	 * One level of escapes for the regex, one for C. Ew.
 	 * This is really:
-	 * ^(.*[\\/])?(.*)$ 
+	 * ^(.*[\\/])?(.*)$
 	 */
 	static Regex sep("^(.*[\\\\/])?(.*)$");
 	bool bCheck = sep.Compare( sPath, asMatches );
@@ -1248,10 +1250,10 @@ float calc_stddev( const float *pStart, const float *pEnd, bool bSample )
 bool CalcLeastSquares( const vector< pair<float, float> > &vCoordinates,
                        float &fSlope, float &fIntercept, float &fError )
 {
-	if( vCoordinates.empty() ) 
+	if( vCoordinates.empty() )
 		return false;
 	float fSumXX = 0.0f, fSumXY = 0.0f, fSumX = 0.0f, fSumY = 0.0f;
-	for( unsigned i = 0; i < vCoordinates.size(); ++i ) 
+	for( unsigned i = 0; i < vCoordinates.size(); ++i )
 	{
 		fSumXX += vCoordinates[i].first * vCoordinates[i].first;
 		fSumXY += vCoordinates[i].first * vCoordinates[i].second;
@@ -1263,7 +1265,7 @@ bool CalcLeastSquares( const vector< pair<float, float> > &vCoordinates,
 	fIntercept = (fSumXX * fSumY - fSumX * fSumXY) / fDenominator;
 
 	fError = 0.0f;
-	for( unsigned i = 0; i < vCoordinates.size(); ++i ) 
+	for( unsigned i = 0; i < vCoordinates.size(); ++i )
 	{
 		const float fOneError = fIntercept + fSlope * vCoordinates[i].first - vCoordinates[i].second;
 		fError += fOneError * fOneError;
@@ -1877,27 +1879,20 @@ void MakeLower( wchar_t *p, size_t iLen )
 
 float StringToFloat( const RString &sString )
 {
-	RString toTrim = sString;
-	Trim(toTrim);
-	if (toTrim.size() == 0)
+	float fOut = std::strtof(sString, nullptr);
+	if (!isfinite(fOut))
 	{
-		return 0;
+		fOut = 0.0f;
 	}
-	return std::stof(toTrim);
+	return fOut;
 }
 
 bool StringToFloat( const RString &sString, float &fOut )
 {
-	RString toTrim = sString;
-	Trim(toTrim);
-	if (toTrim.size() == 0)
-	{
-		return false;
-	}
-	char *endPtr;
+	char *endPtr = nullptr;
 
-	fOut = strtof( toTrim, &endPtr );
-	return *endPtr == '\0' && isfinite( fOut );
+	fOut = std::strtof(sString, &endPtr);
+	return sString.size() && *endPtr == '\0' && isfinite(fOut);
 }
 
 RString FloatToString( const float &num )
@@ -1905,6 +1900,51 @@ RString FloatToString( const float &num )
 	stringstream ss;
 	ss << num;
 	return ss.str();
+}
+
+int StringToInt( const std::string& str, std::size_t* pos, int base, int exceptVal )
+{
+  try
+  {
+    return std::stoi(str, pos, base);
+  }
+  catch (const std::invalid_argument & e) {
+    LOG->Warn( "stoi(%s): %s", str.c_str(), e.what() );
+  }
+  catch (const std::out_of_range & e) {
+    LOG->Warn( "stoi(%s): %s", str.c_str(), e.what() );
+  }
+  return exceptVal;
+}
+
+long StringToLong( const std::string& str, std::size_t* pos, int base, long exceptVal )
+{
+  try
+  {
+    return std::stol(str, pos, base);
+  }
+  catch (const std::invalid_argument & e) {
+    LOG->Warn( "stol(%s): %s", str.c_str(), e.what() );
+  }
+  catch (const std::out_of_range & e) {
+    LOG->Warn( "stol(%s): %s", str.c_str(), e.what() );
+  }
+  return exceptVal;
+}
+
+long long StringToLLong( const std::string& str, std::size_t* pos, int base, long long exceptVal )
+{
+  try
+  {
+    return std::stoll(str, pos, base);
+  }
+  catch (const std::invalid_argument & e) {
+    LOG->Warn( "stoll(%s): %s", str.c_str(), e.what() );
+  }
+  catch (const std::out_of_range & e) {
+    LOG->Warn( "stoll(%s): %s", str.c_str(), e.what() );
+  }
+  return exceptVal;
 }
 
 const wchar_t INVALID_CHAR = 0xFFFD; /* U+FFFD REPLACEMENT CHARACTER */
@@ -1923,7 +1963,7 @@ wstring RStringToWstring( const RString &s )
 			++start;
 			continue;
 		}
-		
+
 		wchar_t ch = L'\0';
 		if( !utf8_to_wchar( s.data(), s.size(), start, ch ) )
 			ch = INVALID_CHAR;
@@ -2156,13 +2196,13 @@ RString Dirname( const RString &dir )
 	return dir.substr(0, pos+1);
 }
 
-RString Capitalize( const RString &s )	
+RString Capitalize( const RString &s )
 {
 	if( s.empty() )
 		return RString();
 
 	char *buf = const_cast<char *>(s.c_str());
-	
+
 	UnicodeDoUpper( buf, s.size(), g_UpperCase );
 
 	return buf;
@@ -2292,7 +2332,7 @@ void CollapsePath( RString &sPath, bool bRemoveLeadingDot )
 
 		sOut.append( sPath, iPos, iNext-iPos );
 	}
-	
+
 	sOut.swap( sPath );
 }
 
@@ -2331,7 +2371,7 @@ namespace StringConversion
 		if( sValue.size() == 0 )
 			return false;
 
-		out = (std::stoi(sValue) != 0);
+		out = StringToInt(sValue) != 0;
 		return true;
 	}
 
@@ -2444,6 +2484,19 @@ LuaFunction( PrettyPercent, PrettyPercent( FArg(1), FArg(2) ) );
 //LuaFunction( IsHexVal, IsHexVal( SArg(1) ) );
 LuaFunction( lerp, lerp(FArg(1), FArg(2), FArg(3)) );
 
+int LuaFunc_BinaryToHex(lua_State* L);
+int LuaFunc_BinaryToHex(lua_State* L)
+{
+	size_t l;
+	const char *s = luaL_checklstring(L, 1, &l);
+
+	RString hex = BinaryToHex(s, l);
+
+	LuaHelpers::Push(L, hex);
+	return 1;
+}
+LUAFUNC_REGISTER_COMMON(BinaryToHex);
+
 int LuaFunc_commify(lua_State* L);
 int LuaFunc_commify(lua_State* L)
 {
@@ -2464,7 +2517,205 @@ int LuaFunc_commify(lua_State* L)
 }
 LUAFUNC_REGISTER_COMMON(commify);
 
-void luafunc_approach_internal(lua_State* L, int valind, int goalind, int speedind, const float mult);
+int LuaFunc_JsonEncode(lua_State* L);
+int LuaFunc_JsonEncode(lua_State* L)
+{
+	int argc = lua_gettop(L);
+	bool minified = false;
+
+	if (argc < 1 || argc > 2)
+	{
+		luaL_error(L, "JsonEncode must be called with one or two arguments");
+	}
+
+	if (argc == 2)
+	{
+		minified = lua_toboolean(L, 2);
+	}
+
+	std::function<Json::Value(int)> convert = [&L, &convert](int index) -> Json::Value
+	{
+		if (lua_isboolean(L, index))
+		{
+			return Json::Value(static_cast<bool>(lua_toboolean(L, index)));
+		}
+		else if (lua_isnil(L, index))
+		{
+			return Json::Value(Json::nullValue);
+		}
+		else if (lua_isnumber(L, index))
+		{
+			double val = lua_tonumber(L, index);
+
+			if (val == static_cast<Json::UInt>(val))
+			{
+				return Json::Value(static_cast<Json::UInt>(val));
+			}
+			else if (val == static_cast<Json::Int>(val))
+			{
+				return Json::Value(static_cast<Json::Int>(val));
+			}
+			return Json::Value(val);
+		}
+		else if (lua_isstring(L, index))
+		{
+			size_t len;
+			const char *s = lua_tolstring(L, index, &len);
+
+			return Json::Value(std::string(s, len));
+		}
+		else if (lua_istable(L, index))
+		{
+			// if the index is relative to the top of the stack,
+			// then calculate the absolute index, so we have a
+			// stable reference
+			if (index < 0)
+			{
+				index = lua_gettop(L) + index + 1;
+			}
+
+			size_t len = lua_objlen(L, index);
+
+			if (len > 0)
+			{
+				// array
+				Json::Value array(Json::arrayValue);
+				array.resize(len);
+
+				for (int i = 0; i < len; i++)
+				{
+					lua_rawgeti(L, index, i + 1);
+					array[i] = convert(-1);
+					lua_pop(L, 1);
+				}
+
+				return array;
+			}
+			else
+			{
+				// object
+				Json::Value obj(Json::objectValue);
+
+				lua_pushnil(L);
+				while (lua_next(L, index) != 0)
+				{
+					if (!lua_isstring(L, -2))
+					{
+						luaL_error(L, "object keys must be strings");
+					}
+
+					size_t keylen;
+					const char *key = lua_tolstring(L, -2, &keylen);
+					obj[std::string(key, keylen)] = convert(-1);
+					lua_pop(L, 1);
+				}
+
+				if (obj.size() < 1)
+				{
+					return Json::Value(Json::arrayValue);
+				}
+				return obj;
+			}
+
+		}
+
+		int tp = lua_type(L, index);
+		luaL_error(L, "%s is not JSON serializable", lua_typename(L, tp));
+		return Json::Value(Json::nullValue);	/* not reached */
+	};
+
+	Json::Value root = convert(1);
+
+	std::string data;
+	if(!minified)
+	{
+		Json::StyledWriter writer;
+		data = writer.write(root);
+	}
+	else
+	{
+		Json::FastWriter writer;
+		data = writer.write(root);
+	}
+
+	lua_pushlstring(L, data.c_str(), data.length());
+	return 1;
+}
+LUAFUNC_REGISTER_COMMON(JsonEncode);
+
+int LuaFunc_JsonDecode(lua_State* L);
+int LuaFunc_JsonDecode(lua_State* L)
+{
+	int argc = lua_gettop(L);
+
+	if (argc < 1)
+	{
+		luaL_error(L, "JsonDecode requires an argument");
+	}
+
+	size_t datalen;
+	const char *data = lua_tolstring(L, 1, &datalen);
+
+	Json::Reader reader;
+	Json::Value root;
+
+	bool ok = reader.parse(std::string(data, datalen), root, true);
+	if (!ok)
+	{
+		std::string error = reader.getFormattedErrorMessages();
+		luaL_error(L, "failed to parse JSON: %s", error.c_str());
+	}
+
+	std::function<void(const Json::Value&)> convert = [&L, &convert](const Json::Value& val)
+	{
+		if (val.isNull())
+		{
+			lua_pushnil(L);
+		}
+		else if (val.isInt() || val.isUInt() || val.isDouble())
+		{
+			lua_pushnumber(L, val.asDouble());
+		}
+		else if (val.isString())
+		{
+			std::string s = val.asString();
+			lua_pushlstring(L, s.c_str(), s.length());
+		}
+		else if (val.isBool())
+		{
+			lua_pushboolean(L, val.asBool());
+		}
+		else if (val.isArray())
+		{
+			lua_createtable(L, val.size(), 0);
+			for (int i = 0; i < val.size(); i++)
+			{
+				convert(val[i]);
+				lua_rawseti(L, -2, i + 1);
+			}
+		}
+		else if (val.isObject())
+		{
+			lua_createtable(L, 0, val.size());
+			for (const std::string& member : val.getMemberNames())
+			{
+				lua_pushlstring(L, member.c_str(), member.length());
+				convert(val[member]);
+				lua_rawset(L, -3);
+			}
+		}
+		else
+		{
+			luaL_error(L, "failed to parse JSON: invalid type");
+		}
+	};
+
+	convert(root);
+	return 1;
+}
+LUAFUNC_REGISTER_COMMON(JsonDecode);
+
+void luafunc_approach_internal(lua_State* L, int valind, int goalind, int speedind, const float mult, int process_index);
 void luafunc_approach_internal(lua_State* L, int valind, int goalind, int speedind, const float mult, int process_index)
 {
 #define TONUMBER_NICE(dest, num_name, index) \

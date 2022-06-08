@@ -63,6 +63,9 @@ option(WITH_SYSTEM_JPEG "Build with system jpeglib" OFF)
 option(WITH_SYSTEM_PCRE "Build with system PCRE" OFF)
 option(WITH_SYSTEM_ZLIB "Build against system zlib" OFF)
 
+option(WITH_PLUGINS "Build LibStepmania and compile plugins" OFF)
+option(WITH_PLUGINS_EMBEDDED "Compile plugins into the binary" OFF)
+
 option(WITH_SDL "Build with SDL" OFF)
 
 if(NOT MSVC)
@@ -96,7 +99,7 @@ elseif(LINUX)
   option(WITH_TTY "Build with Linux TTY Input Support." OFF)
   option(WITH_PROFILING "Build with Profiling Support." OFF)
   option(WITH_GLES2 "Build with OpenGL ES 2.0 Support." ON)
-  option(WITH_GTK2 "Build with GTK2 Support." ON)
+  option(WITH_GTK3 "Build with GTK3 Support." ON)
   option(WITH_PARALLEL_PORT "Build with Parallel Lights I/O Support." OFF)
   option(WITH_CRASH_HANDLER "Build with Crash Handler Support." ON)
   option(WITH_XINERAMA

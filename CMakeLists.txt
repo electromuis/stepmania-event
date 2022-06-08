@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.4)
 
 project(StepMania)
 
@@ -9,3 +9,8 @@ add_subdirectory(extern)
 
 # The internal libraries and eventual executable to be used.
 add_subdirectory(src)
+
+if(WITH_PLUGINS)
+	# Optional plugins people might want to compile
+	add_subdirectory(Plugins)
+endif()

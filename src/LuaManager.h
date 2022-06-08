@@ -8,12 +8,16 @@ class RageMutex;
 class XNode;
 class LuaReference;
 
+#ifndef _MSC_VER
 extern "C"
 {
+#endif
 #include "../extern/lua-5.1/src/lua.h"
 #include "../extern/lua-5.1/src/lualib.h"
 #include "../extern/lua-5.1/src/lauxlib.h"
+#ifndef _MSC_VER
 }
+#endif
 
 // For Dialog::Result
 #include "arch/Dialog/Dialog.h"
@@ -50,7 +54,7 @@ private:
 	LuaManager(const LuaManager& rhs);
 };
 
-extern LuaManager *LUA;
+GLOBALS_IMPORT_PREFIX extern LuaManager *LUA;
 
 
 /** @brief Utilities for working with Lua. */

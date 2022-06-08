@@ -81,7 +81,7 @@ private:
 	RageFileBasic *OpenForWriting( const RString &sPath, int iMode, int &iError );
 };
 
-extern RageFileManager *FILEMAN;
+GLOBALS_IMPORT_PREFIX extern RageFileManager *FILEMAN;
 
 #endif
 

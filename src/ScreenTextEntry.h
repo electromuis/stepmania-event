@@ -105,8 +105,8 @@ public:
 	virtual void Update( float fDelta );
 	virtual bool Input( const InputEventPlus &input );
 
-	static RString s_sLastAnswer;
-	static bool s_bCancelledLast;
+	GLOBALS_IMPORT_PREFIX static RString s_sLastAnswer;
+	GLOBALS_IMPORT_PREFIX static bool s_bCancelledLast;
 
 	// Lua
 	virtual void PushSelf( lua_State *L );

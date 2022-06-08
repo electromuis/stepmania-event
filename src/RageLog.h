@@ -3,6 +3,8 @@
 #ifndef RAGE_LOG_H
 #define RAGE_LOG_H
 
+#include "global.h"
+
 class RageLog
 {
 public:
@@ -43,7 +45,7 @@ private:
 	void AddToRecentLogs( const RString &buf );
 };
 
-extern RageLog*	LOG;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern RageLog*	LOG;	// global and accessible from anywhere in our program
 #endif
 
 /*

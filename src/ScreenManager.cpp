@@ -72,6 +72,7 @@
 #include "ScreenDimensions.h"
 #include "ActorUtil.h"
 #include "InputEventPlus.h"
+#include "PluginManager.h"
 
 ScreenManager*	SCREENMAN = nullptr;	// global and accessible from anywhere in our program
 
@@ -239,6 +240,8 @@ ScreenManager::ScreenManager()
 		LUA->Release( L );
 	}
 
+	int t = sizeof(string);
+
 	g_pSharedBGA = new Actor;
 
 	m_bReloadOverlayScreensAfterInput= false;
@@ -403,7 +406,7 @@ ScreenMessage ScreenManager::PopTopScreenInternal( bool bSendLoseFocus )
 		if( ls.m_bDeleteWhenDone )
 		{
 			BeforeDeleteScreen();
-			SAFE_DELETE( ls.m_pScreen );
+			SAFE_DELETE(ls.m_pScreen);
 			AfterDeleteScreen();
 		}
 	}

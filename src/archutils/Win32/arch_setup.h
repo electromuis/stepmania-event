@@ -180,6 +180,13 @@ inline uint16_t ArchSwap16( uint16_t n )
 }
 #endif
 
+// Allow importing global variables for the PluginManager
+#if defined(GLOBALS_IMPORT)
+	#define GLOBALS_IMPORT_PREFIX __declspec(dllimport)
+#else
+	#define GLOBALS_IMPORT_PREFIX
+#endif
+
 #endif
 
 /*

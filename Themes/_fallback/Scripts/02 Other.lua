@@ -141,6 +141,16 @@ function OptionsNavigationMode()
 	end
 end
 
+function PluginScreens()
+	local plugins = PLUGINMAN:GetPluginNames();
+	SM(plugins)
+	local ccp = table.concat (plugins, ",")
+	SM(ccp)
+	
+	
+	return "GrooveStats","PadmissPlugin"
+end
+
 -- (c) 2005 Chris Danford
 -- All rights reserved.
 -- 

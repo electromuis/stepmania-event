@@ -815,6 +815,10 @@ else()
 
   # Required since building from the source.
   sm_add_compile_definition("tomcrypt" LTC_SOURCE)
+  
+  # Include base64 functionality
+  sm_add_compile_definition("tomcrypt" LTC_BASE64)
+  sm_add_compile_definition("tomcrypt" LTC_BASE64_URL)
 
   # Required since tommath is a dependency.
   sm_add_compile_definition("tomcrypt" LTM_DESC)
@@ -823,6 +827,7 @@ else()
   sm_add_compile_definition("tomcrypt" LTC_DEVRANDOM)
 
   # Common formulas used by our app.
+  sm_add_compile_definition("tomcrypt" LTC_SHA256)
   sm_add_compile_definition("tomcrypt" LTC_SHA1)
   sm_add_compile_definition("tomcrypt" LTC_MD5)
 

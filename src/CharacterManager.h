@@ -1,6 +1,8 @@
 #ifndef CHARACTER_MANAGER_H
 #define CHARACTER_MANAGER_H
 
+#include "global.h"
+
 class Character;
 struct lua_State;
 
@@ -34,7 +36,7 @@ private:
 };
 
 
-extern CharacterManager*	CHARMAN;	// global and accessible from anywhere in our program
+GLOBALS_IMPORT_PREFIX extern CharacterManager*	CHARMAN;	// global and accessible from anywhere in our program
 	
 #endif
 
