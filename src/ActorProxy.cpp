@@ -1,6 +1,7 @@
 #include "global.h"
 #include "ActorProxy.h"
 #include "ActorUtil.h"
+#include "Background.h"
 
 REGISTER_ACTOR_CLASS( ActorProxy );
 
@@ -20,7 +21,14 @@ void ActorProxy::DrawPrimitives()
 	{
 		bool bVisible = m_pActorTarget->GetVisible();
 		m_pActorTarget->SetVisible( true );
-		m_pActorTarget->Draw();
+		if (Background* b = dynamic_cast<Background*>(m_pActorTarget)) {
+			b->m_disable_draw = false;
+			b->Draw();
+			b->m_disable_draw = true;
+		}
+		else {
+			m_pActorTarget->Draw();
+		}
 		m_pActorTarget->SetVisible( bVisible );
 	}
 }

@@ -73,3 +73,13 @@ function GetPlayerMetric(p1value, group, metric, player)
 	
 	return p1value
 end
+
+
+function SubScreensX(i)
+	local ns = ThemePrefs.Get("ScreenCount")
+
+	local _screens = {}
+	local sub_width = SCREEN_WIDTH / ns
+
+	return (i-1) * sub_width + (sub_width / 2)
+end
